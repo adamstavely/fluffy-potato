@@ -1,0 +1,154 @@
+[
+  {
+    "id": "cyberchef",
+    "name": "CyberChef",
+    "shortDescription": "Data manipulation in the browser (GCHQ CyberChef).",
+    "description": "Encode, decode, compress, parse, and transform data using the CyberChef recipe model.",
+    "version": "10.22.1",
+    "category": "data",
+    "icon": "ChefHat",
+    "featureFlag": "tools.cyberchef",
+    "launchUrl": "/tools/cyberchef",
+    "maintainer": {
+      "teamName": "SuperApp Platform",
+      "party": "third_party",
+      "contact": "mailto:platform@example.com",
+      "slackChannel": "#tools-onboarding"
+    },
+    "changelog": [
+      {
+        "version": "10.22.1",
+        "date": "2026-03-28",
+        "bump": "patch",
+        "notes": ["Bundled upstream v10.22.1 static build (wrapper MVP)"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true
+  },
+  {
+    "id": "translation",
+    "name": "Translation",
+    "shortDescription": "Translate text between languages via MyMemory.",
+    "description": "Paste plain text, choose source and target languages, and translate using the public MyMemory API (browser-based; subject to provider limits).",
+    "version": "1.0.0",
+    "category": "language",
+    "icon": "Languages",
+    "launchUrl": "/tools/translation",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-28",
+        "bump": "minor",
+        "notes": ["Initial in-app translation tool"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true
+  },
+  {
+    "id": "transcription",
+    "name": "Transcription",
+    "shortDescription": "Speech-to-text in the browser.",
+    "description": "Record from your microphone with the Web Speech API, or upload audio/video for client-side Whisper transcription. Live mic uses the browser/OS engine; file upload runs a local Whisper model in the browser.",
+    "version": "1.0.0",
+    "category": "language",
+    "icon": "Mic",
+    "launchUrl": "/tools/transcription",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-28",
+        "bump": "minor",
+        "notes": ["Initial Web Speech transcription tool"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true
+  },
+  {
+    "id": "transliteration",
+    "name": "Transliteration",
+    "shortDescription": "Convert between scripts (Cyrillic, Greek, kana).",
+    "description": "Transliterate text locally: Russian Cyrillic to Latin, Greek to Latin, or Japanese hiragana/katakana to romaji.",
+    "version": "1.0.0",
+    "category": "language",
+    "icon": "ReplaceAll",
+    "launchUrl": "/tools/transliteration",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-28",
+        "bump": "minor",
+        "notes": ["Initial client-side transliteration presets"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true
+  },
+  {
+    "id": "list-compare",
+    "name": "List Compare",
+    "shortDescription": "Diff two line-based lists.",
+    "description": "Paste two lists (one item per line) and see items only in A, only in B, and in both, with optional trimming and case folding.",
+    "version": "1.0.0",
+    "category": "data",
+    "icon": "ListChecks",
+    "launchUrl": "/tools/list-compare",
+    "maintainer": {
+      "teamName": "Data Tools",
+      "party": "first_party",
+      "contact": "mailto:data-tools@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-28",
+        "bump": "minor",
+        "notes": ["Initial list compare with copyable sections"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true
+  },
+  {
+    "id": "mrz-decoder",
+    "name": "MRZ Decoder",
+    "shortDescription": "Decode passport and ID machine-readable zones (ICAO).",
+    "description": "Parse TD1, TD2, and TD3 MRZ lines locally: names, document number, nationality, dates, sex, and check digits. Optional autocorrect for single-character OCR errors.",
+    "version": "1.0.0",
+    "category": "identity",
+    "icon": "ScanLine",
+    "launchUrl": "/tools/mrz-decoder",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial MRZ decoder with ICAO field breakdown"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true
+  }
+]

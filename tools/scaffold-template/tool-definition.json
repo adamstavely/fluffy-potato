@@ -1,0 +1,26 @@
+{
+  "id": "your-tool-id",
+  "name": "Your Tool",
+  "shortDescription": "One line for the catalog card.",
+  "description": "Full description for the detail drawer.",
+  "version": "0.1.0",
+  "category": "language",
+  "icon": "Braces",
+  "launchUrl": "https://example.com/your-tool",
+  "maintainer": {
+    "teamName": "Your Team",
+    "party": "first_party",
+    "contact": "mailto:you@example.com",
+    "slackChannel": "#your-channel"
+  },
+  "changelog": [
+    {
+      "version": "0.1.0",
+      "date": "2026-03-28",
+      "bump": "minor",
+      "notes": ["Initial release"]
+    }
+  ],
+  "accessLevel": "All authenticated users",
+  "auditLogEnabled": true
+}
