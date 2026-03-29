@@ -1,11 +1,11 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import type { ToolDefinition } from '../models/tool.model';
+import type { ToolDefinition } from '../../models/tool.model';
 import {
   transliterateText,
   type TransliterationPreset,
-} from '../services/transliteration-maps';
+} from './transliteration-maps';
 
 const PRESETS: { id: TransliterationPreset; label: string; hint: string }[] = [
   {

@@ -2,8 +2,10 @@ import { Component, input, signal } from '@angular/core';
 import { BrowserMultiFormatReader } from '@zxing/browser';
 import { BarcodeFormat, DecodeHintType, NotFoundException } from '@zxing/library';
 
-import type { ToolDefinition } from '../models/tool.model';
-import { PII_PASTE_WARNING } from '../constants/data-tool-scope';
+import type { ToolDefinition } from '../../models/tool.model';
+
+const PII_PASTE_WARNING =
+  'Do not paste secrets, credentials, or sensitive personal data unless policy allows. All processing happens in this browser session.';
 
 @Component({
   selector: 'sa-barcode-qr-tool',

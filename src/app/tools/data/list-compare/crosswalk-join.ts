@@ -1,6 +1,6 @@
 import { normalizeForCompareKey } from './list-parse';
 import { keySimilarity } from './string-similarity';
-import { rowToTsv } from './delimited-table';
+import { rowToTsv } from '../shared/delimited-table';
 
 export interface CrosswalkOptions {
   keyColA: number;

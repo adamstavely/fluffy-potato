@@ -1,13 +1,13 @@
 import { Component, computed, effect, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import type { ToolDefinition } from '../models/tool.model';
+import type { ToolDefinition } from '../../models/tool.model';
 import {
   convertValue,
   listMeasures,
   listUnitsForMeasure,
   measureLabel,
-} from '../data/unit-convert';
+} from './unit-convert';
 
 @Component({
   selector: 'sa-unit-converter-tool',

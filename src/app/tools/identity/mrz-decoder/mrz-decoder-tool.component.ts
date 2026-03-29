@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { parse, type ParseResult } from 'mrz';
 
-import type { ToolDefinition } from '../models/tool.model';
+import type { ToolDefinition } from '../../models/tool.model';
 
 function normalizeMrzInput(raw: string): string {
   const lines = raw

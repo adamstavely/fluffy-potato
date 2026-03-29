@@ -1,25 +1,22 @@
 import { Type } from '@angular/core';
 
-import { BarcodeQrToolComponent } from './components/barcode-qr-tool.component';
-import { CyberChefHostComponent } from './components/cyberchef-host.component';
-import { GenericToolPlaceholderComponent } from './components/generic-tool-placeholder.component';
-import { IbanToolComponent } from './components/iban-tool.component';
-import { ListCompareToolComponent } from './components/list-compare-tool.component';
-import { TableWorkspaceToolComponent } from './components/table-workspace-tool.component';
-import { MrzDecoderToolComponent } from './components/mrz-decoder-tool.component';
-import { PaymentCardToolComponent } from './components/payment-card-tool.component';
-import { PomodoroToolComponent } from './components/pomodoro-tool.component';
-import { PhoneNumberToolComponent } from './components/phone-number-tool.component';
-import { TaxIdToolComponent } from './components/tax-id-tool.component';
-import { TranscriptionToolComponent } from './components/transcription-tool.component';
-import { TransliterationToolComponent } from './components/transliteration-tool.component';
-import { TranslationToolComponent } from './components/translation-tool.component';
-import { UnitConverterToolComponent } from './components/unit-converter-tool.component';
-import { WorldClockToolComponent } from './components/world-clock-tool.component';
+import { BarcodeQrToolComponent } from './data/barcode-qr/barcode-qr-tool.component';
+import { CyberChefHostComponent } from './data/cyberchef/cyberchef-host.component';
+import { IbanToolComponent } from './financial/iban/iban-tool.component';
+import { ListCompareToolComponent } from './data/list-compare/list-compare-tool.component';
+import { TableWorkspaceToolComponent } from './data/table-workspace/table-workspace-tool.component';
+import { MrzDecoderToolComponent } from './identity/mrz-decoder/mrz-decoder-tool.component';
+import { PaymentCardToolComponent } from './financial/payment-card/payment-card-tool.component';
+import { PomodoroToolComponent } from './productivity/pomodoro/pomodoro-tool.component';
+import { PhoneNumberToolComponent } from './identity/phone-number/phone-number-tool.component';
+import { TaxIdToolComponent } from './identity/tax-id/tax-id-tool.component';
+import { TranscriptionToolComponent } from './language/transcription/transcription-tool.component';
+import { TransliterationToolComponent } from './language/transliteration/transliteration-tool.component';
+import { TranslationToolComponent } from './language/translation/translation-tool.component';
+import { UnitConverterToolComponent } from './productivity/unit-converter/unit-converter-tool.component';
+import { WorldClockToolComponent } from './productivity/world-clock/world-clock-tool.component';
 
-/**
- * Map `toolId` → host component. Tools not listed here use {@link GenericToolPlaceholderComponent}.
- */
+/** Map `toolId` → host component. Every in-app tool in the registry must have an entry. */
 export const TOOL_HOST_COMPONENTS: Record<string, Type<unknown>> = {
   cyberchef: CyberChefHostComponent,
   translation: TranslationToolComponent,
@@ -38,8 +35,6 @@ export const TOOL_HOST_COMPONENTS: Record<string, Type<unknown>> = {
   'world-clock': WorldClockToolComponent,
 };
 
-export function resolveToolHostComponent(
-  toolId: string,
-): Type<unknown> {
-  return TOOL_HOST_COMPONENTS[toolId] ?? GenericToolPlaceholderComponent;
+export function resolveToolHostComponent(toolId: string): Type<unknown> | null {
+  return TOOL_HOST_COMPONENTS[toolId] ?? null;
 }

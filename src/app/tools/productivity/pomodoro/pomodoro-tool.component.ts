@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import type { ToolDefinition } from '../models/tool.model';
+import type { ToolDefinition } from '../../models/tool.model';
 
 type Phase = 'focus' | 'shortBreak' | 'longBreak';
 

@@ -1,17 +1,18 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import {
-  CROSSWALK_MAX_ROWS,
-  PII_PASTE_WARNING,
-} from '../constants/data-tool-scope';
-import { crosswalkExact, crosswalkFuzzy as crosswalkFuzzyJoin } from '../data/crosswalk-join';
+import { crosswalkExact, crosswalkFuzzy as crosswalkFuzzyJoin } from './crosswalk-join';
 import {
   type DelimiterMode,
   parseDelimitedTable,
-} from '../data/delimited-table';
-import { parseLines, normalizeForCompareKey } from '../data/list-parse';
-import type { ToolDefinition } from '../models/tool.model';
+} from '../shared/delimited-table';
+import { parseLines, normalizeForCompareKey } from './list-parse';
+import type { ToolDefinition } from '../../models/tool.model';
+
+/** Crosswalk / join cap to avoid main-thread stalls on large pastes. */
+const CROSSWALK_MAX_ROWS = 25_000;
+const PII_PASTE_WARNING =
+  'Do not paste secrets, credentials, or sensitive personal data unless policy allows. All processing happens in this browser session.';
 
 @Component({
   selector: 'sa-list-compare-tool',

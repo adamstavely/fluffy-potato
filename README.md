@@ -32,7 +32,7 @@ The npm package name is `superapp`; the Angular project id is `superapp` (output
 - **Launch** — Open in a new tab with hooks for audit (`AuditService`) and analytics (`AnalyticsService`).
 - **Registry-driven** — `ToolRegistryService` loads tools from a remote API and/or bundled JSON (`src/assets/tools-registry.json`).
 - **In-app tools** — `ToolScaffoldComponent` + `ToolHostComponent` host per-tool routes; optional **CyberChef** wrapper assets live under `src/assets/cyberchef/`.
-- **Feature flags** — Tools may declare `featureFlag`; visibility is enforced in the list and by `featureFlagGuard` on `/tools/:toolId`.
+- **Strict routes** — `/tools/:toolId` is guarded: unknown ids or tools without an Angular host mapping redirect to `/not-found`.
 
 ---
 
@@ -116,12 +116,12 @@ High-level layout (not every file):
     └── app/
         ├── app.component.*       # Shell + router outlet
         ├── app.config.ts         # Router, HTTP (interceptors), animations, ErrorHandler
-        ├── app.routes.ts         # `/tools`, `/tools/:toolId`
+        ├── app.routes.ts         # `/tools`, `/tools/:toolId`, `/not-found`
+        ├── pages/                # e.g. not-found page
         ├── platform/             # Stand-in services for host integration
         │   ├── auth.service.ts
         │   ├── auth.interceptor.ts
         │   ├── user-prefs.service.ts
-        │   ├── feature-flag.service.ts
         │   ├── analytics.service.ts
         │   ├── audit.service.ts
         │   ├── error.service.ts
@@ -129,7 +129,7 @@ High-level layout (not every file):
         └── tools/
             ├── models/tool.model.ts
             ├── services/         # ToolRegistryService, ToolLaunchService
-            ├── guards/           # authGuard, featureFlagGuard
+            ├── guards/           # toolRouteGuard (+ lazy loader)
             ├── components/       # Catalog, cards, drawer, scaffold, hosts
             ├── directives/
             ├── tools-icons.module.ts
@@ -145,11 +145,12 @@ Generated tool folders (`npm run generate-tool`) live under **`src/tools/<tool-i
 | Path | Component | Guards |
 |------|-----------|--------|
 | `/` | Redirect to `/tools` | — |
-| `/tools` | `ToolsPageComponent` | `authGuard` |
-| `/tools/:toolId` | `ToolHostComponent` | `authGuard`, `featureFlagGuard` |
+| `/tools` | `ToolsPageComponent` | — |
+| `/tools/:toolId` | `ToolHostComponent` | `toolRouteGuard` (lazy-loaded; registry + host mapping) |
+| `/not-found` | `NotFoundPageComponent` | — |
 | `**` | Redirect to `/tools` | — |
 
-`authGuard` calls `AuthService.assertAuthenticated()`; in the MVP stand-in it still allows navigation. `featureFlagGuard` resolves the tool from the registry (including flag-hidden tools) and redirects to `/tools` with a snackbar if the flag is off.
+`toolRouteGuard` ensures the `toolId` exists in the registry and has an entry in `TOOL_HOST_COMPONENTS`; otherwise navigation goes to `/not-found`.
 
 ---
 
@@ -173,20 +174,20 @@ Types live in [`src/app/tools/models/tool.model.ts`](src/app/tools/models/tool.m
 
 ## How the Tools feature works
 
-1. **Load** — `ToolRegistryService` fetches the registry (API and/or asset). Tools with `featureFlag` are filtered using `FeatureFlagService`.
+1. **Load** — `ToolRegistryService` fetches the registry (API and/or asset) and exposes the full list to the catalog.
 2. **Browse** — The tools page shows cards by category, supports search and filters, and persists favorites.
 3. **Detail** — Selecting a card opens a drawer with full description, maintainer, changelog, and launch actions.
 4. **Launch external** — `ToolLaunchService` uses `launchUrl` and triggers audit/analytics hooks as configured.
-5. **Open in app** — Navigating to `/tools/:toolId` loads `ToolHostComponent`, which picks a host component from `TOOL_HOST_COMPONENTS` in [`tool-component.registry.ts`](src/app/tools/tool-component.registry.ts) or falls back to `GenericToolPlaceholderComponent`.
+5. **Open in app** — Navigating to `/tools/:toolId` runs `toolRouteGuard`, then loads `ToolHostComponent`, which picks a host component from `TOOL_HOST_COMPONENTS` in [`tool-component.registry.ts`](src/app/tools/tool-component.registry.ts). Unknown ids or ids without a host mapping redirect to `/not-found`.
 6. **Scaffold** — `sa-tool-scaffold` wraps tool content; child components can inject `TOOL_SCAFFOLD_TOOL_ID` from [`src/app/tools/tokens/tool-scaffold-context.ts`](src/app/tools/tokens/tool-scaffold-context.ts).
 
 ---
 
 ## Extending the app
 
-1. **Add or update tools in the registry** — Edit `src/assets/tools-registry.json` and/or your API so each entry matches `ToolDefinition` (categories, Lucide `icon` name, optional `featureFlag`, etc.).
+1. **Add or update tools in the registry** — Edit `src/assets/tools-registry.json` and/or your API so each entry matches `ToolDefinition` (categories, Lucide `icon` name, etc.).
 2. **Register Lucide icons** — Add new icon names to the `pick({ ... })` list in [`src/app/tools/tools-icons.module.ts`](src/app/tools/tools-icons.module.ts) so cards can render them without duplicate imports elsewhere.
-3. **Custom in-app UI for a tool id** — Create a standalone (or imported) component and add `toolId: YourComponent` to `TOOL_HOST_COMPONENTS` in [`src/app/tools/tool-component.registry.ts`](src/app/tools/tool-component.registry.ts). Unlisted ids use the generic placeholder.
+3. **Custom in-app UI for a tool id** — Create a standalone (or imported) component and add `toolId: YourComponent` to `TOOL_HOST_COMPONENTS` in [`src/app/tools/tool-component.registry.ts`](src/app/tools/tool-component.registry.ts). Every in-app registry tool must have a mapping, or `/tools/:toolId` shows the not-found page.
 4. **New tool folder from CLI** — Run `npm run generate-tool -- my-tool-id`, then implement the Angular host component and wire it in the registry as above. The script creates `tool-definition.json` and `compliance-checklist.md` under `src/tools/my-tool-id/`.
 
 ---
@@ -195,7 +196,7 @@ Types live in [`src/app/tools/models/tool.model.ts`](src/app/tools/models/tool.m
 
 Code under **`src/app/platform/`** is intentionally minimal so the app runs in isolation. For a real SuperApp deployment:
 
-- Replace or wrap **`AuthService`**, **`FeatureFlagService`**, **`UserPrefsService`**, **`AnalyticsService`**, **`AuditService`**, and **`ErrorService`** with your platform providers.
+- Replace or wrap **`AuthService`**, **`UserPrefsService`**, **`AnalyticsService`**, **`AuditService`**, and **`ErrorService`** with your platform providers.
 - Adjust **`branding-bar.component.ts`** if the shell chrome is owned by the host.
 - Narrow or remove stand-ins once real services are wired.
 

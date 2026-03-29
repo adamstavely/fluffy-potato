@@ -3,7 +3,7 @@ import { Component, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 
-import type { ToolDefinition } from '../models/tool.model';
+import type { ToolDefinition } from '../../models/tool.model';
 
 interface MyMemoryResponse {
   responseData?: { translatedText?: string };

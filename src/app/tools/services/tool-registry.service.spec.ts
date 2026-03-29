@@ -2,7 +2,6 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { FeatureFlagService } from '../../platform/feature-flag.service';
 import type { ToolDefinition } from '../models/tool.model';
 import { ToolRegistryService } from './tool-registry.service';
 
@@ -19,7 +18,6 @@ describe('ToolRegistryService', () => {
       version: '1.0.0',
       category: 'language',
       icon: 'Braces',
-      featureFlag: 'tools.a',
       launchUrl: 'https://a',
       maintainer: {
         teamName: 't',
@@ -34,18 +32,16 @@ describe('ToolRegistryService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), ToolRegistryService, FeatureFlagService],
+      providers: [provideHttpClient(), provideHttpClientTesting(), ToolRegistryService],
     });
     service = TestBed.inject(ToolRegistryService);
     http = TestBed.inject(HttpTestingController);
   });
 
-  it('filters out tools when feature flag is off', (done) => {
-    const flags = TestBed.inject(FeatureFlagService);
-    flags.setFlag('tools.a', false);
-
+  it('getVisibleTools returns tools from the registry response', (done) => {
     service.getVisibleTools().subscribe((tools) => {
-      expect(tools.length).toBe(0);
+      expect(tools.length).toBe(1);
+      expect(tools[0].id).toBe('a');
       done();
     });
 

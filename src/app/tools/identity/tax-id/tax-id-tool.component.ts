@@ -1,14 +1,16 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import type { ToolDefinition } from '../models/tool.model';
-import { PII_PASTE_WARNING } from '../constants/data-tool-scope';
+import type { ToolDefinition } from '../../models/tool.model';
 import {
   validateEuVat,
   validateUkNi,
   validateUsEin,
   type TaxIdKind,
-} from '../data/tax-id-validators';
+} from './tax-id-validators';
+
+const PII_PASTE_WARNING =
+  'Do not paste secrets, credentials, or sensitive personal data unless policy allows. All processing happens in this browser session.';
 
 @Component({
   selector: 'sa-tax-id-tool',

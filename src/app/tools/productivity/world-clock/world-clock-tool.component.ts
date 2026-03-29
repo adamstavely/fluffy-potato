@@ -3,8 +3,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { interval } from 'rxjs';
 
-import type { ToolDefinition } from '../models/tool.model';
-import { WORLD_CLOCK_ZONES } from '../data/world-clock-zones';
+import type { ToolDefinition } from '../../models/tool.model';
+import { WORLD_CLOCK_ZONES } from './world-clock-zones';
 
 const STORAGE_KEY = 'tools.world-clock.zones';
 

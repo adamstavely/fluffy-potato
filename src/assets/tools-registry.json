@@ -7,7 +7,6 @@
     "version": "10.22.1",
     "category": "data",
     "icon": "ChefHat",
-    "featureFlag": "tools.cyberchef",
     "launchUrl": "/tools/cyberchef",
     "maintainer": {
       "teamName": "SuperApp Platform",

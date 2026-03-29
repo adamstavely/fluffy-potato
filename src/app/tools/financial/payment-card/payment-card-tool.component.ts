@@ -1,8 +1,8 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import type { ToolDefinition } from '../models/tool.model';
-import { luhnValid } from '../data/luhn';
+import type { ToolDefinition } from '../../models/tool.model';
+import { luhnValid } from './luhn';
 
 const PCI_NOTICE =
   'For compliance, avoid pasting real primary account numbers (PANs) unless your policy explicitly allows it. This tool only runs the Luhn check and length heuristics in your browser—it does not verify that a card is active or issued.';

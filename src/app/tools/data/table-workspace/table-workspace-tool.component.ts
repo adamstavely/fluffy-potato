@@ -2,21 +2,22 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import {
-  DATA_TOOL_MAX_ROWS,
-  PII_PASTE_WARNING,
-  TABLE_WORKSPACE_DISPLAY_MAX,
-} from '../constants/data-tool-scope';
-import { exportDelimited } from '../data/csv-export';
-import type { DelimiterMode } from '../data/delimited-table';
-import { parseDelimitedTable } from '../data/delimited-table';
-import { dedupeByColumns, dedupeExactRows, splitColumnAt } from '../data/table-dedupe';
-import { profileColumns } from '../data/table-profiler';
-import { type PivotAgg, simplePivot } from '../data/table-pivot';
-import { extractDatesFromText } from '../data/timeline-extract';
-import { normalizeTableCells, type TextNormalizeOptions } from '../data/text-normalize';
-import { replaceInCells } from '../data/text-replace';
-import type { ToolDefinition } from '../models/tool.model';
+import { exportDelimited } from './csv-export';
+import type { DelimiterMode } from '../shared/delimited-table';
+import { parseDelimitedTable } from '../shared/delimited-table';
+import { dedupeByColumns, dedupeExactRows, splitColumnAt } from './table-dedupe';
+import { profileColumns } from './table-profiler';
+import { type PivotAgg, simplePivot } from './table-pivot';
+import { extractDatesFromText } from './timeline-extract';
+import { normalizeTableCells, type TextNormalizeOptions } from './text-normalize';
+import { replaceInCells } from './text-replace';
+import type { ToolDefinition } from '../../models/tool.model';
+
+const DATA_TOOL_MAX_ROWS = 50_000;
+/** Rows rendered in the table workspace grid (export still includes full parsed set up to max). */
+const TABLE_WORKSPACE_DISPLAY_MAX = 10_000;
+const PII_PASTE_WARNING =
+  'Do not paste secrets, credentials, or sensitive personal data unless policy allows. All processing happens in this browser session.';
 
 type WorkspaceTab =
   | 'grid'

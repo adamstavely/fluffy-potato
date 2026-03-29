@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, combineLatest, of } from 'rxjs';
-import { catchError, map, shareReplay, switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map, shareReplay } from 'rxjs/operators';
 
 import bundledToolsRegistry from '../../../assets/tools-registry.json';
 import { environment } from '../../../environments/environment';
-import { FeatureFlagService } from '../../platform/feature-flag.service';
 import type { ToolDefinition } from '../models/tool.model';
 
 /** Bundled copy so registry resolution works when HTTP fails (e.g. new tab, base-href edge cases). */
@@ -14,20 +13,18 @@ const BUNDLED_TOOLS = bundledToolsRegistry as ToolDefinition[];
 @Injectable({ providedIn: 'root' })
 export class ToolRegistryService {
   private readonly http = inject(HttpClient);
-  private readonly flags = inject(FeatureFlagService);
 
   private rawToolsCache$?: Observable<ToolDefinition[]>;
 
-  /** All tools with feature flags applied */
+  /** All tools from the registry (API and/or bundled asset). */
   getVisibleTools(): Observable<ToolDefinition[]> {
-    return this.fetchRawTools().pipe(switchMap((tools) => this.filterByFlags(tools)));
+    return this.fetchRawTools();
   }
 
   getToolById(id: string): Observable<ToolDefinition | undefined> {
-    return this.getVisibleTools().pipe(map((tools) => tools.find((t) => t.id === id)));
+    return this.fetchRawTools().pipe(map((tools) => tools.find((t) => t.id === id)));
   }
 
-  /** Includes tools hidden by flags — for guard resolution */
   getToolByIdAny(id: string): Observable<ToolDefinition | undefined> {
     return this.fetchRawTools().pipe(map((tools) => tools.find((t) => t.id === id)));
   }
@@ -70,22 +67,5 @@ export class ToolRegistryService {
       catchError(() => of([])),
       map(withBundledFallback),
     );
-  }
-
-  private filterByFlags(tools: ToolDefinition[]): Observable<ToolDefinition[]> {
-    if (tools.length === 0) {
-      return of([]);
-    }
-    const vis$ = tools.map((t) => this.visibility$(t));
-    return combineLatest(vis$).pipe(
-      map((flags) => tools.filter((_, i) => flags[i])),
-    );
-  }
-
-  private visibility$(tool: ToolDefinition): Observable<boolean> {
-    if (!tool.featureFlag) {
-      return of(true);
-    }
-    return this.flags.isEnabled(tool.featureFlag);
   }
 }

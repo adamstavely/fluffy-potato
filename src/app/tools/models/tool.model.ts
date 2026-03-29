@@ -32,7 +32,6 @@ export interface ToolDefinition {
   category: ToolCategory;
   /** Lucide icon name (PascalCase), e.g. Wrench */
   icon: string;
-  featureFlag?: string;
   launchUrl: string;
   maintainer: MaintainerInfo;
   changelog: ChangelogEntry[];
@@ -44,7 +43,6 @@ export interface ToolScaffoldConfig {
   toolId: string;
   toolName: string;
   version: string;
-  featureFlag?: string;
 }
 
 export const TOOL_CATEGORY_LABEL: Record<ToolCategory, string> = {

@@ -1,7 +1,7 @@
 import { Component, input, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import type { ToolDefinition } from '../models/tool.model';
+import type { ToolDefinition } from '../../models/tool.model';
 
 /** Narrow typings for Web Speech API (project tsconfig omits full DOM typings). */
 type SpeechRec = {
