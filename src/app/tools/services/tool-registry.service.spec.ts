@@ -51,4 +51,22 @@ describe('ToolRegistryService', () => {
 
     http.expectOne((req) => req.url.endsWith('tools-registry.json')).flush(sample);
   });
+
+  it('lookupBundledToolById returns a tool from the bundled JSON', () => {
+    const t = service.lookupBundledToolById('cyberchef');
+    expect(t?.id).toBe('cyberchef');
+    expect(service.lookupBundledToolById('nonexistent-tool-slug')).toBeUndefined();
+  });
+
+  it('falls back to bundled registry when asset GET fails', (done) => {
+    service.getVisibleTools().subscribe((tools) => {
+      expect(tools.length).toBeGreaterThan(0);
+      expect(tools.some((t) => t.id === 'cyberchef')).toBe(true);
+      done();
+    });
+
+    http
+      .expectOne((req) => req.url.endsWith('tools-registry.json'))
+      .flush('', { status: 404, statusText: 'Not Found' });
+  });
 });

@@ -134,7 +134,7 @@
   },
   {
     "id": "table-workspace",
-    "name": "Table workspace",
+    "name": "Table Workspace",
     "shortDescription": "Paste tables, profile columns, dedupe, pivot, normalize, and extract dates.",
     "description": "Load TSV/CSV-style data once, then switch between a sortable filterable grid, column profiler, dedupe by key or whole row, simple pivot (sum or count), text normalization and column split, timeline extraction from free text, and find-replace across cells. Exports CSV or TSV. All processing stays in the browser.",
     "version": "1.0.0",
@@ -192,7 +192,7 @@
   },
   {
     "id": "iban-validator",
-    "name": "IBAN & BIC",
+    "name": "IBAN & BIC Validator",
     "shortDescription": "Validate IBAN and optional BIC/SWIFT locally.",
     "description": "Check IBAN checksum and structure, show electronic and grouped formats, and optionally validate a BIC/SWIFT using ibantools in the browser.",
     "version": "1.0.1",
@@ -223,7 +223,7 @@
   },
   {
     "id": "phone-number",
-    "name": "Phone number",
+    "name": "Phone Number",
     "shortDescription": "Parse and validate international phone numbers.",
     "description": "Parse phone numbers with libphonenumber-js: E.164, country, national format, and line type. Choose a default region when the number has no country code.",
     "version": "1.0.0",
@@ -248,7 +248,7 @@
   },
   {
     "id": "tax-id",
-    "name": "Tax & national ID",
+    "name": "Tax & National ID",
     "shortDescription": "EU VAT, US EIN, and UK NI format checks.",
     "description": "Validate EU VAT numbers (checksum for DE and NL; format checks for FR, GB, ES), US EIN prefix ranges, and UK National Insurance format. Does not prove a number is issued or active.",
     "version": "1.0.0",
@@ -273,7 +273,7 @@
   },
   {
     "id": "payment-card",
-    "name": "Payment card (Luhn)",
+    "name": "Payment Cards (Luhn)",
     "shortDescription": "Luhn check and length heuristics for card numbers.",
     "description": "Run the Luhn algorithm and common length/brand heuristics on digits you paste. Not a substitute for PCI-compliant handling; avoid real PANs unless policy allows.",
     "version": "1.0.1",
@@ -329,7 +329,7 @@
   },
   {
     "id": "pomodoro",
-    "name": "Pomodoro",
+    "name": "Pomodoro Timer",
     "shortDescription": "Focus and break timer with configurable intervals.",
     "description": "Run focus sessions, short breaks, and long breaks with drift-corrected countdowns. Adjust durations, pause, skip, and reset. Time runs in your browser only.",
     "version": "1.0.0",
@@ -354,7 +354,7 @@
   },
   {
     "id": "unit-converter",
-    "name": "Unit converter",
+    "name": "Unit Converter",
     "shortDescription": "Convert length, mass, speed, temperature, and more.",
     "description": "Convert between units for length, mass, volume, area, speed, temperature, pressure, digital storage, time, and other measures. All calculations run locally in your browser.",
     "version": "1.0.0",
@@ -379,7 +379,7 @@
   },
   {
     "id": "world-clock",
-    "name": "World clock",
+    "name": "World Clock",
     "shortDescription": "Track multiple time zones with live updating clocks.",
     "description": "Add cities from a curated list of IANA time zones, see local date and time with second precision, and keep your selection saved in this browser. No network calls.",
     "version": "1.0.0",

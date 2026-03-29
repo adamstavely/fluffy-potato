@@ -9,6 +9,7 @@ import {
 } from '@angular/router';
 import { of } from 'rxjs';
 
+import { AuthService } from '../../platform/auth.service';
 import { FeatureFlagService } from '../../platform/feature-flag.service';
 import { ToolRegistryService } from '../services/tool-registry.service';
 import type { ToolDefinition } from '../models/tool.model';
@@ -37,7 +38,11 @@ describe('featureFlagGuard', () => {
     }) as ToolDefinition;
 
   beforeEach(() => {
-    registry = jasmine.createSpyObj('ToolRegistryService', ['getToolByIdAny']);
+    registry = jasmine.createSpyObj('ToolRegistryService', [
+      'getToolByIdAny',
+      'lookupBundledToolById',
+    ]);
+    registry.lookupBundledToolById.and.returnValue(undefined);
     snack = { open: jasmine.createSpy('open') };
     TestBed.configureTestingModule({
       providers: [
@@ -45,6 +50,7 @@ describe('featureFlagGuard', () => {
         FeatureFlagService,
         { provide: ToolRegistryService, useValue: registry },
         { provide: MatSnackBar, useValue: snack },
+        { provide: AuthService, useValue: { assertAuthenticated: () => {} } },
       ],
     });
     flags = TestBed.inject(FeatureFlagService);

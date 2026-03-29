@@ -318,17 +318,6 @@ export class ToolsSectionComponent {
     tool: ToolDefinition;
     source: 'card' | 'drawer' | 'favorites_chip';
   }): void {
-    const url = this.resolveUrl(event.tool.launchUrl);
-    this.launch.launch(url, event.tool.id, event.source);
-  }
-
-  private resolveUrl(url: string): string {
-    if (url.startsWith('http')) {
-      return url;
-    }
-    if (typeof window !== 'undefined') {
-      return `${window.location.origin}${url.startsWith('/') ? '' : '/'}${url}`;
-    }
-    return url;
+    this.launch.recordLaunch(event.tool, event.source);
   }
 }

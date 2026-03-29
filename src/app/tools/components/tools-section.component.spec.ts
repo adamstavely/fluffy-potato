@@ -56,7 +56,14 @@ describe('ToolsSectionComponent', () => {
             },
           },
         },
-        { provide: ToolLaunchService, useValue: { launch: () => {} } },
+        {
+          provide: ToolLaunchService,
+          useValue: {
+            getLaunchHref: () => 'https://example.com/t',
+            recordLaunch: () => {},
+            launchTool: () => {},
+          },
+        },
         { provide: AuditService, useValue: { logView: () => {} } },
         { provide: AnalyticsService, useValue: { track: () => {} } },
         { provide: AuthService, useValue: { getUserIdSnapshot: () => 'u1' } },
@@ -82,5 +89,64 @@ describe('ToolsSectionComponent', () => {
     detailBtn!.triggerEventHandler('click', {});
     fixture.detectChanges();
     expect(fixture.nativeElement.textContent).toContain('About');
+  });
+
+  describe('Launch', () => {
+    let recordLaunchSpy: jasmine.Spy;
+
+    beforeEach(async () => {
+      recordLaunchSpy = jasmine.createSpy('recordLaunch');
+      const fav$ = new BehaviorSubject<Set<string>>(new Set());
+      const inAppTool: ToolDefinition = {
+        ...sampleTool,
+        launchUrl: '/tools/cyberchef',
+      };
+      await TestBed.resetTestingModule();
+      await TestBed.configureTestingModule({
+        imports: [ToolsSectionComponent],
+        providers: [
+          {
+            provide: ToolRegistryService,
+            useValue: {
+              getVisibleTools: () => of([inAppTool]),
+            },
+          },
+          {
+            provide: UserPrefsService,
+            useValue: {
+              getFavoriteToolIds: () => fav$.asObservable(),
+              snapshotFavorites: () => fav$.value,
+              toggleFavorite: () => {},
+            },
+          },
+          {
+            provide: ToolLaunchService,
+            useValue: {
+              getLaunchHref: () => 'http://localhost/tools/cyberchef',
+              recordLaunch: recordLaunchSpy,
+              launchTool: () => {},
+            },
+          },
+          { provide: AuditService, useValue: { logView: () => {} } },
+          { provide: AnalyticsService, useValue: { track: () => {} } },
+          { provide: AuthService, useValue: { getUserIdSnapshot: () => 'u1' } },
+        ],
+      }).compileComponents();
+
+      fixture = TestBed.createComponent(ToolsSectionComponent);
+      fixture.detectChanges();
+    });
+
+    it('delegates to ToolLaunchService.recordLaunch with tool and source on Launch click', () => {
+      const launchLink = fixture.debugElement.query(
+        By.css('a[aria-label="Launch CyberChef"]'),
+      );
+      expect(launchLink).withContext('Launch link').toBeTruthy();
+      launchLink!.triggerEventHandler('click', {});
+      expect(recordLaunchSpy).toHaveBeenCalledTimes(1);
+      const [tool, source] = recordLaunchSpy.calls.argsFor(0);
+      expect(tool.id).toBe('cyberchef');
+      expect(source).toBe('card');
+    });
   });
 });

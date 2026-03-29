@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { ExternalLink, PanelRightClose, PanelRightOpen, Star } from 'lucide-angular';
 
 import { ToolCardViewDirective } from '../directives/tool-card-view.directive';
 import { ToolsIconsModule } from '../tools-icons.module';
 import type { ToolCategory, ToolDefinition } from '../models/tool.model';
 import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
+import { ToolLaunchService } from '../services/tool-launch.service';
 
 @Component({
   selector: 'sa-tool-card',
@@ -65,15 +66,17 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
       </p>
 
       <div class="mt-auto flex items-center gap-2">
-        <button
-          type="button"
-          class="inline-flex h-[34px] flex-1 items-center justify-center gap-1.5 rounded-[7px] border-0 bg-[var(--app-accent)] font-sans text-[13px] font-medium tracking-tight text-[var(--app-accent-fg)] transition-opacity hover:opacity-85"
+        <a
+          class="inline-flex h-[34px] flex-1 items-center justify-center gap-1.5 rounded-[7px] border-0 bg-[var(--app-accent)] font-sans text-[13px] font-medium tracking-tight text-[var(--app-accent-fg)] no-underline transition-opacity hover:opacity-85"
+          [href]="launchHref()"
+          target="_blank"
+          rel="noopener noreferrer"
           [attr.aria-label]="'Launch ' + tool().name"
           (click)="onLaunch('card')"
         >
           <lucide-icon [img]="ExternalLink" [size]="13" aria-hidden="true" />
           Launch
-        </button>
+        </a>
         <button
           type="button"
           class="inline-flex h-[34px] shrink-0 items-center justify-center gap-1.5 rounded-[7px] border border-[var(--app-border)] bg-transparent px-3 font-sans text-[13px] font-medium tracking-tight text-[var(--app-text-secondary)] transition-colors hover:border-[#c4c0ba] hover:text-[var(--app-text-primary)]"
@@ -101,7 +104,12 @@ export class ToolCardComponent {
   protected readonly PanelRightOpen = PanelRightOpen;
   protected readonly PanelRightClose = PanelRightClose;
 
+  private readonly launch = inject(ToolLaunchService);
+
   readonly tool = input.required<ToolDefinition>();
+
+  /** Memoized: avoid calling `getLaunchHref` on every change-detection pass (template-bound). */
+  protected readonly launchHref = computed(() => this.launch.getLaunchHref(this.tool()));
   readonly isFavorited = input(false);
   readonly isDrawerActive = input(false);
 

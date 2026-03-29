@@ -1,8 +1,9 @@
-import { Component, input, output } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 
 import { ExternalLink, Star, X } from 'lucide-angular';
 
 import { ToolsIconsModule } from '../tools-icons.module';
+import { ToolLaunchService } from '../services/tool-launch.service';
 import type { ChangelogBump, ToolDefinition } from '../models/tool.model';
 import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
 
@@ -170,15 +171,17 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
         </div>
 
         <div class="shrink-0 px-6 pb-6">
-          <button
-            type="button"
-            class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg border-0 bg-[var(--app-accent)] font-sans text-[13.5px] font-medium tracking-tight text-[var(--app-accent-fg)] transition-opacity hover:opacity-85"
+          <a
+            class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg border-0 bg-[var(--app-accent)] font-sans text-[13.5px] font-medium tracking-tight text-[var(--app-accent-fg)] no-underline transition-opacity hover:opacity-85"
+            [href]="launchHref()"
+            target="_blank"
+            rel="noopener noreferrer"
             [attr.aria-label]="'Launch ' + tool()!.name"
             (click)="onLaunch()"
           >
             <lucide-icon [img]="ExternalLink" [size]="15" aria-hidden="true" />
             Launch Tool
-          </button>
+          </a>
         </div>
       </div>
     }
@@ -207,7 +210,14 @@ export class ToolDetailDrawerComponent {
   protected readonly Star = Star;
   protected readonly ExternalLink = ExternalLink;
 
+  private readonly launch = inject(ToolLaunchService);
+
   readonly tool = input<ToolDefinition | null>(null);
+
+  protected readonly launchHref = computed(() => {
+    const t = this.tool();
+    return t ? this.launch.getLaunchHref(t) : '#';
+  });
   readonly isFavorited = input(false);
 
   readonly drawerClose = output<void>();

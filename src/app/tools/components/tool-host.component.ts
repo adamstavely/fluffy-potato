@@ -1,8 +1,8 @@
 import { NgComponentOutlet } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
-import { map, of, switchMap, tap } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { map, of, switchMap } from 'rxjs';
 
 import type { ToolDefinition } from '../models/tool.model';
 import { ToolRegistryService } from '../services/tool-registry.service';
@@ -31,17 +31,10 @@ import { ToolScaffoldComponent } from './tool-scaffold.component';
 export class ToolHostComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly registry = inject(ToolRegistryService);
-  private readonly router = inject(Router);
 
   private readonly tool$ = this.route.paramMap.pipe(
     map((p) => p.get('toolId') ?? ''),
     switchMap((id) => (id ? this.registry.getToolByIdAny(id) : of(undefined))),
-    tap((t) => {
-      const id = this.route.snapshot.paramMap.get('toolId');
-      if (id && !t) {
-        void this.router.navigate(['/tools']);
-      }
-    }),
   );
 
   readonly tool = toSignal(this.tool$, { initialValue: undefined as ToolDefinition | undefined });
