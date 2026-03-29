@@ -50,6 +50,19 @@ describe('ToolLaunchService', () => {
     service = TestBed.inject(ToolLaunchService);
   });
 
+  it('isExternalLaunch is false for path-only launchUrl', () => {
+    expect(service.isExternalLaunch(baseTool({ launchUrl: '/tools/cyberchef' }))).toBe(false);
+  });
+
+  it('isExternalLaunch is false for same-origin root https launchUrl', () => {
+    const origin = window.location.origin;
+    expect(service.isExternalLaunch(baseTool({ launchUrl: `${origin}/` }))).toBe(false);
+  });
+
+  it('isExternalLaunch is true for external https URL', () => {
+    expect(service.isExternalLaunch(baseTool({ launchUrl: 'https://example.com/t' }))).toBe(true);
+  });
+
   it('getLaunchHref matches URL passed to window.open by launchTool for in-app tools', () => {
     const t = baseTool({ launchUrl: '/tools/cyberchef' });
     expect(service.getLaunchHref(t)).toBe(expectOriginPlusPath('/tools/cyberchef'));

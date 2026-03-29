@@ -19,9 +19,10 @@ The npm package name is `superapp`; the Angular project id is `superapp` (output
 9. [How the Tools feature works](#how-the-tools-feature-works)
 10. [Extending the app](#extending-the-app)
 11. [Host integration (platform)](#host-integration-platform)
-12. [Testing and builds](#testing-and-builds)
-13. [Contributor documentation](#contributor-documentation)
-14. [Additional resources](#additional-resources)
+12. [Parent SuperApp integration guide](#parent-superapp-integration-guide)
+13. [Testing and builds](#testing-and-builds)
+14. [Contributor documentation](#contributor-documentation)
+15. [Additional resources](#additional-resources)
 
 ---
 
@@ -106,7 +107,6 @@ High-level layout (not every file):
 │   ├── README.md             # Registry contract, external vs in-app, SC-01–SC-12
 │   ├── generate-tool.mjs
 │   └── scaffold-template/
-├── public/                   # Copied to site root
 └── src/
     ├── assets/
     │   ├── tools-registry.json   # Default registry when API is unset or fails
@@ -200,6 +200,12 @@ Code under **`src/app/platform/`** is intentionally minimal so the app runs in i
 - Replace or wrap **`AuthService`**, **`UserPrefsService`**, **`AnalyticsService`**, **`AuditService`**, and **`ErrorService`** with your platform providers.
 - Adjust **`branding-bar.component.ts`** if the shell chrome is owned by the host.
 - Narrow or remove stand-ins once real services are wired.
+
+---
+
+## Parent SuperApp integration guide
+
+Platform engineers embedding this build in the parent SuperApp shell should read **[`docs/parent-super-app-integration.md`](docs/parent-super-app-integration.md)**. It covers deployment patterns (sub-path, reverse proxy, separate origin), **`base-href`**, wiring platform services in **`app.config.ts`**, registry URLs, and a host checklist.
 
 ---
 

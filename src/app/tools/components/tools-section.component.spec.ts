@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import { BehaviorSubject, of } from 'rxjs';
 
 import { AuditService } from '../../platform/audit.service';
@@ -34,6 +35,7 @@ describe('ToolsSectionComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ToolsSectionComponent],
       providers: [
+        provideRouter([]),
         {
           provide: ToolRegistryService,
           useValue: {
@@ -60,6 +62,7 @@ describe('ToolsSectionComponent', () => {
           provide: ToolLaunchService,
           useValue: {
             getLaunchHref: () => 'https://example.com/t',
+            isExternalLaunch: () => true,
             recordLaunch: () => {},
             launchTool: () => {},
           },
@@ -105,6 +108,7 @@ describe('ToolsSectionComponent', () => {
       await TestBed.configureTestingModule({
         imports: [ToolsSectionComponent],
         providers: [
+          provideRouter([]),
           {
             provide: ToolRegistryService,
             useValue: {
@@ -123,6 +127,7 @@ describe('ToolsSectionComponent', () => {
             provide: ToolLaunchService,
             useValue: {
               getLaunchHref: () => 'http://localhost/tools/cyberchef',
+              isExternalLaunch: () => false,
               recordLaunch: recordLaunchSpy,
               launchTool: () => {},
             },

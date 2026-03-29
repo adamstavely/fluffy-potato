@@ -36,6 +36,33 @@ export class ToolLaunchService {
   private readonly location = inject(Location);
 
   /**
+   * In-app tools (path-only `launchUrl` or same-origin root misconfig) should use `RouterLink`
+   * so `href` respects `APP_BASE_HREF` without manual `origin + prepareExternalUrl` (avoids
+   * bounce / wrong-tab URL when combined with `target="_blank"`).
+   */
+  isExternalLaunch(tool: ToolDefinition): boolean {
+    const lu = tool.launchUrl?.trim() ?? '';
+    if (!lu || !EXTERNAL_URL.test(lu)) {
+      return false;
+    }
+    if (typeof window === 'undefined') {
+      return true;
+    }
+    try {
+      const u = new URL(lu);
+      if (u.origin === window.location.origin) {
+        const p = u.pathname.replace(/\/+$/, '') || '/';
+        if (p === '/') {
+          return false;
+        }
+      }
+    } catch {
+      return true;
+    }
+    return true;
+  }
+
+  /**
    * Absolute URL for opening a tool (in-app or external). Use with `<a target="_blank">` for
    * reliable new-tab navigation; avoid `window.open` alone for same.
    */

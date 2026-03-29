@@ -11,6 +11,7 @@ import { of } from 'rxjs';
 import { ToolRegistryService } from '../services/tool-registry.service';
 import type { ToolDefinition } from '../models/tool.model';
 import { toolRouteGuard } from './tool-route.guard';
+import { toolRouteGuard as toolRouteGuardLoader } from './tool-route.guard.loader';
 
 describe('toolRouteGuard', () => {
   let registry: jasmine.SpyObj<ToolRegistryService>;
@@ -78,6 +79,14 @@ describe('toolRouteGuard', () => {
     registry.getToolByIdAny.and.returnValue(of(baseTool({ id: 'cyberchef' })));
     const result = await TestBed.runInInjectionContext(() =>
       toolRouteGuard(routeWith('cyberchef'), state),
+    );
+    expect(result).toBe(true);
+  });
+
+  it('lazy loader guard runs inner guard after dynamic import (injection context)', async () => {
+    registry.getToolByIdAny.and.returnValue(of(baseTool({ id: 'cyberchef' })));
+    const result = await TestBed.runInInjectionContext(() =>
+      toolRouteGuardLoader(routeWith('cyberchef'), state),
     );
     expect(result).toBe(true);
   });

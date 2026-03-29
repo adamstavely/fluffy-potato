@@ -1,4 +1,5 @@
 import { Component, computed, inject, input, output } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { ExternalLink, Star, X } from 'lucide-angular';
 
@@ -10,7 +11,7 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
 @Component({
   selector: 'sa-tool-detail-drawer',
   standalone: true,
-  imports: [ToolsIconsModule],
+  imports: [ToolsIconsModule, RouterLink],
   template: `
     @if (tool()) {
       <div
@@ -163,17 +164,31 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
         </div>
 
         <div class="shrink-0 px-6 pb-6">
-          <a
-            class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg border-0 bg-[var(--app-accent)] font-sans text-[13.5px] font-medium tracking-tight text-[var(--app-accent-fg)] no-underline transition-opacity hover:opacity-85"
-            [href]="launchHref()"
-            target="_blank"
-            rel="noopener noreferrer"
-            [attr.aria-label]="'Launch ' + tool()!.name"
-            (click)="onLaunch()"
-          >
-            <lucide-icon [img]="ExternalLink" [size]="15" aria-hidden="true" />
-            Launch Tool
-          </a>
+          @if (tool(); as t) {
+            @if (useRouterLinkForLaunch(t)) {
+              <a
+                class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg border-0 bg-[var(--app-accent)] font-sans text-[13.5px] font-medium tracking-tight text-[var(--app-accent-fg)] no-underline transition-opacity hover:opacity-85"
+                [routerLink]="['/tools', t.id]"
+                [attr.aria-label]="'Launch ' + t.name"
+                (click)="onLaunch()"
+              >
+                <lucide-icon [img]="ExternalLink" [size]="15" aria-hidden="true" />
+                Launch Tool
+              </a>
+            } @else {
+              <a
+                class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg border-0 bg-[var(--app-accent)] font-sans text-[13.5px] font-medium tracking-tight text-[var(--app-accent-fg)] no-underline transition-opacity hover:opacity-85"
+                [href]="launchHref()"
+                target="_blank"
+                rel="noopener noreferrer"
+                [attr.aria-label]="'Launch ' + t.name"
+                (click)="onLaunch()"
+              >
+                <lucide-icon [img]="ExternalLink" [size]="15" aria-hidden="true" />
+                Launch Tool
+              </a>
+            }
+          }
         </div>
       </div>
     }
@@ -210,6 +225,10 @@ export class ToolDetailDrawerComponent {
     const t = this.tool();
     return t ? this.launch.getLaunchHref(t) : '#';
   });
+
+  protected useRouterLinkForLaunch(t: ToolDefinition): boolean {
+    return !this.launch.isExternalLaunch(t);
+  }
   readonly isFavorited = input(false);
 
   readonly drawerClose = output<void>();

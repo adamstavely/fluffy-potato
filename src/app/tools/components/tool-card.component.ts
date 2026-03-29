@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, input, output } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ExternalLink, PanelRightClose, PanelRightOpen, Star } from 'lucide-angular';
 
 import { ToolCardViewDirective } from '../directives/tool-card-view.directive';
@@ -11,7 +12,7 @@ import { ToolLaunchService } from '../services/tool-launch.service';
 @Component({
   selector: 'sa-tool-card',
   standalone: true,
-  imports: [CommonModule, ToolsIconsModule, ToolCardViewDirective],
+  imports: [CommonModule, ToolsIconsModule, ToolCardViewDirective, RouterLink],
   template: `
     <article
       saTrackCardView
@@ -66,17 +67,29 @@ import { ToolLaunchService } from '../services/tool-launch.service';
       </p>
 
       <div class="mt-auto flex items-center gap-2">
-        <a
-          class="inline-flex h-[34px] flex-1 items-center justify-center gap-1.5 rounded-[7px] border-0 bg-[var(--app-accent)] font-sans text-[13px] font-medium tracking-tight text-[var(--app-accent-fg)] no-underline transition-opacity hover:opacity-85"
-          [href]="launchHref()"
-          target="_blank"
-          rel="noopener noreferrer"
-          [attr.aria-label]="'Launch ' + tool().name"
-          (click)="onLaunch('card')"
-        >
-          <lucide-icon [img]="ExternalLink" [size]="13" aria-hidden="true" />
-          Launch
-        </a>
+        @if (useRouterLinkForLaunch()) {
+          <a
+            class="inline-flex h-[34px] flex-1 items-center justify-center gap-1.5 rounded-[7px] border-0 bg-[var(--app-accent)] font-sans text-[13px] font-medium tracking-tight text-[var(--app-accent-fg)] no-underline transition-opacity hover:opacity-85"
+            [routerLink]="['/tools', tool().id]"
+            [attr.aria-label]="'Launch ' + tool().name"
+            (click)="onLaunch('card')"
+          >
+            <lucide-icon [img]="ExternalLink" [size]="13" aria-hidden="true" />
+            Launch
+          </a>
+        } @else {
+          <a
+            class="inline-flex h-[34px] flex-1 items-center justify-center gap-1.5 rounded-[7px] border-0 bg-[var(--app-accent)] font-sans text-[13px] font-medium tracking-tight text-[var(--app-accent-fg)] no-underline transition-opacity hover:opacity-85"
+            [href]="launchHref()"
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.aria-label]="'Launch ' + tool().name"
+            (click)="onLaunch('card')"
+          >
+            <lucide-icon [img]="ExternalLink" [size]="13" aria-hidden="true" />
+            Launch
+          </a>
+        }
         <button
           type="button"
           class="inline-flex h-[34px] shrink-0 items-center justify-center gap-1.5 rounded-[7px] border border-[var(--app-border)] bg-transparent px-3 font-sans text-[13px] font-medium tracking-tight text-[var(--app-text-secondary)] transition-colors hover:border-[#c4c0ba] hover:text-[var(--app-text-primary)]"
@@ -110,6 +123,8 @@ export class ToolCardComponent {
 
   /** Memoized: avoid calling `getLaunchHref` on every change-detection pass (template-bound). */
   protected readonly launchHref = computed(() => this.launch.getLaunchHref(this.tool()));
+
+  protected readonly useRouterLinkForLaunch = computed(() => !this.launch.isExternalLaunch(this.tool()));
   readonly isFavorited = input(false);
   readonly isDrawerActive = input(false);
 
