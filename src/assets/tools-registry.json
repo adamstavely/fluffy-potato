@@ -104,9 +104,9 @@
   {
     "id": "list-compare",
     "name": "List Compare",
-    "shortDescription": "Diff two line-based lists.",
-    "description": "Paste two lists (one item per line) and see items only in A, only in B, and in both, with optional trimming and case folding.",
-    "version": "1.0.0",
+    "shortDescription": "Compare lines or crosswalk two delimited tables by key.",
+    "description": "Lines mode: paste two lists (one item per line) for only A, only B, and both. Crosswalk mode: paste TSV/CSV tables, choose key columns, optional fuzzy key matching, and get matched pairs plus unmatched rows.",
+    "version": "1.1.0",
     "category": "data",
     "icon": "ListChecks",
     "launchUrl": "/tools/list-compare",
@@ -116,6 +116,12 @@
       "contact": "mailto:data-tools@example.com"
     },
     "changelog": [
+      {
+        "version": "1.1.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Crosswalk mode: key columns, delimiter options, fuzzy key similarity, shared data helpers"]
+      },
       {
         "version": "1.0.0",
         "date": "2026-03-28",
@@ -127,11 +133,38 @@
     "auditLogEnabled": true
   },
   {
+    "id": "table-workspace",
+    "name": "Table workspace",
+    "shortDescription": "Paste tables, profile columns, dedupe, pivot, normalize, and extract dates.",
+    "description": "Load TSV/CSV-style data once, then switch between a sortable filterable grid, column profiler, dedupe by key or whole row, simple pivot (sum or count), text normalization and column split, timeline extraction from free text, and find-replace across cells. Exports CSV or TSV. All processing stays in the browser.",
+    "version": "1.0.0",
+    "category": "data",
+    "icon": "LayoutGrid",
+    "launchUrl": "/tools/table-workspace",
+    "maintainer": {
+      "teamName": "Data Tools",
+      "party": "first_party",
+      "contact": "mailto:data-tools@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": [
+          "Initial table workspace: grid, profiler, dedupe, pivot, normalize, timeline, find-replace"
+        ]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true
+  },
+  {
     "id": "mrz-decoder",
     "name": "MRZ Decoder",
     "shortDescription": "Decode passport and ID machine-readable zones (ICAO).",
-    "description": "Parse TD1, TD2, and TD3 MRZ lines locally: names, document number, nationality, dates, sex, and check digits. Optional autocorrect for single-character OCR errors.",
-    "version": "1.0.0",
+    "description": "Parse TD1, TD2, and TD3 MRZ lines locally: names, document number, nationality, dates, sex, and check digits. Optional autocorrect for single-character OCR errors. Shows approximate age and days until or since expiry from parsed dates.",
+    "version": "1.1.0",
     "category": "identity",
     "icon": "ScanLine",
     "launchUrl": "/tools/mrz-decoder",
@@ -142,10 +175,228 @@
     },
     "changelog": [
       {
+        "version": "1.1.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Approximate age and expiry countdown from parsed birth and expiration dates"]
+      },
+      {
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
         "notes": ["Initial MRZ decoder with ICAO field breakdown"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true
+  },
+  {
+    "id": "iban-validator",
+    "name": "IBAN & BIC",
+    "shortDescription": "Validate IBAN and optional BIC/SWIFT locally.",
+    "description": "Check IBAN checksum and structure, show electronic and grouped formats, and optionally validate a BIC/SWIFT using ibantools in the browser.",
+    "version": "1.0.1",
+    "category": "financial",
+    "icon": "Landmark",
+    "launchUrl": "/tools/iban-validator",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.1",
+        "date": "2026-03-29",
+        "bump": "patch",
+        "notes": ["Catalog category: Financial"]
+      },
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial IBAN and BIC validation"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true
+  },
+  {
+    "id": "phone-number",
+    "name": "Phone number",
+    "shortDescription": "Parse and validate international phone numbers.",
+    "description": "Parse phone numbers with libphonenumber-js: E.164, country, national format, and line type. Choose a default region when the number has no country code.",
+    "version": "1.0.0",
+    "category": "identity",
+    "icon": "Phone",
+    "launchUrl": "/tools/phone-number",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial phone parse and validation"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true
+  },
+  {
+    "id": "tax-id",
+    "name": "Tax & national ID",
+    "shortDescription": "EU VAT, US EIN, and UK NI format checks.",
+    "description": "Validate EU VAT numbers (checksum for DE and NL; format checks for FR, GB, ES), US EIN prefix ranges, and UK National Insurance format. Does not prove a number is issued or active.",
+    "version": "1.0.0",
+    "category": "identity",
+    "icon": "BadgePercent",
+    "launchUrl": "/tools/tax-id",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial tax and NI validators"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true
+  },
+  {
+    "id": "payment-card",
+    "name": "Payment card (Luhn)",
+    "shortDescription": "Luhn check and length heuristics for card numbers.",
+    "description": "Run the Luhn algorithm and common length/brand heuristics on digits you paste. Not a substitute for PCI-compliant handling; avoid real PANs unless policy allows.",
+    "version": "1.0.1",
+    "category": "financial",
+    "icon": "CreditCard",
+    "launchUrl": "/tools/payment-card",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.1",
+        "date": "2026-03-29",
+        "bump": "patch",
+        "notes": ["Catalog category: Financial"]
+      },
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial Luhn and brand heuristic tool"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true
+  },
+  {
+    "id": "barcode-qr",
+    "name": "Barcode & QR",
+    "shortDescription": "Decode barcodes and QR codes from an image file.",
+    "description": "Upload an image; ZXing decodes QR, PDF417, Data Matrix, Code 128, EAN, and other common formats locally in your browser.",
+    "version": "1.0.0",
+    "category": "data",
+    "icon": "ScanBarcode",
+    "launchUrl": "/tools/barcode-qr",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial image upload decode"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true
+  },
+  {
+    "id": "pomodoro",
+    "name": "Pomodoro",
+    "shortDescription": "Focus and break timer with configurable intervals.",
+    "description": "Run focus sessions, short breaks, and long breaks with drift-corrected countdowns. Adjust durations, pause, skip, and reset. Time runs in your browser only.",
+    "version": "1.0.0",
+    "category": "productivity",
+    "icon": "Timer",
+    "launchUrl": "/tools/pomodoro",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial Pomodoro timer"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true
+  },
+  {
+    "id": "unit-converter",
+    "name": "Unit converter",
+    "shortDescription": "Convert length, mass, speed, temperature, and more.",
+    "description": "Convert between units for length, mass, volume, area, speed, temperature, pressure, digital storage, time, and other measures. All calculations run locally in your browser.",
+    "version": "1.0.0",
+    "category": "productivity",
+    "icon": "Scale",
+    "launchUrl": "/tools/unit-converter",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial unit converter"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true
+  },
+  {
+    "id": "world-clock",
+    "name": "World clock",
+    "shortDescription": "Track multiple time zones with live updating clocks.",
+    "description": "Add cities from a curated list of IANA time zones, see local date and time with second precision, and keep your selection saved in this browser. No network calls.",
+    "version": "1.0.0",
+    "category": "productivity",
+    "icon": "Globe",
+    "launchUrl": "/tools/world-clock",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial world clock"]
       }
     ],
     "accessLevel": "All authenticated users",

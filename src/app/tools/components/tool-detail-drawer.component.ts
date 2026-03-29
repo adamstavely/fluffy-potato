@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 
-import { ExternalLink, Star, X } from 'lucide-angular/src/icons';
+import { ExternalLink, Star, X } from 'lucide-angular';
 
 import { ToolsIconsModule } from '../tools-icons.module';
 import type { ChangelogBump, ToolDefinition } from '../models/tool.model';
@@ -23,9 +23,9 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
         >
           <div class="flex min-w-0 flex-1 items-center gap-3">
             <div
-              class="flex size-11 shrink-0 items-center justify-center rounded-[11px] text-[var(--app-text-primary)]"
+              class="flex size-9 shrink-0 items-center justify-center rounded-[9px] text-[var(--app-text-primary)]"
             >
-              <lucide-icon [name]="tool()!.icon" [size]="22" />
+              <lucide-icon [name]="tool()!.icon" [size]="36" aria-hidden="true" />
             </div>
             <div class="min-w-0">
               <h2
@@ -48,6 +48,7 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
               <lucide-icon
                 [img]="Star"
                 [size]="15"
+                aria-hidden="true"
                 [class]="isFavorited() ? 'fill-[#d4af37]' : ''"
               />
             </button>
@@ -57,7 +58,7 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
               (click)="drawerClose.emit()"
               aria-label="Close detail"
             >
-              <lucide-icon [img]="X" [size]="15" />
+              <lucide-icon [img]="X" [size]="15" aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -172,9 +173,10 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
           <button
             type="button"
             class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg border-0 bg-[var(--app-accent)] font-sans text-[13.5px] font-medium tracking-tight text-[var(--app-accent-fg)] transition-opacity hover:opacity-85"
+            [attr.aria-label]="'Launch ' + tool()!.name"
             (click)="onLaunch()"
           >
-            <lucide-icon [img]="ExternalLink" [size]="15" />
+            <lucide-icon [img]="ExternalLink" [size]="15" aria-hidden="true" />
             Launch Tool
           </button>
         </div>
@@ -213,7 +215,7 @@ export class ToolDetailDrawerComponent {
   readonly launched = output<{ tool: ToolDefinition; source: 'drawer' }>();
 
   protected categoryLabel(cat: ToolDefinition['category']): string {
-    return TOOL_CATEGORY_LABEL[cat];
+    return TOOL_CATEGORY_LABEL[cat] ?? String(cat);
   }
 
   protected bumpClass(b: ChangelogBump): string {

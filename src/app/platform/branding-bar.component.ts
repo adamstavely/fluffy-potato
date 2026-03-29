@@ -4,15 +4,12 @@ import { Component, input } from '@angular/core';
   selector: 'sa-branding-bar',
   standalone: true,
   template: `
-    <header
-      class="flex h-14 items-center border-b border-slate-200 bg-white px-4 text-slate-800 shadow-sm"
-      role="banner"
-    >
-      <span class="text-sm font-semibold tracking-tight">{{ title() }}</span>
+    <div class="flex h-14 items-center border-b border-slate-200 bg-white px-4 text-slate-800 shadow-sm">
+      <h1 class="m-0 text-sm font-semibold tracking-tight">{{ title() }}</h1>
       @if (subtitle()) {
-        <span class="ml-2 text-xs text-slate-500">{{ subtitle() }}</span>
+        <span class="ml-2 text-xs text-slate-600">{{ subtitle() }}</span>
       }
-    </header>
+    </div>
   `,
 })
 export class BrandingBarComponent {

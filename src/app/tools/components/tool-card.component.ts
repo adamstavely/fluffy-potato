@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
-import { ExternalLink, PanelRightClose, PanelRightOpen, Star } from 'lucide-angular/src/icons';
+import { ExternalLink, PanelRightClose, PanelRightOpen, Star } from 'lucide-angular';
 
 import { ToolCardViewDirective } from '../directives/tool-card-view.directive';
 import { ToolsIconsModule } from '../tools-icons.module';
@@ -27,9 +27,9 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
       <div class="mb-3 flex items-start justify-between">
         <div class="flex min-w-0 items-center gap-2.5">
           <div
-            class="flex size-10 shrink-0 items-center justify-center rounded-[10px] text-[var(--app-text-primary)]"
+            class="flex size-9 shrink-0 items-center justify-center rounded-[9px] text-[var(--app-text-primary)]"
           >
-            <lucide-icon [name]="tool().icon" [size]="22" />
+            <lucide-icon [name]="tool().icon" [size]="36" aria-hidden="true" />
           </div>
           <div class="min-w-0">
             <h3
@@ -52,6 +52,7 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
           <lucide-icon
             [img]="Star"
             [size]="15"
+            aria-hidden="true"
             [class]="isFavorited() ? 'fill-[#d4af37]' : ''"
           />
         </button>
@@ -67,9 +68,10 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
         <button
           type="button"
           class="inline-flex h-[34px] flex-1 items-center justify-center gap-1.5 rounded-[7px] border-0 bg-[var(--app-accent)] font-sans text-[13px] font-medium tracking-tight text-[var(--app-accent-fg)] transition-opacity hover:opacity-85"
+          [attr.aria-label]="'Launch ' + tool().name"
           (click)="onLaunch('card')"
         >
-          <lucide-icon [img]="ExternalLink" [size]="13" />
+          <lucide-icon [img]="ExternalLink" [size]="13" aria-hidden="true" />
           Launch
         </button>
         <button
@@ -78,14 +80,15 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
           [class.border-[var(--app-accent)]]="isDrawerActive()"
           [class.bg-[var(--app-accent)]]="isDrawerActive()"
           [class.text-[var(--app-accent-fg)]]="isDrawerActive()"
+          [attr.aria-expanded]="isDrawerActive()"
           [attr.aria-label]="isDrawerActive() ? 'Close tool details' : 'View tool details'"
           (click)="drawerOpen.emit(tool())"
         >
           View Details
           @if (isDrawerActive()) {
-            <lucide-icon [img]="PanelRightClose" [size]="15" />
+            <lucide-icon [img]="PanelRightClose" [size]="15" aria-hidden="true" />
           } @else {
-            <lucide-icon [img]="PanelRightOpen" [size]="15" />
+            <lucide-icon [img]="PanelRightOpen" [size]="15" aria-hidden="true" />
           }
         </button>
       </div>
@@ -108,7 +111,7 @@ export class ToolCardComponent {
 
   protected categoryLabel(): string {
     const c = this.tool().category as ToolCategory;
-    return TOOL_CATEGORY_LABEL[c];
+    return TOOL_CATEGORY_LABEL[c] ?? String(c);
   }
 
   protected onLaunch(source: 'card'): void {

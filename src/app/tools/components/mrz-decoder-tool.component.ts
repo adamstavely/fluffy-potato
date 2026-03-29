@@ -26,6 +26,39 @@ function expandMrzDate(yyMMDD: string | null | undefined): string {
   return `${year}-${mm}-${dd}`;
 }
 
+function parseIsoLocal(iso: string): Date | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  if (!m) {
+    return null;
+  }
+  const y = +m[1]!;
+  const mo = +m[2]! - 1;
+  const d = +m[3]!;
+  const dt = new Date(y, mo, d);
+  if (dt.getFullYear() !== y || dt.getMonth() !== mo || dt.getDate() !== d) {
+    return null;
+  }
+  return dt;
+}
+
+function todayLocal(): Date {
+  const n = new Date();
+  return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+}
+
+function ageYears(birth: Date, ref: Date): number {
+  let age = ref.getFullYear() - birth.getFullYear();
+  const m = ref.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && ref.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age;
+}
+
+function diffDays(a: Date, b: Date): number {
+  return Math.round((b.getTime() - a.getTime()) / (24 * 60 * 60 * 1000));
+}
+
 @Component({
   selector: 'sa-mrz-decoder-tool',
   standalone: true,
@@ -97,6 +130,9 @@ function expandMrzDate(yyMMDD: string | null | undefined): string {
 
         <div class="overflow-hidden rounded-lg border border-slate-200">
           <table class="w-full border-collapse text-left text-sm">
+            <caption class="sr-only">
+              Parsed MRZ fields: name, document data, and validation status per field
+            </caption>
             <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-600">
               <tr>
                 <th class="border-b border-slate-200 px-3 py-2">Field</th>
@@ -123,6 +159,20 @@ function expandMrzDate(yyMMDD: string | null | undefined): string {
             </tbody>
           </table>
         </div>
+
+        @if (lifeSummary(); as ls) {
+          <div class="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-800">
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-600">From parsed dates</p>
+            <ul class="mt-2 list-inside list-disc space-y-1">
+              @if (ls.ageText) {
+                <li>{{ ls.ageText }}</li>
+              }
+              @if (ls.expiryText) {
+                <li>{{ ls.expiryText }}</li>
+              }
+            </ul>
+          </div>
+        }
 
         <p class="text-xs text-slate-500">
           Dates shown as <span class="font-mono">YYYY-MM-DD</span> use a common century heuristic on
@@ -167,6 +217,47 @@ export class MrzDecoderToolComponent {
   protected readonly result = computed((): ParseResult | null => {
     const p = this.parsed();
     return p.kind === 'ok' ? p.result : null;
+  });
+
+  protected readonly lifeSummary = computed((): {
+    ageText: string | null;
+    expiryText: string | null;
+  } | null => {
+    const r = this.result();
+    if (!r) {
+      return null;
+    }
+    const birthRaw = r.fields.birthDate;
+    const expRaw = r.fields.expirationDate;
+    const birthIso = birthRaw && birthRaw.length === 6 ? expandMrzDate(birthRaw) : null;
+    const expIso = expRaw && expRaw.length === 6 ? expandMrzDate(expRaw) : null;
+    const today = todayLocal();
+    let ageText: string | null = null;
+    let expiryText: string | null = null;
+    if (birthIso && birthIso !== '—') {
+      const bd = parseIsoLocal(birthIso);
+      if (bd) {
+        const age = ageYears(bd, today);
+        ageText = `Approximate age (from birth date ${birthIso}): ${age} years`;
+      }
+    }
+    if (expIso && expIso !== '—') {
+      const ed = parseIsoLocal(expIso);
+      if (ed) {
+        const d = diffDays(today, ed);
+        if (d > 0) {
+          expiryText = `Document expiry ${expIso}: in ${d} day${d === 1 ? '' : 's'}`;
+        } else if (d === 0) {
+          expiryText = `Document expiry ${expIso}: today`;
+        } else {
+          expiryText = `Document expiry ${expIso}: expired ${Math.abs(d)} day${Math.abs(d) === 1 ? '' : 's'} ago`;
+        }
+      }
+    }
+    if (!ageText && !expiryText) {
+      return null;
+    }
+    return { ageText, expiryText };
   });
 
   protected readonly detailRows = computed(() => {

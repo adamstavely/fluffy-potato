@@ -89,6 +89,8 @@ function loadWhisperTranscriber(): Promise<FileTranscriber> {
 
       <div
         class="rounded-lg border border-dashed border-slate-200 bg-slate-50/80 p-4"
+        role="region"
+        aria-label="Upload an audio or video file to transcribe"
         (dragover)="onDragOver($event)"
         (dragleave)="onDragLeave($event)"
         (drop)="onDrop($event)"
@@ -96,22 +98,27 @@ function loadWhisperTranscriber(): Promise<FileTranscriber> {
         [class.ring-slate-400]="fileDragOver()"
         [class.bg-slate-100]="fileDragOver()"
       >
-        <p class="text-xs font-medium text-slate-700">Transcribe an audio or video file</p>
-        <p class="mt-1 text-xs text-slate-500">
+        <p class="text-xs font-medium text-slate-700" id="transcription-file-upload-desc">
+          Transcribe an audio or video file
+        </p>
+        <p class="mt-1 text-xs text-slate-600">
           Drop a file here or choose one. Video must contain an audio track your browser can decode.
         </p>
         <div class="mt-3 flex flex-wrap items-center gap-2">
           <input
             #fileInput
+            id="transcription-file-input"
             type="file"
             class="sr-only"
             accept="audio/*,video/*"
+            aria-describedby="transcription-file-upload-desc"
             (change)="onFileInputChange($event)"
           />
           <button
             type="button"
             class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             [disabled]="fileTranscribing()"
+            aria-controls="transcription-file-input"
             (click)="fileInput.click()"
           >
             Choose file…

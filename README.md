@@ -26,7 +26,7 @@ The npm package name is `superapp`; the Angular project id is `superapp` (output
 
 ## Features
 
-- **Catalog UI** — Responsive grid grouped by category (`language`, `data`, `identity`), with debounced search and category filters.
+- **Catalog UI** — Responsive grid grouped by category (`language`, `data`, `identity`, `financial`, `productivity`), with debounced search and category filters.
 - **Favorites** — Persisted via `UserPrefsService` and `localStorage`.
 - **Detail drawer** — Rich metadata (maintainer, changelog, access level) with a push layout on larger viewports.
 - **Launch** — Open in a new tab with hooks for audit (`AuditService`) and analytics (`AnalyticsService`).

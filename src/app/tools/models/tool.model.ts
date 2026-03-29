@@ -1,4 +1,9 @@
-export type ToolCategory = 'language' | 'data' | 'identity';
+export type ToolCategory =
+  | 'language'
+  | 'data'
+  | 'identity'
+  | 'financial'
+  | 'productivity';
 
 export type ChangelogBump = 'major' | 'minor' | 'patch';
 
@@ -46,6 +51,14 @@ export const TOOL_CATEGORY_LABEL: Record<ToolCategory, string> = {
   language: 'Language',
   data: 'Data',
   identity: 'Identity',
+  financial: 'Financial',
+  productivity: 'Productivity',
 };
 
-export const TOOL_CATEGORY_ORDER: ToolCategory[] = ['language', 'data', 'identity'];
+export const TOOL_CATEGORY_ORDER: ToolCategory[] = [
+  'language',
+  'data',
+  'identity',
+  'financial',
+  'productivity',
+];

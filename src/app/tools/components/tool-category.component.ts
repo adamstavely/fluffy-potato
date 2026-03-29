@@ -10,12 +10,12 @@ import { ToolCardComponent } from './tool-card.component';
   imports: [ToolCardComponent],
   template: `
     <section class="mb-11" [attr.aria-labelledby]="headingId()">
-      <div class="mb-4 flex flex-wrap items-center gap-2.5">
+      <h2 [id]="headingId()" class="mb-4 flex flex-wrap items-center gap-2.5">
         <span [class]="badgeClass()">{{ label() }}</span>
         <span class="text-xs font-normal text-[var(--app-text-muted)]"
           >{{ tools().length }} tool{{ tools().length !== 1 ? 's' : '' }}</span
         >
-      </div>
+      </h2>
       <div
         class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3.5"
         role="list"
@@ -63,6 +63,10 @@ export class ToolCategoryComponent {
         return `${base} bg-[var(--app-tag-data-bg)] text-[var(--app-tag-data-text)]`;
       case 'identity':
         return `${base} bg-[var(--app-tag-sec-bg)] text-[var(--app-tag-sec-text)]`;
+      case 'financial':
+        return `${base} bg-[var(--app-tag-fin-bg)] text-[var(--app-tag-fin-text)]`;
+      case 'productivity':
+        return `${base} bg-[var(--app-tag-prod-bg)] text-[var(--app-tag-prod-text)]`;
     }
   }
 }

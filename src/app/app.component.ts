@@ -7,6 +7,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   template: `
     <div class="flex min-h-screen min-h-[100dvh] flex-col bg-[var(--app-bg)]">
+      <a class="skip-to-main" href="#main-content">Skip to main content</a>
       <header
         class="sticky top-0 z-[60] border-b border-[var(--app-border)] bg-[var(--app-surface)]"
       >
@@ -18,10 +19,12 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
           <nav class="flex flex-1 gap-1" aria-label="Primary">
             <span
               class="cursor-default rounded-md px-3 py-1.5 text-[13.5px] tracking-tight text-[var(--app-text-secondary)]"
+              aria-disabled="true"
               >Home</span
             >
             <span
               class="cursor-default rounded-md px-3 py-1.5 text-[13.5px] tracking-tight text-[var(--app-text-secondary)]"
+              aria-disabled="true"
               >Workspace</span
             >
             <a
@@ -33,10 +36,12 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
             >
             <span
               class="cursor-default rounded-md px-3 py-1.5 text-[13.5px] tracking-tight text-[var(--app-text-secondary)]"
+              aria-disabled="true"
               >Reports</span
             >
             <span
               class="cursor-default rounded-md px-3 py-1.5 text-[13.5px] tracking-tight text-[var(--app-text-secondary)]"
+              aria-disabled="true"
               >Admin</span
             >
           </nav>
@@ -48,7 +53,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
           </div>
         </div>
       </header>
-      <main class="min-h-0 flex-1">
+      <main id="main-content" class="min-h-0 flex-1" tabindex="-1">
         <router-outlet />
       </main>
     </div>

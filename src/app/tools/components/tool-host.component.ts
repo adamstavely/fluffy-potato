@@ -18,7 +18,8 @@ import { ToolScaffoldComponent } from './tool-scaffold.component';
       <sa-tool-scaffold [config]="scaffoldConfig()">
         @if (hostComponent(); as comp) {
           <ng-container
-            *ngComponentOutlet="comp; ngComponentOutletInputs: hostInputs()"
+            [ngComponentOutlet]="comp"
+            [ngComponentOutletInputs]="hostInputs()"
           />
         }
       </sa-tool-scaffold>

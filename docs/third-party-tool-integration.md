@@ -17,7 +17,7 @@ Each tool is one object in the registry array. The shape matches `ToolDefinition
 | `shortDescription` | Yes | One line on tool cards. |
 | `description` | Yes | Longer copy for the detail drawer. |
 | `version` | Yes | Semver string; must stay in sync with what the shell expects (see §5). |
-| `category` | Yes | One of: `language`, `data`, `identity`. |
+| `category` | Yes | One of: `language`, `data`, `identity`, `financial`, `productivity`. |
 | `icon` | Yes | **Lucide** icon name in **PascalCase** (e.g. `Languages`, `Braces`). The app only renders icons that are registered in `src/app/tools/tools-icons.module.ts`. |
 | `launchUrl` | Yes | Where **Launch** navigates (see §2). |
 | `maintainer` | Yes | `teamName`, `party` (`first_party` \| `third_party`), `contact`, optional `slackChannel`. |

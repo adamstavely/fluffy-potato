@@ -1,0 +1,415 @@
+<div class="mx-auto max-w-6xl space-y-4">
+  <p class="rounded-lg border border-amber-100 bg-amber-50/80 px-3 py-2 text-xs leading-relaxed text-amber-950">
+    {{ piiNotice }} Up to {{ DATA_TOOL_MAX_ROWS | number }} data rows per load.
+  </p>
+
+  <p class="text-sm leading-relaxed text-slate-600">
+    Paste spreadsheet-style data, load it once, then use the tabs to explore, clean, dedupe, pivot,
+    normalize, extract dates from notes, or find-and-replace in cells. Everything runs in your
+    browser.
+  </p>
+
+  <div
+    class="flex flex-wrap gap-1 rounded-lg border border-slate-200 bg-slate-100 p-0.5 text-xs font-medium text-slate-700"
+    role="tablist"
+  >
+    @for (t of tabDefs; track t.id) {
+      <button
+        type="button"
+        role="tab"
+        class="rounded-md px-2.5 py-1.5 transition-colors"
+        [class.bg-white]="activeTab() === t.id"
+        [class.shadow-sm]="activeTab() === t.id"
+        [class.text-slate-900]="activeTab() === t.id"
+        (click)="setTab(t.id)"
+      >
+        {{ t.label }}
+      </button>
+    }
+  </div>
+
+  <!-- Input + load (always visible for context) -->
+  <div class="space-y-2 rounded-lg border border-slate-200 bg-white p-4">
+    <div class="flex flex-wrap items-center gap-3 text-xs text-slate-700">
+      <label class="inline-flex items-center gap-1.5">
+        Delimiter
+        <select
+          class="rounded border border-slate-200 bg-white px-2 py-1 font-mono"
+          [(ngModel)]="delimiterUi"
+        >
+          <option value="auto">Auto</option>
+          <option value="tab">Tab</option>
+          <option value="comma">Comma</option>
+        </select>
+      </label>
+      <label class="inline-flex cursor-pointer items-center gap-2">
+        <input type="checkbox" [(ngModel)]="firstRowHeader" />
+        First row is header
+      </label>
+      <button
+        type="button"
+        class="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-800"
+        (click)="loadTable()"
+      >
+        Load table
+      </button>
+    </div>
+    <label class="block text-xs font-medium text-slate-700">
+      Paste data
+      <textarea
+        class="mt-1 min-h-[100px] w-full resize-y rounded-lg border border-slate-200 bg-slate-50/50 p-3 font-mono text-sm text-slate-900 outline-none focus:border-slate-400"
+        [(ngModel)]="rawPaste"
+        spellcheck="false"
+        placeholder="Tab- or comma-separated values, one row per line…"
+      ></textarea>
+    </label>
+    @if (parseNotice(); as note) {
+      <p class="text-xs text-slate-600">{{ note }}</p>
+    }
+  </div>
+
+  @if (activeTab() === 'grid') {
+    <div class="space-y-3">
+      <div class="flex flex-wrap items-center gap-3">
+        <label class="flex min-w-[200px] flex-1 items-center gap-2 text-xs text-slate-700">
+          <span class="shrink-0">Filter rows</span>
+          <input
+            type="search"
+            class="flex-1 rounded-lg border border-slate-200 px-2 py-1.5 font-mono text-xs"
+            placeholder="Any cell contains…"
+            [ngModel]="filterQuery()"
+            (ngModelChange)="filterQuery.set($event)"
+          />
+        </label>
+        <div class="flex flex-wrap gap-2">
+          <button
+            type="button"
+            class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50"
+            (click)="exportCsv()"
+          >
+            Download CSV
+          </button>
+          <button
+            type="button"
+            class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50"
+            (click)="exportTsv()"
+          >
+            Download TSV
+          </button>
+        </div>
+      </div>
+
+      @if (columnCount() === 0) {
+        <p class="text-sm text-slate-500">Load a table to see the sortable grid.</p>
+      } @else {
+        @if (displayRows(); as dr) {
+          @if (dr.truncated) {
+            <p class="text-xs text-amber-800">
+              Showing first {{ TABLE_WORKSPACE_DISPLAY_MAX | number }} of
+              {{ dr.total | number }} filtered rows in the grid (export still includes full table).
+            </p>
+          }
+          <div class="max-h-[min(480px,70vh)] overflow-auto rounded-lg border border-slate-200">
+            <table class="min-w-full border-collapse text-left text-xs">
+              <thead class="sticky top-0 z-10 bg-slate-100">
+                <tr>
+                  @for (col of columnIndices(); track col) {
+                    <th
+                      class="cursor-pointer border border-slate-200 px-2 py-1.5 font-semibold text-slate-800 hover:bg-slate-200"
+                      (click)="toggleSort(col)"
+                    >
+                      {{ headerLabel(col) }} {{ sortIndicator(col) }}
+                    </th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of dr.rows; track $index) {
+                  <tr class="odd:bg-white even:bg-slate-50/80">
+                    @for (col of columnIndices(); track col) {
+                      <td class="border border-slate-200 px-2 py-1 font-mono text-slate-800">
+                        {{ padRow(row, columnCount())[col] }}
+                      </td>
+                    }
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+    </div>
+  }
+
+  @if (activeTab() === 'profiler') {
+    <div class="overflow-x-auto rounded-lg border border-slate-200">
+      @if (profiles().length === 0) {
+        <p class="p-4 text-sm text-slate-500">Load a table to profile columns.</p>
+      } @else {
+        <table class="min-w-full border-collapse text-left text-xs">
+          <thead class="bg-slate-100">
+            <tr>
+              <th class="border border-slate-200 px-2 py-1.5">Column</th>
+              <th class="border border-slate-200 px-2 py-1.5">Inferred type</th>
+              <th class="border border-slate-200 px-2 py-1.5">Empty / null</th>
+              <th class="border border-slate-200 px-2 py-1.5">Distinct (capped)</th>
+              <th class="border border-slate-200 px-2 py-1.5">Min / max (sample)</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of profiles(); track p.columnLabel) {
+              <tr>
+                <td class="border border-slate-200 px-2 py-1 font-medium">{{ p.columnLabel }}</td>
+                <td class="border border-slate-200 px-2 py-1">{{ p.inferredType }}</td>
+                <td class="border border-slate-200 px-2 py-1">{{ p.nullOrEmpty }}</td>
+                <td class="border border-slate-200 px-2 py-1">{{ p.distinctCount }}</td>
+                <td class="border border-slate-200 px-2 py-1 font-mono text-[11px]">
+                  @if (p.minSample !== undefined && p.maxSample !== undefined) {
+                    {{ p.minSample }} … {{ p.maxSample }}
+                  } @else {
+                    —
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  }
+
+  @if (activeTab() === 'dedupe') {
+    <div class="space-y-3 text-sm text-slate-700">
+      <label class="mr-4 inline-flex items-center gap-2">
+        <input type="radio" name="dedupeMode" [(ngModel)]="dedupeMode" value="columns" />
+        By key column(s)
+      </label>
+      <label class="inline-flex items-center gap-2">
+        <input type="radio" name="dedupeMode" [(ngModel)]="dedupeMode" value="whole" />
+        Whole row (exact)
+      </label>
+      @if (dedupeMode === 'columns') {
+        <label class="block text-xs">
+          1-based column numbers (comma-separated), e.g. <code class="rounded bg-slate-100 px-1">1</code> or
+          <code class="rounded bg-slate-100 px-1">1,3</code>
+          <input
+            class="mt-1 w-full max-w-md rounded border border-slate-200 px-2 py-1 font-mono"
+            [(ngModel)]="dedupeKeyCols"
+          />
+        </label>
+      }
+      <button
+        type="button"
+        class="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-800"
+        (click)="applyDedupe()"
+      >
+        Remove duplicate rows
+      </button>
+      <p class="text-xs text-slate-500">First occurrence is kept. Applies to the loaded table in memory.</p>
+    </div>
+  }
+
+  @if (activeTab() === 'pivot') {
+    <div class="flex flex-wrap items-end gap-4 text-xs text-slate-700">
+      <label class="inline-flex flex-col gap-1">
+        Group by column (1-based)
+        <input
+          type="number"
+          min="1"
+          class="w-20 rounded border border-slate-200 px-2 py-1 font-mono"
+          [ngModel]="pivotGroupCol()"
+          (ngModelChange)="pivotGroupCol.set(+$event)"
+        />
+      </label>
+      <label class="inline-flex flex-col gap-1">
+        Value column (1-based)
+        <input
+          type="number"
+          min="1"
+          class="w-20 rounded border border-slate-200 px-2 py-1 font-mono"
+          [ngModel]="pivotValueCol()"
+          (ngModelChange)="pivotValueCol.set(+$event)"
+        />
+      </label>
+      <label class="inline-flex flex-col gap-1">
+        Aggregate
+        <select
+          class="rounded border border-slate-200 bg-white px-2 py-1"
+          [ngModel]="pivotAgg()"
+          (ngModelChange)="setPivotAgg($event)"
+        >
+          <option value="sum">Sum (numeric)</option>
+          <option value="count">Count rows</option>
+        </select>
+      </label>
+    </div>
+    <div class="mt-3 overflow-x-auto rounded-lg border border-slate-200">
+      @if (pivotResult().length === 0) {
+        <p class="p-4 text-sm text-slate-500">Load a table and set valid column indexes.</p>
+      } @else {
+        <table class="min-w-full border-collapse text-left text-xs">
+          <thead class="bg-slate-100">
+            <tr>
+              <th class="border border-slate-200 px-2 py-1.5">Group</th>
+              <th class="border border-slate-200 px-2 py-1.5">
+                {{ pivotAgg() === 'sum' ? 'Sum' : 'Count' }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (pr of pivotResult(); track pr.groupKey) {
+              <tr>
+                <td class="border border-slate-200 px-2 py-1">{{ pr.groupKey }}</td>
+                <td class="border border-slate-200 px-2 py-1 font-mono">{{ pr.value }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  }
+
+  @if (activeTab() === 'normalize') {
+    <div class="space-y-3 text-sm text-slate-700">
+      <div class="flex flex-wrap gap-4 text-xs">
+        <label class="inline-flex cursor-pointer items-center gap-2">
+          <input type="checkbox" [(ngModel)]="normCollapseWs" />
+          Collapse spaces
+        </label>
+        <label class="inline-flex cursor-pointer items-center gap-2">
+          <input type="checkbox" [(ngModel)]="normLines" />
+          Unify line endings in cells
+        </label>
+        <label class="inline-flex cursor-pointer items-center gap-2">
+          <input type="checkbox" [(ngModel)]="normStripInvisible" />
+          Strip zero-width / BOM
+        </label>
+        <label class="inline-flex cursor-pointer items-center gap-2">
+          <input type="checkbox" [(ngModel)]="normNfc" (ngModelChange)="normNfd = false" />
+          Unicode NFC
+        </label>
+        <label class="inline-flex cursor-pointer items-center gap-2">
+          <input type="checkbox" [(ngModel)]="normNfd" (ngModelChange)="normNfc = false" />
+          Unicode NFD
+        </label>
+      </div>
+      <button
+        type="button"
+        class="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-800"
+        (click)="applyNormalize()"
+      >
+        Apply to all cells
+      </button>
+      <div class="border-t border-slate-200 pt-3">
+        <p class="mb-2 text-xs font-medium text-slate-600">Split one column</p>
+        <div class="flex flex-wrap items-end gap-3 text-xs">
+          <label class="inline-flex flex-col gap-1">
+            Column (1-based)
+            <input
+              type="number"
+              min="1"
+              class="w-20 rounded border border-slate-200 px-2 py-1 font-mono"
+              [(ngModel)]="splitCol1"
+            />
+          </label>
+          <label class="inline-flex flex-col gap-1">
+            Delimiter
+            <input
+              class="w-28 rounded border border-slate-200 px-2 py-1 font-mono"
+              [(ngModel)]="splitDelimiter"
+            />
+          </label>
+          <button
+            type="button"
+            class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50"
+            (click)="applySplitColumn()"
+          >
+            Split column
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (activeTab() === 'timeline') {
+    <div class="space-y-2">
+      <label class="block text-xs font-medium text-slate-700">
+        Free text (notes, logs, email)
+        <textarea
+          class="mt-1 min-h-[140px] w-full resize-y rounded-lg border border-slate-200 bg-white p-3 font-mono text-sm text-slate-900"
+          [ngModel]="timelineText()"
+          (ngModelChange)="timelineText.set($event)"
+          spellcheck="false"
+          placeholder="Paste text; ISO dates, slashes, and dotted dates are detected."
+        ></textarea>
+      </label>
+      <div class="flex gap-2">
+        <button
+          type="button"
+          class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50"
+          [disabled]="timelineHits().length === 0"
+          (click)="copyText(timelineExportText())"
+        >
+          Copy TSV (date, match, context)
+        </button>
+      </div>
+      <div class="max-h-[280px] overflow-auto rounded-lg border border-slate-200">
+        @if (timelineHits().length === 0) {
+          <p class="p-3 text-xs text-slate-500">No dates extracted yet.</p>
+        } @else {
+          <table class="min-w-full border-collapse text-left text-xs">
+            <thead class="sticky top-0 bg-slate-100">
+              <tr>
+                <th class="border border-slate-200 px-2 py-1">Sort key</th>
+                <th class="border border-slate-200 px-2 py-1">Match</th>
+                <th class="border border-slate-200 px-2 py-1">Context</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (h of timelineHits(); track $index) {
+                <tr>
+                  <td class="border border-slate-200 px-2 py-1 font-mono">{{ h.isoOrRaw }}</td>
+                  <td class="border border-slate-200 px-2 py-1 font-mono">{{ h.match }}</td>
+                  <td class="border border-slate-200 px-2 py-1 text-slate-700">{{ h.context }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+    </div>
+  }
+
+  @if (activeTab() === 'findreplace') {
+    <div class="flex flex-wrap items-end gap-3 text-sm">
+      <label class="inline-flex flex-col gap-1 text-xs">
+        Find
+        <input
+          class="w-48 rounded border border-slate-200 px-2 py-1 font-mono"
+          [(ngModel)]="frFind"
+        />
+      </label>
+      <label class="inline-flex flex-col gap-1 text-xs">
+        Replace with
+        <input
+          class="w-48 rounded border border-slate-200 px-2 py-1 font-mono"
+          [(ngModel)]="frReplace"
+        />
+      </label>
+      <label class="inline-flex cursor-pointer items-center gap-2 text-xs">
+        <input type="checkbox" [(ngModel)]="frCaseInsensitive" />
+        Case-insensitive
+      </label>
+      <button
+        type="button"
+        class="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-800"
+        (click)="applyFindReplace()"
+      >
+        Apply to all cells
+      </button>
+    </div>
+    <p class="text-xs text-slate-500">
+      Literal find string (not regex). Empty find leaves the table unchanged.
+    </p>
+  }
+</div>

@@ -65,7 +65,7 @@ const PRESETS: { id: TransliterationPreset; label: string; hint: string }[] = [
 
         <div class="flex min-h-0 flex-col">
           <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-medium text-slate-700">
-            <span>Output</span>
+            <label for="transliteration-output">Output</label>
             <button
               type="button"
               class="shrink-0 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-normal text-slate-700 hover:bg-slate-50"
@@ -76,6 +76,7 @@ const PRESETS: { id: TransliterationPreset; label: string; hint: string }[] = [
             </button>
           </div>
           <textarea
+            id="transliteration-output"
             class="mt-1 min-h-[180px] w-full flex-1 resize-y rounded-lg border border-slate-200 bg-slate-50 p-3 font-mono text-sm text-slate-900 outline-none md:min-h-[240px]"
             [value]="output()"
             readonly

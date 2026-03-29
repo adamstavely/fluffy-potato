@@ -1,15 +1,23 @@
 import { NgModule } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import {
+  BadgePercent,
   Binary,
   Braces,
   ChefHat,
+  CreditCard,
   ExternalLink,
   Fingerprint,
+  Globe,
+  Landmark,
   Languages,
+  LayoutGrid,
   ListChecks,
   Mic,
+  Phone,
   ReplaceAll,
+  Scale,
+  ScanBarcode,
   ScanLine,
   Star,
   PanelRightClose,
@@ -17,8 +25,9 @@ import {
   Search,
   Shield,
   Table,
+  Timer,
   X,
-} from 'lucide-angular/src/icons';
+} from 'lucide-angular';
 
 /**
  * Lucide icons used by the Tools catalog. Import this NgModule into standalone components
@@ -42,8 +51,17 @@ import {
       Languages,
       Mic,
       ReplaceAll,
+      LayoutGrid,
       ListChecks,
       ScanLine,
+      Timer,
+      Scale,
+      Globe,
+      Landmark,
+      Phone,
+      BadgePercent,
+      CreditCard,
+      ScanBarcode,
     }),
   ],
   exports: [LucideAngularModule],
