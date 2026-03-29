@@ -95,7 +95,7 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
                   tool()!.maintainer.party === 'first_party' ? '1st-party (SuperApp)' : '3rd-party integration'
                 }}</span>
               </div>
-              <div class="info-row-drawer flex gap-2 border-b border-[var(--app-border-subtle)] py-2.5 text-[13.5px]">
+              <div class="info-row-drawer flex gap-2 py-2.5 text-[13.5px] last:border-b-0">
                 <span class="w-[90px] shrink-0 text-[13px] text-[var(--app-text-muted)]">Contact</span>
                 <span class="min-w-0 break-words font-normal text-[var(--app-text-primary)]">
                   <a class="text-[#2563eb] no-underline hover:underline" [href]="contactHref()">{{
@@ -103,14 +103,6 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
                   }}</a>
                 </span>
               </div>
-              @if (tool()!.maintainer.slackChannel) {
-                <div class="info-row-drawer flex gap-2 py-2.5 text-[13.5px] last:border-b-0">
-                  <span class="w-[90px] shrink-0 text-[13px] text-[var(--app-text-muted)]">Slack</span>
-                  <span class="min-w-0 font-normal text-[var(--app-text-primary)]">{{
-                    tool()!.maintainer.slackChannel
-                  }}</span>
-                </div>
-              }
             </div>
           </section>
 

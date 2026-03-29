@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "generate-tool": "node scripts/generate-tool.mjs"
+    "generate-tool": "node getting-started/generate-tool.mjs"
   },
   "private": true,
   "dependencies": {

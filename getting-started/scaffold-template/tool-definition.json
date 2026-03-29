@@ -10,8 +10,7 @@
   "maintainer": {
     "teamName": "Your Team",
     "party": "first_party",
-    "contact": "mailto:you@example.com",
-    "slackChannel": "#your-channel"
+    "contact": "mailto:you@example.com"
   },
   "changelog": [
     {

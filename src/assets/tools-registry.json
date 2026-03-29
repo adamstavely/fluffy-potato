@@ -11,8 +11,7 @@
     "maintainer": {
       "teamName": "SuperApp Platform",
       "party": "third_party",
-      "contact": "mailto:platform@example.com",
-      "slackChannel": "#tools-onboarding"
+      "contact": "mailto:platform@example.com"
     },
     "changelog": [
       {

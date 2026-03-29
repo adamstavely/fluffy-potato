@@ -13,7 +13,6 @@ export interface MaintainerInfo {
   teamName: string;
   party: Party;
   contact: string;
-  slackChannel?: string;
 }
 
 export interface ChangelogEntry {

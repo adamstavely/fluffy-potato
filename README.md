@@ -20,7 +20,8 @@ The npm package name is `superapp`; the Angular project id is `superapp` (output
 10. [Extending the app](#extending-the-app)
 11. [Host integration (platform)](#host-integration-platform)
 12. [Testing and builds](#testing-and-builds)
-13. [Additional resources](#additional-resources)
+13. [Contributor documentation](#contributor-documentation)
+14. [Additional resources](#additional-resources)
 
 ---
 
@@ -28,7 +29,7 @@ The npm package name is `superapp`; the Angular project id is `superapp` (output
 
 - **Catalog UI** — Responsive grid grouped by category (`language`, `data`, `identity`, `financial`, `productivity`), with debounced search and category filters.
 - **Favorites** — Persisted via `UserPrefsService` and `localStorage`.
-- **Detail drawer** — Rich metadata (maintainer, changelog, access level) with a push layout on larger viewports.
+- **Detail drawer** — Full `ToolDefinition` metadata: maintainer (team, first- vs third-party source, contact link), version, category, access level, audit-log flag, and changelog entries with semver **bump** badges (major / minor / patch); push layout on larger viewports.
 - **Launch** — Open in a new tab with hooks for audit (`AuditService`) and analytics (`AnalyticsService`).
 - **Registry-driven** — `ToolRegistryService` loads tools from a remote API and/or bundled JSON (`src/assets/tools-registry.json`).
 - **In-app tools** — `ToolScaffoldComponent` + `ToolHostComponent` host per-tool routes; optional **CyberChef** wrapper assets live under `src/assets/cyberchef/`.
@@ -87,9 +88,9 @@ Open **http://localhost:4200/** — the app redirects `/` to `/tools`. The dev s
 | `npm run build` | Production build → `dist/superapp` |
 | `npm run watch` | Development build with `--watch` |
 | `npm test` | Karma + Jasmine unit tests |
-| `npm run generate-tool -- <tool-id>` | Scaffolds `src/tools/<tool-id>/` from `tools/scaffold-template/` |
+| `npm run generate-tool -- <category> <tool-id>` | Scaffolds `src/app/tools/<category>/<tool-id>/` (see [`getting-started/README.md`](getting-started/README.md)) |
 
-`<tool-id>` must match `^[a-z0-9-]+$` (lowercase letters, digits, hyphens).
+`<category>` is one of: `language`, `data`, `identity`, `financial`, `productivity`. `<tool-id>` must match `^[a-z0-9-]+$` (lowercase letters, digits, hyphens).
 
 ---
 
@@ -101,10 +102,10 @@ High-level layout (not every file):
 .
 ├── angular.json              # CLI project "superapp"
 ├── package.json
-├── scripts/
-│   └── generate-tool.mjs     # Tool folder scaffold
-├── tools/
-│   └── scaffold-template/    # Templates for generate-tool
+├── getting-started/          # Contributor guide + scaffold (CLI, template JSON; see Contributor documentation)
+│   ├── README.md             # Registry contract, external vs in-app, SC-01–SC-12
+│   ├── generate-tool.mjs
+│   └── scaffold-template/
 ├── public/                   # Copied to site root
 └── src/
     ├── assets/
@@ -136,7 +137,7 @@ High-level layout (not every file):
             └── tool-component.registry.ts   # toolId → host component
 ```
 
-Generated tool folders (`npm run generate-tool`) live under **`src/tools/<tool-id>/`** (metadata templates), separate from **`src/app/tools/`** (Angular feature code).
+Generated tool folders (`npm run generate-tool`) live under **`src/app/tools/<category>/<tool-id>/`** next to the host component you add. See [`getting-started/README.md`](getting-started/README.md).
 
 ---
 
@@ -168,7 +169,7 @@ Generated tool folders (`npm run generate-tool`) live under **`src/tools/<tool-i
 
 ### Tool definition shape
 
-Types live in [`src/app/tools/models/tool.model.ts`](src/app/tools/models/tool.model.ts). The bundled registry in [`src/assets/tools-registry.json`](src/assets/tools-registry.json) is the reference payload for local development.
+Types live in [`src/app/tools/models/tool.model.ts`](src/app/tools/models/tool.model.ts). Each tool includes **`maintainer`** (`teamName`, `party`: `first_party` \| `third_party`, `contact`), **`changelog`** (entries with `version`, `date`, `bump`, `notes`), plus **`accessLevel`** and **`auditLogEnabled`**. The bundled registry in [`src/assets/tools-registry.json`](src/assets/tools-registry.json) is the reference payload for local development.
 
 ---
 
@@ -176,7 +177,7 @@ Types live in [`src/app/tools/models/tool.model.ts`](src/app/tools/models/tool.m
 
 1. **Load** — `ToolRegistryService` fetches the registry (API and/or asset) and exposes the full list to the catalog.
 2. **Browse** — The tools page shows cards by category, supports search and filters, and persists favorites.
-3. **Detail** — Selecting a card opens a drawer with full description, maintainer, changelog, and launch actions.
+3. **Detail** — Selecting a card opens a drawer with description, maintainer (including party and contact), structured changelog with bump labels, access and audit settings, and launch actions.
 4. **Launch external** — `ToolLaunchService` uses `launchUrl` and triggers audit/analytics hooks as configured.
 5. **Open in app** — Navigating to `/tools/:toolId` runs `toolRouteGuard`, then loads `ToolHostComponent`, which picks a host component from `TOOL_HOST_COMPONENTS` in [`tool-component.registry.ts`](src/app/tools/tool-component.registry.ts). Unknown ids or ids without a host mapping redirect to `/not-found`.
 6. **Scaffold** — `sa-tool-scaffold` wraps tool content; child components can inject `TOOL_SCAFFOLD_TOOL_ID` from [`src/app/tools/tokens/tool-scaffold-context.ts`](src/app/tools/tokens/tool-scaffold-context.ts).
@@ -188,7 +189,7 @@ Types live in [`src/app/tools/models/tool.model.ts`](src/app/tools/models/tool.m
 1. **Add or update tools in the registry** — Edit `src/assets/tools-registry.json` and/or your API so each entry matches `ToolDefinition` (categories, Lucide `icon` name, etc.).
 2. **Register Lucide icons** — Add new icon names to the `pick({ ... })` list in [`src/app/tools/tools-icons.module.ts`](src/app/tools/tools-icons.module.ts) so cards can render them without duplicate imports elsewhere.
 3. **Custom in-app UI for a tool id** — Create a standalone (or imported) component and add `toolId: YourComponent` to `TOOL_HOST_COMPONENTS` in [`src/app/tools/tool-component.registry.ts`](src/app/tools/tool-component.registry.ts). Every in-app registry tool must have a mapping, or `/tools/:toolId` shows the not-found page.
-4. **New tool folder from CLI** — Run `npm run generate-tool -- my-tool-id`, then implement the Angular host component and wire it in the registry as above. The script creates `tool-definition.json` and `compliance-checklist.md` under `src/tools/my-tool-id/`.
+4. **New tool folder from CLI** — Run `npm run generate-tool -- <category> my-tool-id`, then implement the Angular host component and wire it in the registry as above. The script creates `tool-definition.json` under `src/app/tools/<category>/my-tool-id/`. Scaffold compliance (SC-01–SC-12) and the full workflow are in [`getting-started/README.md`](getting-started/README.md).
 
 ---
 
@@ -219,6 +220,22 @@ npm run build
 Artifacts are written to **`dist/superapp/`**. Production configuration enables hashing, budgets, and replaces `environment.ts` with `environment.prod.ts`.
 
 End-to-end tests are **not** configured in this repository’s `angular.json`. To add E2E coverage, use your preferred runner (for example Cypress or Playwright) and follow the current [Angular testing documentation](https://angular.dev/guide/testing).
+
+---
+
+## Contributor documentation
+
+Tool authors and platform contributors should start with **[`getting-started/README.md`](getting-started/README.md)**. It documents the registry contract, **external** (new tab) vs **in-app** (`/tools/:id`) integration, the `npm run generate-tool` workflow, **SC-01–SC-12** scaffold compliance, and checklists for third-party maintainers.
+
+**Layout**
+
+| Path | Role |
+|------|------|
+| [`getting-started/README.md`](getting-started/README.md) | Single guide: API vs bundled registry, launch behavior, routing, versioning, compliance table |
+| [`getting-started/generate-tool.mjs`](getting-started/generate-tool.mjs) | CLI invoked by `npm run generate-tool` |
+| [`getting-started/scaffold-template/tool-definition.json`](getting-started/scaffold-template/tool-definition.json) | Template manifest aligned with `ToolDefinition` |
+
+**Consolidation** — This `getting-started/` folder replaces the older split between **`scripts/generate-tool.mjs`**, **`tools/scaffold-template/`**, and **`docs/third-party-tool-integration.md`**, so scaffolding and third-party integration docs live in one place. The npm script **`generate-tool`** runs `node getting-started/generate-tool.mjs` (see [`package.json`](package.json)).
 
 ---
 
