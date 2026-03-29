@@ -3,6 +3,9 @@ import { Component, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 
+import { SaButtonComponent } from '../../../ui/sa-button.component';
+import { SaSelectComponent } from '../../../ui/sa-select.component';
+import { SaTextareaComponent } from '../../../ui/sa-textarea.component';
 import type { ToolDefinition } from '../../models/tool.model';
 
 interface MyMemoryResponse {
@@ -50,7 +53,7 @@ function parseGtxTranslation(data: unknown): string {
 @Component({
   selector: 'sa-translation-tool',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, SaSelectComponent, SaTextareaComponent, SaButtonComponent],
   template: `
     <div class="mx-auto max-w-6xl space-y-4">
       <p class="text-sm leading-relaxed text-slate-600">
@@ -68,80 +71,57 @@ function parseGtxTranslation(data: unknown): string {
       }
 
       <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        <label class="block text-xs font-medium text-slate-700 sm:col-span-2 lg:col-span-1">
-          Translation engine
-          <select
-            class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-400"
-            [(ngModel)]="engine"
-          >
-            @for (e of engines; track e.id) {
-              <option [value]="e.id">{{ e.label }}</option>
-            }
-          </select>
-        </label>
-        <label class="block text-xs font-medium text-slate-700">
-          Source language
-          <select
-            class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-400"
-            [(ngModel)]="sourceLang"
-          >
-            @for (l of langs; track l.code) {
-              <option [value]="l.code">{{ l.label }}</option>
-            }
-          </select>
-        </label>
-        <label class="block text-xs font-medium text-slate-700">
-          Target language
-          <select
-            class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-400"
-            [(ngModel)]="targetLang"
-          >
-            @for (l of targetLangs; track l.code) {
-              <option [value]="l.code">{{ l.label }}</option>
-            }
-          </select>
-        </label>
+        <sa-select
+          label="Translation engine"
+          [options]="engineOptions"
+          [(ngModel)]="engine"
+          fieldClass="sm:col-span-2 lg:col-span-1"
+        />
+        <sa-select label="Source language" [options]="sourceLangOptions" [(ngModel)]="sourceLang" />
+        <sa-select label="Target language" [options]="targetLangOptions" [(ngModel)]="targetLang" />
       </div>
 
       <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-stretch">
-        <label class="flex min-h-0 flex-1 flex-col text-xs font-medium text-slate-700">
-          Text
-          <textarea
-            class="mt-1 min-h-[180px] w-full flex-1 resize-y rounded-lg border border-slate-200 bg-white p-3 font-mono text-sm text-slate-900 outline-none focus:border-slate-400"
-            [(ngModel)]="sourceText"
-            placeholder="Paste text to translate…"
-            spellcheck="false"
-          ></textarea>
-        </label>
-        <label class="flex min-h-0 flex-1 flex-col text-xs font-medium text-slate-700">
-          Translation
-          <textarea
-            class="mt-1 min-h-[180px] w-full flex-1 resize-y rounded-lg border border-slate-200 bg-slate-50 p-3 font-mono text-sm text-slate-900 outline-none"
-            [value]="output()"
-            readonly
-            placeholder="Translation appears here…"
-            spellcheck="false"
-          ></textarea>
-        </label>
+        <sa-textarea
+          label="Text"
+          [rows]="8"
+          [(ngModel)]="sourceText"
+          placeholder="Paste text to translate…"
+          [spellcheck]="false"
+          inputClass="font-mono text-sm"
+          fieldClass="min-h-[180px] flex-1"
+        />
+        <sa-textarea
+          label="Translation"
+          [rows]="8"
+          [ngModel]="output()"
+          [readOnly]="true"
+          placeholder="Translation appears here…"
+          [spellcheck]="false"
+          inputClass="font-mono text-sm bg-slate-50"
+          fieldClass="min-h-[180px] flex-1"
+        />
       </div>
 
       <div class="flex flex-wrap items-center gap-2">
-        <button
-          type="button"
-          class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+        <sa-button
+          variant="flat"
+          ariaLabel="Translate text"
+          innerClass="!bg-slate-900 px-4 py-2 text-sm font-medium !text-white hover:!opacity-90 disabled:!cursor-not-allowed disabled:!opacity-50"
           [disabled]="loading() || !sourceText.trim()"
           (click)="translate()"
         >
           {{ loading() ? 'Translating…' : 'Translate' }}
-        </button>
-        <button
-          type="button"
-          class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+        </sa-button>
+        <sa-button
+          variant="stroked"
+          ariaLabel="Copy translation result"
+          innerClass="px-3 py-2 text-sm"
           [disabled]="!output()"
           (click)="copyOutput()"
         >
           Copy result
-        </button>
+        </sa-button>
       </div>
     </div>
   `,
@@ -151,9 +131,9 @@ export class TranslationToolComponent {
 
   private readonly http = inject(HttpClient);
 
-  protected readonly engines = ENGINES;
-  protected readonly langs = LANGS;
-  protected readonly targetLangs = TARGET_LANGS;
+  protected readonly engineOptions = ENGINES.map((e) => ({ value: e.id, label: e.label }));
+  protected readonly sourceLangOptions = LANGS.map((l) => ({ value: l.code, label: l.label }));
+  protected readonly targetLangOptions = TARGET_LANGS.map((l) => ({ value: l.code, label: l.label }));
   protected engine: 'mymemory' | 'google' = 'mymemory';
   protected sourceLang = 'autodetect';
   protected targetLang = 'es';

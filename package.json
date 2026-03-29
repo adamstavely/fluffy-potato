@@ -26,7 +26,9 @@
     "ibantools": "^4.5.1",
     "libphonenumber-js": "^1.12.41",
     "lucide-angular": "^1.0.0",
+    "mammoth": "^1.12.0",
     "mrz": "^5.0.2",
+    "pdfjs-dist": "^4.10.38",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
@@ -37,6 +39,7 @@
     "@angular/compiler-cli": "^19.2.0",
     "@tailwindcss/postcss": "^4.2.2",
     "@types/jasmine": "~5.1.0",
+    "axe-core": "^4.10.3",
     "jasmine-core": "~5.6.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

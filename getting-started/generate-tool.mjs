@@ -50,7 +50,16 @@ data.id = toolId;
 data.category = category;
 writeFileSync(join(destDir, 'tool-definition.json'), JSON.stringify(data, null, 2) + '\n');
 
+const pascalParts = toolId.split('-').map((s) => s.charAt(0).toUpperCase() + s.slice(1));
+const toolClassName = `${pascalParts.join('')}ToolComponent`;
+
+const componentTemplatePath = join(templateDir, 'tool-component.template.ts');
+let componentSrc = readFileSync(componentTemplatePath, 'utf8');
+componentSrc = componentSrc.replaceAll('__TOOL_ID__', toolId).replaceAll('__TOOL_CLASS__', toolClassName);
+const componentFile = join(destDir, `${toolId}-tool.component.ts`);
+writeFileSync(componentFile, componentSrc);
+
 console.log(`Created ${destDir}`);
 console.log(
-  `Next: add ${toolId}-tool.component.ts, register in tool-component.registry.ts, icons, and tools-registry.json.`,
+  `Next: edit ${toolId}-tool.component.ts, register in tool-component.registry.ts, icons, and tools-registry.json.`,
 );

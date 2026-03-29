@@ -36,12 +36,18 @@ export interface ToolDefinition {
   changelog: ChangelogEntry[];
   accessLevel: string;
   auditLogEnabled: boolean;
+  /**
+   * When true, the shell may show that processing stays in this browser session.
+   * Set false if the tool sends data to your backend or another remote processing service.
+   */
+  allProcessingInBrowser: boolean;
 }
 
 export interface ToolScaffoldConfig {
   toolId: string;
   toolName: string;
   version: string;
+  allProcessingInBrowser: boolean;
 }
 
 export const TOOL_CATEGORY_LABEL: Record<ToolCategory, string> = {

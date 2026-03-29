@@ -1,52 +1,56 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { SaButtonComponent } from '../../../ui/sa-button.component';
+import { SaCheckboxComponent } from '../../../ui/sa-checkbox.component';
+import { SaSelectComponent, type SaSelectOption } from '../../../ui/sa-select.component';
+import { SaSliderComponent } from '../../../ui/sa-slider.component';
+import { SaTextareaComponent } from '../../../ui/sa-textarea.component';
+import { SaTextFieldComponent } from '../../../ui/sa-text-field.component';
+import type { ToolDefinition } from '../../models/tool.model';
 import { crosswalkExact, crosswalkFuzzy as crosswalkFuzzyJoin } from './crosswalk-join';
 import {
   type DelimiterMode,
   parseDelimitedTable,
 } from '../shared/delimited-table';
 import { parseLines, normalizeForCompareKey } from './list-parse';
-import type { ToolDefinition } from '../../models/tool.model';
 
 /** Crosswalk / join cap to avoid main-thread stalls on large pastes. */
 const CROSSWALK_MAX_ROWS = 25_000;
-const PII_PASTE_WARNING =
-  'Do not paste secrets, credentials, or sensitive personal data unless policy allows. All processing happens in this browser session.';
 
 @Component({
   selector: 'sa-list-compare-tool',
   standalone: true,
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    SaButtonComponent,
+    SaCheckboxComponent,
+    SaSelectComponent,
+    SaSliderComponent,
+    SaTextareaComponent,
+    SaTextFieldComponent,
+  ],
   template: `
     <div class="mx-auto max-w-5xl space-y-4">
-      <p class="rounded-lg border border-amber-100 bg-amber-50/80 px-3 py-2 text-xs leading-relaxed text-amber-950">
-        {{ piiNotice }}
-      </p>
-
       <div
-        class="inline-flex rounded-lg border border-slate-200 bg-slate-100 p-0.5 text-xs font-medium text-slate-700"
+        class="inline-flex shrink-0 overflow-hidden rounded-lg border border-[var(--app-border)] bg-[var(--app-bg)] p-0.5 divide-x divide-[var(--app-border)]"
         role="group"
         aria-label="Compare mode"
       >
         <button
           type="button"
-          class="rounded-md px-3 py-1.5 transition-colors"
-          [class.bg-white]="compareMode() === 'lines'"
-          [class.shadow-sm]="compareMode() === 'lines'"
-          [class.text-slate-900]="compareMode() === 'lines'"
-          [attr.aria-pressed]="compareMode() === 'lines'"
+          class="sa-segmented-btn min-h-[34px] shrink-0 whitespace-nowrap px-3 py-1.5 text-center text-[13px] font-medium leading-tight"
+          [class.sa-segmented-btn--active]="compareMode() === 'lines'"
+          [attr.aria-pressed]="compareMode() === 'lines' ? 'true' : 'false'"
           (click)="setMode('lines')"
         >
           Lines
         </button>
         <button
           type="button"
-          class="rounded-md px-3 py-1.5 transition-colors"
-          [class.bg-white]="compareMode() === 'crosswalk'"
-          [class.shadow-sm]="compareMode() === 'crosswalk'"
-          [class.text-slate-900]="compareMode() === 'crosswalk'"
-          [attr.aria-pressed]="compareMode() === 'crosswalk'"
+          class="sa-segmented-btn min-h-[34px] shrink-0 whitespace-nowrap px-3 py-1.5 text-center text-[13px] font-medium leading-tight"
+          [class.sa-segmented-btn--active]="compareMode() === 'crosswalk'"
+          [attr.aria-pressed]="compareMode() === 'crosswalk' ? 'true' : 'false'"
           (click)="setMode('crosswalk')"
         >
           Crosswalk
@@ -60,41 +64,34 @@ const PII_PASTE_WARNING =
         </p>
 
         <div class="flex flex-wrap gap-4 text-xs text-slate-700">
-          <label class="inline-flex cursor-pointer items-center gap-2">
-            <input type="checkbox" [(ngModel)]="trimLines" (ngModelChange)="bump()" />
-            Trim each line
-          </label>
-          <label class="inline-flex cursor-pointer items-center gap-2">
-            <input type="checkbox" [(ngModel)]="ignoreEmpty" (ngModelChange)="bump()" />
-            Ignore blank lines
-          </label>
-          <label class="inline-flex cursor-pointer items-center gap-2">
-            <input type="checkbox" [(ngModel)]="caseInsensitive" (ngModelChange)="bump()" />
+          <sa-checkbox [(ngModel)]="trimLines" (ngModelChange)="bump()"> Trim each line </sa-checkbox>
+          <sa-checkbox [(ngModel)]="ignoreEmpty" (ngModelChange)="bump()"> Ignore blank lines </sa-checkbox>
+          <sa-checkbox [(ngModel)]="caseInsensitive" (ngModelChange)="bump()">
             Case-insensitive match
-          </label>
+          </sa-checkbox>
         </div>
 
         <div class="grid gap-4 lg:grid-cols-2">
-          <label class="block text-xs font-medium text-slate-700">
-            List A
-            <textarea
-              class="mt-1 min-h-[180px] w-full resize-y rounded-lg border border-slate-200 bg-white p-3 font-mono text-sm text-slate-900 outline-none focus:border-slate-400"
-              [(ngModel)]="listA"
-              (ngModelChange)="bump()"
-              placeholder="One item per line…"
-              spellcheck="false"
-            ></textarea>
-          </label>
-          <label class="block text-xs font-medium text-slate-700">
-            List B
-            <textarea
-              class="mt-1 min-h-[180px] w-full resize-y rounded-lg border border-slate-200 bg-white p-3 font-mono text-sm text-slate-900 outline-none focus:border-slate-400"
-              [(ngModel)]="listB"
-              (ngModelChange)="bump()"
-              placeholder="One item per line…"
-              spellcheck="false"
-            ></textarea>
-          </label>
+          <sa-textarea
+            label="List A"
+            [rows]="8"
+            [(ngModel)]="listA"
+            (ngModelChange)="bump()"
+            placeholder="One item per line…"
+            [spellcheck]="false"
+            inputClass="font-mono text-sm"
+            fieldClass="min-h-[180px]"
+          />
+          <sa-textarea
+            label="List B"
+            [rows]="8"
+            [(ngModel)]="listB"
+            (ngModelChange)="bump()"
+            placeholder="One item per line…"
+            [spellcheck]="false"
+            inputClass="font-mono text-sm"
+            fieldClass="min-h-[180px]"
+          />
         </div>
       } @else {
         <p class="text-sm leading-relaxed text-slate-600">
@@ -103,104 +100,80 @@ const PII_PASTE_WARNING =
           similarity on the key cells.
         </p>
 
-        <div class="flex flex-wrap gap-3 text-xs text-slate-700">
-          <label class="inline-flex items-center gap-1.5">
-            Delimiter
-            <select
-              class="rounded border border-slate-200 bg-white px-2 py-1 font-mono"
-              [(ngModel)]="delimiterUi"
-              (ngModelChange)="onDelimiterChange($event); bump()"
-            >
-              <option value="auto">Auto</option>
-              <option value="tab">Tab</option>
-              <option value="comma">Comma</option>
-            </select>
-          </label>
-          <label class="inline-flex cursor-pointer items-center gap-2">
-            <input
-              type="checkbox"
-              [(ngModel)]="crosswalkFirstRowHeader"
-              (ngModelChange)="bump()"
-            />
+        <div class="flex flex-wrap items-end gap-3 text-xs text-slate-700">
+          <sa-select
+            label="Delimiter"
+            [options]="delimiterOptions"
+            [(ngModel)]="delimiterUi"
+            (ngModelChange)="onDelimiterChange($event); bump()"
+            fieldClass="max-w-[200px]"
+          />
+          <sa-checkbox [(ngModel)]="crosswalkFirstRowHeader" (ngModelChange)="bump()">
             First row is header
-          </label>
-          <label class="inline-flex items-center gap-1.5">
-            Key column A
-            <input
-              type="number"
-              min="1"
-              class="w-14 rounded border border-slate-200 bg-white px-2 py-1 text-center font-mono"
-              [(ngModel)]="keyColA1"
-              (ngModelChange)="bump()"
-            />
-          </label>
-          <label class="inline-flex items-center gap-1.5">
-            Key column B
-            <input
-              type="number"
-              min="1"
-              class="w-14 rounded border border-slate-200 bg-white px-2 py-1 text-center font-mono"
-              [(ngModel)]="keyColB1"
-              (ngModelChange)="bump()"
-            />
-          </label>
+          </sa-checkbox>
+          <sa-text-field
+            label="Key column A"
+            type="number"
+            [min]="1"
+            [ngModel]="keyColA1"
+            (ngModelChange)="keyColA1 = $event; bump()"
+            fieldClass="w-24"
+            inputClass="text-center font-mono"
+          />
+          <sa-text-field
+            label="Key column B"
+            type="number"
+            [min]="1"
+            [ngModel]="keyColB1"
+            (ngModelChange)="keyColB1 = $event; bump()"
+            fieldClass="w-24"
+            inputClass="text-center font-mono"
+          />
           <span class="text-slate-500">(1 = leftmost)</span>
         </div>
 
-        <div class="flex flex-wrap gap-4 text-xs text-slate-700">
-          <label class="inline-flex cursor-pointer items-center gap-2">
-            <input type="checkbox" [(ngModel)]="crosswalkTrimKeys" (ngModelChange)="bump()" />
-            Trim key cells
-          </label>
-          <label class="inline-flex cursor-pointer items-center gap-2">
-            <input
-              type="checkbox"
-              [(ngModel)]="crosswalkCaseInsensitive"
+        <div class="flex flex-wrap items-center gap-4 text-xs text-slate-700">
+          <sa-checkbox [(ngModel)]="crosswalkTrimKeys" (ngModelChange)="bump()"> Trim key cells </sa-checkbox>
+          <sa-checkbox [(ngModel)]="crosswalkCaseInsensitive" (ngModelChange)="bump()">
+            Case-insensitive key
+          </sa-checkbox>
+          <sa-checkbox [(ngModel)]="crosswalkFuzzyEnabled" (ngModelChange)="bump()">
+            Fuzzy key match
+          </sa-checkbox>
+          @if (crosswalkFuzzyEnabled) {
+            <sa-slider
+              label="Min similarity"
+              [min]="50"
+              [max]="100"
+              [step]="1"
+              valueSuffix="%"
+              [(ngModel)]="fuzzyThresholdPercent"
               (ngModelChange)="bump()"
             />
-            Case-insensitive key
-          </label>
-          <label class="inline-flex cursor-pointer items-center gap-2">
-            <input type="checkbox" [(ngModel)]="crosswalkFuzzyEnabled" (ngModelChange)="bump()" />
-            Fuzzy key match
-          </label>
-          @if (crosswalkFuzzyEnabled) {
-            <label class="inline-flex items-center gap-1.5">
-              Min similarity
-              <input
-                type="range"
-                min="50"
-                max="100"
-                [(ngModel)]="fuzzyThresholdPercent"
-                (ngModelChange)="bump()"
-                [attr.aria-valuetext]="fuzzyThresholdPercent + ' percent'"
-              />
-              <span class="font-mono tabular-nums" aria-hidden="true">{{ fuzzyThresholdPercent }}%</span>
-            </label>
           }
         </div>
 
         <div class="grid gap-4 lg:grid-cols-2">
-          <label class="block text-xs font-medium text-slate-700">
-            Table A
-            <textarea
-              class="mt-1 min-h-[200px] w-full resize-y rounded-lg border border-slate-200 bg-white p-3 font-mono text-sm text-slate-900 outline-none focus:border-slate-400"
-              [(ngModel)]="tableA"
-              (ngModelChange)="bump()"
-              placeholder="Paste TSV or CSV…"
-              spellcheck="false"
-            ></textarea>
-          </label>
-          <label class="block text-xs font-medium text-slate-700">
-            Table B
-            <textarea
-              class="mt-1 min-h-[200px] w-full resize-y rounded-lg border border-slate-200 bg-white p-3 font-mono text-sm text-slate-900 outline-none focus:border-slate-400"
-              [(ngModel)]="tableB"
-              (ngModelChange)="bump()"
-              placeholder="Paste TSV or CSV…"
-              spellcheck="false"
-            ></textarea>
-          </label>
+          <sa-textarea
+            label="Table A"
+            [rows]="8"
+            [(ngModel)]="tableA"
+            (ngModelChange)="bump()"
+            placeholder="Paste TSV or CSV…"
+            [spellcheck]="false"
+            inputClass="font-mono text-sm"
+            fieldClass="min-h-[200px]"
+          />
+          <sa-textarea
+            label="Table B"
+            [rows]="8"
+            [(ngModel)]="tableB"
+            (ngModelChange)="bump()"
+            placeholder="Paste TSV or CSV…"
+            [spellcheck]="false"
+            inputClass="font-mono text-sm"
+            fieldClass="min-h-[200px]"
+          />
         </div>
 
         @if (crosswalkError()) {
@@ -237,15 +210,15 @@ const PII_PASTE_WARNING =
               <span class="text-xs font-semibold uppercase tracking-wide text-slate-600">{{
                 block.title
               }}</span>
-              <button
-                type="button"
-                class="text-xs text-slate-600 underline decoration-slate-300 hover:decoration-slate-600"
+              <sa-button
+                variant="text"
+                [ariaLabel]="'Copy ' + block.title + ' to clipboard'"
                 [disabled]="!block.text"
-                [attr.aria-label]="'Copy ' + block.title + ' to clipboard'"
+                innerClass="!text-xs !text-slate-600 !underline !decoration-slate-300 hover:!decoration-slate-600"
                 (click)="copyBlock(block.text)"
               >
                 Copy
-              </button>
+              </sa-button>
             </div>
             <pre
               class="max-h-[220px] overflow-auto whitespace-pre-wrap break-words font-mono text-xs text-slate-800"
@@ -261,7 +234,11 @@ const PII_PASTE_WARNING =
 export class ListCompareToolComponent {
   readonly tool = input.required<ToolDefinition>();
 
-  protected readonly piiNotice = PII_PASTE_WARNING;
+  protected readonly delimiterOptions: SaSelectOption<'auto' | 'tab' | 'comma'>[] = [
+    { value: 'auto', label: 'Auto' },
+    { value: 'tab', label: 'Tab' },
+    { value: 'comma', label: 'Comma' },
+  ];
 
   protected readonly compareMode = signal<'lines' | 'crosswalk'>('lines');
 
@@ -293,10 +270,8 @@ export class ListCompareToolComponent {
     this.version.update((v) => v + 1);
   }
 
-  protected onDelimiterChange(v: string): void {
-    if (v === 'auto' || v === 'tab' || v === 'comma') {
-      this.delimiterUi = v;
-    }
+  protected onDelimiterChange(v: 'auto' | 'tab' | 'comma'): void {
+    this.delimiterUi = v;
   }
 
   private delimiterMode(): DelimiterMode {

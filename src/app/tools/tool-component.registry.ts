@@ -8,6 +8,7 @@ import { TableWorkspaceToolComponent } from './data/table-workspace/table-worksp
 import { MrzDecoderToolComponent } from './identity/mrz-decoder/mrz-decoder-tool.component';
 import { PaymentCardToolComponent } from './financial/payment-card/payment-card-tool.component';
 import { PomodoroToolComponent } from './productivity/pomodoro/pomodoro-tool.component';
+import { SpeedReaderToolComponent } from './productivity/speed-reader/speed-reader-tool.component';
 import { PhoneNumberToolComponent } from './identity/phone-number/phone-number-tool.component';
 import { TaxIdToolComponent } from './identity/tax-id/tax-id-tool.component';
 import { TranscriptionToolComponent } from './language/transcription/transcription-tool.component';
@@ -33,6 +34,7 @@ export const TOOL_HOST_COMPONENTS: Record<string, Type<unknown>> = {
   pomodoro: PomodoroToolComponent,
   'unit-converter': UnitConverterToolComponent,
   'world-clock': WorldClockToolComponent,
+  'speed-reader': SpeedReaderToolComponent,
 };
 
 export function resolveToolHostComponent(toolId: string): Type<unknown> | null {

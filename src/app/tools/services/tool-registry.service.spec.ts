@@ -27,6 +27,7 @@ describe('ToolRegistryService', () => {
       changelog: [],
       accessLevel: 'All authenticated users',
       auditLogEnabled: true,
+      allProcessingInBrowser: true,
     },
   ];
 

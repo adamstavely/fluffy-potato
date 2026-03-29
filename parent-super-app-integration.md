@@ -72,6 +72,12 @@ Persists **favorite tool ids** in **`localStorage`** under the key `tools.favori
 
 **Host action:** If prefs must follow the user across devices, replace with a server-backed or host-synced store while keeping the same observable API.
 
+### `TeamToolFavoritesService` (`team-tool-favorites.service.ts`)
+
+Exposes **team-favorited tool ids** for the catalog **My Team** scope (`getTeamFavoriteToolIds()` → `Observable<Set<string>>`, plus `snapshotTeamFavorites()`). The default implementation emits an **empty set** (standalone).
+
+**Host action:** Replace with an implementation that loads favorites for the current team from your SuperApp org/team APIs (or shared shell), keeping the same observable API.
+
 ### `AnalyticsService` (`analytics.service.ts`)
 
 | Method | When it fires |
@@ -201,7 +207,7 @@ No code changes land in this repo until the main SuperApp repo ships a consumabl
 | Path | Purpose |
 |------|---------|
 | `src/app/app.config.ts` | Router, HTTP interceptors, `ErrorHandler` |
-| `src/app/platform/` | Platform façades (or future package imports) |
+| `src/app/platform/` | Platform façades (or future package imports), including `team-tool-favorites.service.ts` |
 | `src/environments/environment*.ts` | Registry URLs |
 | `src/app/tools/services/tool-launch.service.ts` | Launch URLs, audit/analytics on open |
 | `src/app/tools/components/tool-scaffold.component.ts` | Entry/exit audit, page view, auth gate |

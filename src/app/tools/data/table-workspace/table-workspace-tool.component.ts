@@ -2,6 +2,15 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { SaButtonComponent } from '../../../ui/sa-button.component';
+import { SaCheckboxComponent } from '../../../ui/sa-checkbox.component';
+import {
+  SaRadioGroupComponent,
+  type SaRadioOption,
+} from '../../../ui/sa-radio-group.component';
+import { SaSelectComponent, type SaSelectOption } from '../../../ui/sa-select.component';
+import { SaTextareaComponent } from '../../../ui/sa-textarea.component';
+import { SaTextFieldComponent } from '../../../ui/sa-text-field.component';
 import { exportDelimited } from './csv-export';
 import type { DelimiterMode } from '../shared/delimited-table';
 import { parseDelimitedTable } from '../shared/delimited-table';
@@ -16,8 +25,6 @@ import type { ToolDefinition } from '../../models/tool.model';
 const DATA_TOOL_MAX_ROWS = 50_000;
 /** Rows rendered in the table workspace grid (export still includes full parsed set up to max). */
 const TABLE_WORKSPACE_DISPLAY_MAX = 10_000;
-const PII_PASTE_WARNING =
-  'Do not paste secrets, credentials, or sensitive personal data unless policy allows. All processing happens in this browser session.';
 
 type WorkspaceTab =
   | 'grid'
@@ -31,7 +38,16 @@ type WorkspaceTab =
 @Component({
   selector: 'sa-table-workspace-tool',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    SaButtonComponent,
+    SaCheckboxComponent,
+    SaRadioGroupComponent,
+    SaSelectComponent,
+    SaTextareaComponent,
+    SaTextFieldComponent,
+  ],
   templateUrl: './table-workspace-tool.component.html',
 })
 export class TableWorkspaceToolComponent {
@@ -50,7 +66,21 @@ export class TableWorkspaceToolComponent {
     { id: 'findreplace', label: 'Find & replace' },
   ];
 
-  protected readonly piiNotice = PII_PASTE_WARNING;
+  protected readonly delimiterOptions: SaSelectOption<'auto' | 'tab' | 'comma'>[] = [
+    { value: 'auto', label: 'Auto (tab or comma)' },
+    { value: 'tab', label: 'Tab' },
+    { value: 'comma', label: 'Comma' },
+  ];
+
+  protected readonly pivotAggOptions: SaSelectOption<PivotAgg>[] = [
+    { value: 'sum', label: 'Sum' },
+    { value: 'count', label: 'Count' },
+  ];
+
+  protected readonly dedupeModeOptions: SaRadioOption<'columns' | 'whole'>[] = [
+    { value: 'columns', label: 'By key columns' },
+    { value: 'whole', label: 'Whole row exact' },
+  ];
 
   protected readonly activeTab = signal<WorkspaceTab>('grid');
 

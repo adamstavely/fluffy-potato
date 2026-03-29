@@ -88,5 +88,6 @@ export class ToolHostComponent {
     toolId: tool.id,
     toolName: tool.name,
     version: tool.version,
+    allProcessingInBrowser: tool.allProcessingInBrowser ?? true,
   });
 }

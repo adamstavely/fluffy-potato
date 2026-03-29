@@ -9,6 +9,8 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { SaButtonComponent } from '../../../ui/sa-button.component';
+import { SaTextFieldComponent } from '../../../ui/sa-text-field.component';
 import type { ToolDefinition } from '../../models/tool.model';
 
 type Phase = 'focus' | 'shortBreak' | 'longBreak';
@@ -88,80 +90,75 @@ function persistSettings(s: PomodoroSettings): void {
 
         <div class="flex flex-wrap items-center justify-center gap-2">
           @if (!isRunning()) {
-            <button
-              type="button"
-              class="rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-slate-800"
+            <sa-button
+              variant="flat"
+              ariaLabel="Start or resume timer"
+              innerClass="!bg-slate-900 px-5 py-2.5 text-sm font-medium !text-white hover:!bg-slate-800"
               (click)="startOrResume()"
             >
               {{ hasStarted() ? 'Resume' : 'Start' }}
-            </button>
+            </sa-button>
           } @else {
-            <button
-              type="button"
-              class="rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50"
+            <sa-button
+              variant="stroked"
+              ariaLabel="Pause timer"
+              innerClass="px-5 py-2.5 text-sm font-medium"
               (click)="pause()"
             >
               Pause
-            </button>
+            </sa-button>
           }
-          <button
-            type="button"
-            class="rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50"
+          <sa-button
+            variant="stroked"
+            ariaLabel="Skip to next phase"
+            innerClass="px-5 py-2.5 text-sm font-medium"
             (click)="skipPhase()"
           >
             Skip phase
-          </button>
-          <button
-            type="button"
-            class="rounded-lg border border-slate-200 px-5 py-2.5 text-sm text-slate-600 hover:bg-slate-50"
+          </sa-button>
+          <sa-button
+            variant="text"
+            ariaLabel="Reset timer"
+            innerClass="px-5 py-2.5 text-sm text-slate-600"
             (click)="reset()"
           >
             Reset
-          </button>
+          </sa-button>
         </div>
       </div>
 
       <div class="grid gap-4 rounded-xl border border-slate-200 bg-slate-50/80 p-4 sm:grid-cols-3">
-        <label class="block text-xs font-medium text-slate-700">
-          Focus (minutes)
-          <input
-            type="number"
-            min="1"
-            max="180"
-            class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900"
-            [ngModel]="settings().focusMin"
-            (ngModelChange)="setFocusMin($event)"
-            [disabled]="isRunning()"
-          />
-        </label>
-        <label class="block text-xs font-medium text-slate-700">
-          Short break (minutes)
-          <input
-            type="number"
-            min="1"
-            max="180"
-            class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900"
-            [ngModel]="settings().shortBreakMin"
-            (ngModelChange)="setShortBreakMin($event)"
-            [disabled]="isRunning()"
-          />
-        </label>
-        <label class="block text-xs font-medium text-slate-700">
-          Long break (minutes)
-          <input
-            type="number"
-            min="1"
-            max="180"
-            class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900"
-            [ngModel]="settings().longBreakMin"
-            (ngModelChange)="setLongBreakMin($event)"
-            [disabled]="isRunning()"
-          />
-        </label>
+        <sa-text-field
+          label="Focus (minutes)"
+          type="number"
+          [min]="1"
+          [max]="180"
+          [ngModel]="settings().focusMin"
+          (ngModelChange)="setFocusMin($event)"
+          [hostDisabled]="isRunning()"
+        />
+        <sa-text-field
+          label="Short break (minutes)"
+          type="number"
+          [min]="1"
+          [max]="180"
+          [ngModel]="settings().shortBreakMin"
+          (ngModelChange)="setShortBreakMin($event)"
+          [hostDisabled]="isRunning()"
+        />
+        <sa-text-field
+          label="Long break (minutes)"
+          type="number"
+          [min]="1"
+          [max]="180"
+          [ngModel]="settings().longBreakMin"
+          (ngModelChange)="setLongBreakMin($event)"
+          [hostDisabled]="isRunning()"
+        />
       </div>
     </div>
   `,
-  imports: [FormsModule],
+  imports: [FormsModule, SaButtonComponent, SaTextFieldComponent],
 })
 export class PomodoroToolComponent implements OnDestroy {
   readonly tool = input.required<ToolDefinition>();

@@ -6,10 +6,9 @@ import {
   type CountryCode,
 } from 'libphonenumber-js';
 
+import { SaSelectComponent, type SaSelectOption } from '../../../ui/sa-select.component';
+import { SaTextFieldComponent } from '../../../ui/sa-text-field.component';
 import type { ToolDefinition } from '../../models/tool.model';
-
-const PII_PASTE_WARNING =
-  'Do not paste secrets, credentials, or sensitive personal data unless policy allows. All processing happens in this browser session.';
 
 const REGIONS: { code: CountryCode; label: string }[] = [
   { code: 'US', label: 'United States' },
@@ -24,36 +23,28 @@ const REGIONS: { code: CountryCode; label: string }[] = [
 @Component({
   selector: 'sa-phone-number-tool',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, SaTextFieldComponent, SaSelectComponent],
   template: `
     <div class="mx-auto max-w-3xl space-y-4">
-      <p class="text-sm leading-relaxed text-slate-600">{{ piiNotice }}</p>
-
-      <label class="block text-xs font-medium text-slate-700">
-        Default region (when number has no country code)
-        <select
-          class="mt-1 w-full max-w-md rounded-lg border border-slate-200 bg-white p-2 text-sm text-slate-900 outline-none focus:border-slate-400"
+      <div class="flex flex-col gap-6">
+        <sa-select
+          label="Default region (when number has no country code)"
+          [options]="regionOptions"
           [(ngModel)]="defaultRegion"
           (ngModelChange)="bump()"
-        >
-          @for (r of regions; track r.code) {
-            <option [ngValue]="r.code">{{ r.label }} ({{ r.code }})</option>
-          }
-        </select>
-      </label>
+          fieldClass="max-w-md"
+        />
 
-      <label class="block text-xs font-medium text-slate-700">
-        Phone number
-        <input
-          type="text"
-          class="mt-1 w-full rounded-lg border border-slate-200 bg-white p-3 font-mono text-sm text-slate-900 outline-none focus:border-slate-400"
+        <sa-text-field
+          label="Phone number"
+          placeholder="+1 415 555 0100"
           [(ngModel)]="raw"
           (ngModelChange)="bump()"
-          placeholder="+1 415 555 0100"
-          spellcheck="false"
+          inputClass="font-mono text-sm"
+          [spellcheck]="false"
           autocomplete="off"
         />
-      </label>
+      </div>
 
       @if (formattedPreview()) {
         <p class="text-xs text-slate-600">
@@ -92,8 +83,10 @@ const REGIONS: { code: CountryCode; label: string }[] = [
 export class PhoneNumberToolComponent {
   readonly tool = input.required<ToolDefinition>();
 
-  protected readonly piiNotice = PII_PASTE_WARNING;
-  protected readonly regions = REGIONS;
+  protected readonly regionOptions: SaSelectOption<CountryCode>[] = REGIONS.map((r) => ({
+    value: r.code,
+    label: `${r.label} (${r.code})`,
+  }));
   protected defaultRegion: CountryCode = 'US';
   protected raw = '';
 

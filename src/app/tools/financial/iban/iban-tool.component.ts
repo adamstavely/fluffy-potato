@@ -9,44 +9,34 @@ import {
   validateIBAN,
 } from 'ibantools';
 
+import { SaTextFieldComponent } from '../../../ui/sa-text-field.component';
 import type { ToolDefinition } from '../../models/tool.model';
-
-const PII_PASTE_WARNING =
-  'Do not paste secrets, credentials, or sensitive personal data unless policy allows. All processing happens in this browser session.';
 
 @Component({
   selector: 'sa-iban-tool',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, SaTextFieldComponent],
   template: `
     <div class="mx-auto max-w-3xl space-y-4">
-      <p class="text-sm leading-relaxed text-slate-600">{{ piiNotice }}</p>
+      <sa-text-field
+        label="IBAN"
+        placeholder="e.g. NL91 ABNA 0417 1643 00"
+        [(ngModel)]="ibanInput"
+        (ngModelChange)="bump()"
+        inputClass="font-mono text-sm"
+        [spellcheck]="false"
+        autocomplete="off"
+      />
 
-      <label class="block text-xs font-medium text-slate-700">
-        IBAN
-        <input
-          type="text"
-          class="mt-1 w-full rounded-lg border border-slate-200 bg-white p-3 font-mono text-sm text-slate-900 outline-none focus:border-slate-400"
-          [(ngModel)]="ibanInput"
-          (ngModelChange)="bump()"
-          placeholder="e.g. NL91 ABNA 0417 1643 00"
-          spellcheck="false"
-          autocomplete="off"
-        />
-      </label>
-
-      <label class="block text-xs font-medium text-slate-700">
-        BIC / SWIFT (optional)
-        <input
-          type="text"
-          class="mt-1 w-full rounded-lg border border-slate-200 bg-white p-3 font-mono text-sm uppercase text-slate-900 outline-none focus:border-slate-400"
-          [(ngModel)]="bicInput"
-          (ngModelChange)="bump()"
-          placeholder="e.g. ABNANL2A"
-          spellcheck="false"
-          autocomplete="off"
-        />
-      </label>
+      <sa-text-field
+        label="BIC / SWIFT (optional)"
+        placeholder="e.g. ABNANL2A"
+        [(ngModel)]="bicInput"
+        (ngModelChange)="bump()"
+        inputClass="font-mono text-sm uppercase"
+        [spellcheck]="false"
+        autocomplete="off"
+      />
 
       @if (ibanBlock(); as b) {
         <div
@@ -106,7 +96,6 @@ const PII_PASTE_WARNING =
 export class IbanToolComponent {
   readonly tool = input.required<ToolDefinition>();
 
-  protected readonly piiNotice = PII_PASTE_WARNING;
   protected ibanInput = '';
   protected bicInput = '';
 

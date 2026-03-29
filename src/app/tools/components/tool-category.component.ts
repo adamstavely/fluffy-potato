@@ -10,14 +10,15 @@ import { ToolCardComponent } from './tool-card.component';
   imports: [ToolCardComponent],
   template: `
     <section class="mb-11" [attr.aria-labelledby]="headingId()">
-      <h2 [id]="headingId()" class="mb-4 flex flex-wrap items-center gap-2.5">
-        <span [class]="badgeClass()">{{ label() }}</span>
-        <span class="text-xs font-normal text-[var(--app-text-muted)]"
-          >{{ tools().length }} tool{{ tools().length !== 1 ? 's' : '' }}</span
-        >
+      <h2
+        [id]="headingId()"
+        class="font-display mb-3.5 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--app-text-secondary)]"
+      >
+        <span>{{ label() }} | {{ tools().length }} tool{{ tools().length !== 1 ? 's' : '' }}</span>
+        <span class="h-px flex-1 bg-[var(--app-border)]" aria-hidden="true"></span>
       </h2>
       <div
-        class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3.5"
+        class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3.5 2xl:grid-cols-4"
         role="list"
       >
         @for (tool of tools(); track tool.id) {
@@ -51,22 +52,5 @@ export class ToolCategoryComponent {
 
   protected label(): string {
     return TOOL_CATEGORY_LABEL[this.category()];
-  }
-
-  protected badgeClass(): string {
-    const base =
-      'font-display inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.05em]';
-    switch (this.category()) {
-      case 'language':
-        return `${base} bg-[var(--app-tag-lang-bg)] text-[var(--app-tag-lang-text)]`;
-      case 'data':
-        return `${base} bg-[var(--app-tag-data-bg)] text-[var(--app-tag-data-text)]`;
-      case 'identity':
-        return `${base} bg-[var(--app-tag-sec-bg)] text-[var(--app-tag-sec-text)]`;
-      case 'financial':
-        return `${base} bg-[var(--app-tag-fin-bg)] text-[var(--app-tag-fin-text)]`;
-      case 'productivity':
-        return `${base} bg-[var(--app-tag-prod-bg)] text-[var(--app-tag-prod-text)]`;
-    }
   }
 }

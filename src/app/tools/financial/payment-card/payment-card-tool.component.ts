@@ -1,6 +1,7 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { SaTextFieldComponent } from '../../../ui/sa-text-field.component';
 import type { ToolDefinition } from '../../models/tool.model';
 import { luhnValid } from './luhn';
 
@@ -46,24 +47,21 @@ function guessBrand(digits: string): string {
 @Component({
   selector: 'sa-payment-card-tool',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, SaTextFieldComponent],
   template: `
     <div class="mx-auto max-w-3xl space-y-4">
       <p class="text-sm leading-relaxed text-amber-900">{{ pciNotice }}</p>
 
-      <label class="block text-xs font-medium text-slate-700">
-        Card number (digits only; spaces ignored)
-        <input
-          type="text"
-          inputmode="numeric"
-          class="mt-1 w-full rounded-lg border border-slate-200 bg-white p-3 font-mono text-sm text-slate-900 outline-none focus:border-slate-400"
-          [(ngModel)]="raw"
-          (ngModelChange)="bump()"
-          placeholder="4111 1111 1111 1111"
-          spellcheck="false"
-          autocomplete="off"
-        />
-      </label>
+      <sa-text-field
+        label="Card number (digits only; spaces ignored)"
+        placeholder="4111 1111 1111 1111"
+        inputmode="numeric"
+        [(ngModel)]="raw"
+        (ngModelChange)="bump()"
+        inputClass="font-mono text-sm"
+        [spellcheck]="false"
+        autocomplete="off"
+      />
 
       @if (info(); as i) {
         <div

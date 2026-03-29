@@ -17,7 +17,7 @@ import { ToolsSectionComponent } from '../components/tools-section.component';
         <p
           class="mt-1.5 text-sm font-light tracking-tight text-[var(--app-text-secondary)] [letter-spacing:-0.01em]"
         >
-          Utility tools for language, data, identity, financial, and productivity workflows — available to all authenticated users.
+          Utility tools for language, data, identity, financial, and productivity workflows
         </p>
       </header>
       <sa-tools-section />

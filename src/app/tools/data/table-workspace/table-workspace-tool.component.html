@@ -1,6 +1,6 @@
 <div class="mx-auto max-w-6xl space-y-4">
-  <p class="rounded-lg border border-amber-100 bg-amber-50/80 px-3 py-2 text-xs leading-relaxed text-amber-950">
-    {{ piiNotice }} Up to {{ DATA_TOOL_MAX_ROWS | number }} data rows per load.
+  <p class="text-sm text-slate-600">
+    Up to {{ DATA_TOOL_MAX_ROWS | number }} data rows per load.
   </p>
 
   <p class="text-sm leading-relaxed text-slate-600">
@@ -9,60 +9,55 @@
     browser.
   </p>
 
-  <div
-    class="flex flex-wrap gap-1 rounded-lg border border-slate-200 bg-slate-100 p-0.5 text-xs font-medium text-slate-700"
-    role="tablist"
-  >
-    @for (t of tabDefs; track t.id) {
-      <button
-        type="button"
-        role="tab"
-        class="rounded-md px-2.5 py-1.5 transition-colors"
-        [class.bg-white]="activeTab() === t.id"
-        [class.shadow-sm]="activeTab() === t.id"
-        [class.text-slate-900]="activeTab() === t.id"
-        (click)="setTab(t.id)"
-      >
-        {{ t.label }}
-      </button>
-    }
+  <div class="max-w-full overflow-x-auto pb-0.5">
+    <div
+      class="inline-flex shrink-0 overflow-hidden rounded-lg border border-[var(--app-border)] bg-[var(--app-bg)] p-0.5 divide-x divide-[var(--app-border)]"
+      role="tablist"
+      aria-label="Table workspace views"
+    >
+      @for (t of tabDefs; track t.id) {
+        <button
+          type="button"
+          role="tab"
+          class="sa-segmented-btn min-h-[34px] shrink-0 whitespace-nowrap px-3 py-1.5 text-center text-[13px] font-medium leading-tight"
+          [class.sa-segmented-btn--active]="activeTab() === t.id"
+          [attr.aria-selected]="activeTab() === t.id ? 'true' : 'false'"
+          (click)="setTab(t.id)"
+        >
+          {{ t.label }}
+        </button>
+      }
+    </div>
   </div>
 
   <!-- Input + load (always visible for context) -->
   <div class="space-y-2 rounded-lg border border-slate-200 bg-white p-4">
     <div class="flex flex-wrap items-center gap-3 text-xs text-slate-700">
-      <label class="inline-flex items-center gap-1.5">
-        Delimiter
-        <select
-          class="rounded border border-slate-200 bg-white px-2 py-1 font-mono"
-          [(ngModel)]="delimiterUi"
-        >
-          <option value="auto">Auto</option>
-          <option value="tab">Tab</option>
-          <option value="comma">Comma</option>
-        </select>
-      </label>
-      <label class="inline-flex cursor-pointer items-center gap-2">
-        <input type="checkbox" [(ngModel)]="firstRowHeader" />
-        First row is header
-      </label>
-      <button
-        type="button"
-        class="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-800"
+      <sa-select
+        label="Delimiter"
+        [options]="delimiterOptions"
+        [(ngModel)]="delimiterUi"
+        fieldClass="max-w-[200px]"
+      />
+      <sa-checkbox [(ngModel)]="firstRowHeader">First row is header</sa-checkbox>
+      <sa-button
+        variant="flat"
+        ariaLabel="Load pasted table"
+        innerClass="!bg-slate-900 px-3 py-1.5 !text-xs font-medium !text-white hover:!bg-slate-800"
         (click)="loadTable()"
       >
         Load table
-      </button>
+      </sa-button>
     </div>
-    <label class="block text-xs font-medium text-slate-700">
-      Paste data
-      <textarea
-        class="mt-1 min-h-[100px] w-full resize-y rounded-lg border border-slate-200 bg-slate-50/50 p-3 font-mono text-sm text-slate-900 outline-none focus:border-slate-400"
-        [(ngModel)]="rawPaste"
-        spellcheck="false"
-        placeholder="Tab- or comma-separated values, one row per line…"
-      ></textarea>
-    </label>
+    <sa-textarea
+      label="Paste data"
+      [rows]="4"
+      [(ngModel)]="rawPaste"
+      [spellcheck]="false"
+      placeholder="Tab- or comma-separated values, one row per line…"
+      inputClass="font-mono text-sm"
+      fieldClass="min-h-[100px] bg-slate-50/50"
+    />
     @if (parseNotice(); as note) {
       <p class="text-xs text-slate-600">{{ note }}</p>
     }
@@ -71,31 +66,34 @@
   @if (activeTab() === 'grid') {
     <div class="space-y-3">
       <div class="flex flex-wrap items-center gap-3">
-        <label class="flex min-w-[200px] flex-1 items-center gap-2 text-xs text-slate-700">
-          <span class="shrink-0">Filter rows</span>
-          <input
+        <div class="flex min-w-[200px] flex-1 flex-col gap-1">
+          <sa-text-field
+            label="Filter rows"
             type="search"
-            class="flex-1 rounded-lg border border-slate-200 px-2 py-1.5 font-mono text-xs"
             placeholder="Any cell contains…"
             [ngModel]="filterQuery()"
             (ngModelChange)="filterQuery.set($event)"
+            inputClass="font-mono text-xs"
+            fieldClass="flex-1"
           />
-        </label>
+        </div>
         <div class="flex flex-wrap gap-2">
-          <button
-            type="button"
-            class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50"
+          <sa-button
+            variant="stroked"
+            ariaLabel="Download table as CSV"
+            innerClass="px-3 py-1.5 text-xs font-medium"
             (click)="exportCsv()"
           >
             Download CSV
-          </button>
-          <button
-            type="button"
-            class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50"
+          </sa-button>
+          <sa-button
+            variant="stroked"
+            ariaLabel="Download table as TSV"
+            innerClass="px-3 py-1.5 text-xs font-medium"
             (click)="exportTsv()"
           >
             Download TSV
-          </button>
+          </sa-button>
         </div>
       </div>
 
@@ -180,68 +178,59 @@
 
   @if (activeTab() === 'dedupe') {
     <div class="space-y-3 text-sm text-slate-700">
-      <label class="mr-4 inline-flex items-center gap-2">
-        <input type="radio" name="dedupeMode" [(ngModel)]="dedupeMode" value="columns" />
-        By key column(s)
-      </label>
-      <label class="inline-flex items-center gap-2">
-        <input type="radio" name="dedupeMode" [(ngModel)]="dedupeMode" value="whole" />
-        Whole row (exact)
-      </label>
+      <sa-radio-group
+        name="dedupeMode"
+        ariaLabel="Deduplication mode"
+        [options]="dedupeModeOptions"
+        [(ngModel)]="dedupeMode"
+      />
       @if (dedupeMode === 'columns') {
-        <label class="block text-xs">
-          1-based column numbers (comma-separated), e.g. <code class="rounded bg-slate-100 px-1">1</code> or
-          <code class="rounded bg-slate-100 px-1">1,3</code>
-          <input
-            class="mt-1 w-full max-w-md rounded border border-slate-200 px-2 py-1 font-mono"
-            [(ngModel)]="dedupeKeyCols"
-          />
-        </label>
+        <sa-text-field
+          label="1-based column numbers (comma-separated), e.g. 1 or 1,3"
+          [(ngModel)]="dedupeKeyCols"
+          inputClass="font-mono text-sm"
+          fieldClass="max-w-md"
+        />
       }
-      <button
-        type="button"
-        class="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-800"
+      <sa-button
+        variant="flat"
+        ariaLabel="Remove duplicate rows"
+        innerClass="!bg-slate-900 px-3 py-1.5 !text-xs font-medium !text-white hover:!bg-slate-800"
         (click)="applyDedupe()"
       >
         Remove duplicate rows
-      </button>
+      </sa-button>
       <p class="text-xs text-slate-500">First occurrence is kept. Applies to the loaded table in memory.</p>
     </div>
   }
 
   @if (activeTab() === 'pivot') {
     <div class="flex flex-wrap items-end gap-4 text-xs text-slate-700">
-      <label class="inline-flex flex-col gap-1">
-        Group by column (1-based)
-        <input
-          type="number"
-          min="1"
-          class="w-20 rounded border border-slate-200 px-2 py-1 font-mono"
-          [ngModel]="pivotGroupCol()"
-          (ngModelChange)="pivotGroupCol.set(+$event)"
-        />
-      </label>
-      <label class="inline-flex flex-col gap-1">
-        Value column (1-based)
-        <input
-          type="number"
-          min="1"
-          class="w-20 rounded border border-slate-200 px-2 py-1 font-mono"
-          [ngModel]="pivotValueCol()"
-          (ngModelChange)="pivotValueCol.set(+$event)"
-        />
-      </label>
-      <label class="inline-flex flex-col gap-1">
-        Aggregate
-        <select
-          class="rounded border border-slate-200 bg-white px-2 py-1"
-          [ngModel]="pivotAgg()"
-          (ngModelChange)="setPivotAgg($event)"
-        >
-          <option value="sum">Sum (numeric)</option>
-          <option value="count">Count rows</option>
-        </select>
-      </label>
+      <sa-text-field
+        label="Group by column (1-based)"
+        type="number"
+        [min]="1"
+        [ngModel]="pivotGroupCol()"
+        (ngModelChange)="pivotGroupCol.set(+$event)"
+        fieldClass="w-28"
+        inputClass="font-mono"
+      />
+      <sa-text-field
+        label="Value column (1-based)"
+        type="number"
+        [min]="1"
+        [ngModel]="pivotValueCol()"
+        (ngModelChange)="pivotValueCol.set(+$event)"
+        fieldClass="w-28"
+        inputClass="font-mono"
+      />
+      <sa-select
+        label="Aggregate"
+        [options]="pivotAggOptions"
+        [ngModel]="pivotAgg()"
+        (ngModelChange)="setPivotAgg($event)"
+        fieldClass="max-w-[200px]"
+      />
     </div>
     <div class="mt-3 overflow-x-auto rounded-lg border border-slate-200">
       @if (pivotResult().length === 0) {
@@ -272,60 +261,45 @@
   @if (activeTab() === 'normalize') {
     <div class="space-y-3 text-sm text-slate-700">
       <div class="flex flex-wrap gap-4 text-xs">
-        <label class="inline-flex cursor-pointer items-center gap-2">
-          <input type="checkbox" [(ngModel)]="normCollapseWs" />
-          Collapse spaces
-        </label>
-        <label class="inline-flex cursor-pointer items-center gap-2">
-          <input type="checkbox" [(ngModel)]="normLines" />
-          Unify line endings in cells
-        </label>
-        <label class="inline-flex cursor-pointer items-center gap-2">
-          <input type="checkbox" [(ngModel)]="normStripInvisible" />
-          Strip zero-width / BOM
-        </label>
-        <label class="inline-flex cursor-pointer items-center gap-2">
-          <input type="checkbox" [(ngModel)]="normNfc" (ngModelChange)="normNfd = false" />
-          Unicode NFC
-        </label>
-        <label class="inline-flex cursor-pointer items-center gap-2">
-          <input type="checkbox" [(ngModel)]="normNfd" (ngModelChange)="normNfc = false" />
-          Unicode NFD
-        </label>
+        <sa-checkbox [(ngModel)]="normCollapseWs">Collapse spaces</sa-checkbox>
+        <sa-checkbox [(ngModel)]="normLines">Unify line endings in cells</sa-checkbox>
+        <sa-checkbox [(ngModel)]="normStripInvisible">Strip zero-width / BOM</sa-checkbox>
+        <sa-checkbox [(ngModel)]="normNfc" (ngModelChange)="normNfd = false">Unicode NFC</sa-checkbox>
+        <sa-checkbox [(ngModel)]="normNfd" (ngModelChange)="normNfc = false">Unicode NFD</sa-checkbox>
       </div>
-      <button
-        type="button"
-        class="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-800"
+      <sa-button
+        variant="flat"
+        ariaLabel="Apply normalization to all cells"
+        innerClass="!bg-slate-900 px-3 py-1.5 !text-xs font-medium !text-white hover:!bg-slate-800"
         (click)="applyNormalize()"
       >
         Apply to all cells
-      </button>
+      </sa-button>
       <div class="border-t border-slate-200 pt-3">
         <p class="mb-2 text-xs font-medium text-slate-600">Split one column</p>
         <div class="flex flex-wrap items-end gap-3 text-xs">
-          <label class="inline-flex flex-col gap-1">
-            Column (1-based)
-            <input
-              type="number"
-              min="1"
-              class="w-20 rounded border border-slate-200 px-2 py-1 font-mono"
-              [(ngModel)]="splitCol1"
-            />
-          </label>
-          <label class="inline-flex flex-col gap-1">
-            Delimiter
-            <input
-              class="w-28 rounded border border-slate-200 px-2 py-1 font-mono"
-              [(ngModel)]="splitDelimiter"
-            />
-          </label>
-          <button
-            type="button"
-            class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50"
+          <sa-text-field
+            label="Column (1-based)"
+            type="number"
+            [min]="1"
+            [(ngModel)]="splitCol1"
+            fieldClass="w-24"
+            inputClass="font-mono"
+          />
+          <sa-text-field
+            label="Delimiter"
+            [(ngModel)]="splitDelimiter"
+            fieldClass="w-32"
+            inputClass="font-mono"
+          />
+          <sa-button
+            variant="stroked"
+            ariaLabel="Split column by delimiter"
+            innerClass="px-3 py-1.5 text-xs font-medium"
             (click)="applySplitColumn()"
           >
             Split column
-          </button>
+          </sa-button>
         </div>
       </div>
     </div>
@@ -333,25 +307,26 @@
 
   @if (activeTab() === 'timeline') {
     <div class="space-y-2">
-      <label class="block text-xs font-medium text-slate-700">
-        Free text (notes, logs, email)
-        <textarea
-          class="mt-1 min-h-[140px] w-full resize-y rounded-lg border border-slate-200 bg-white p-3 font-mono text-sm text-slate-900"
-          [ngModel]="timelineText()"
-          (ngModelChange)="timelineText.set($event)"
-          spellcheck="false"
-          placeholder="Paste text; ISO dates, slashes, and dotted dates are detected."
-        ></textarea>
-      </label>
+      <sa-textarea
+        label="Free text (notes, logs, email)"
+        [rows]="6"
+        [ngModel]="timelineText()"
+        (ngModelChange)="timelineText.set($event)"
+        [spellcheck]="false"
+        placeholder="Paste text; ISO dates, slashes, and dotted dates are detected."
+        inputClass="font-mono text-sm"
+        fieldClass="min-h-[140px]"
+      />
       <div class="flex gap-2">
-        <button
-          type="button"
-          class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50"
+        <sa-button
+          variant="stroked"
+          ariaLabel="Copy timeline as TSV"
+          innerClass="px-3 py-1.5 text-xs font-medium"
           [disabled]="timelineHits().length === 0"
           (click)="copyText(timelineExportText())"
         >
           Copy TSV (date, match, context)
-        </button>
+        </sa-button>
       </div>
       <div class="max-h-[280px] overflow-auto rounded-lg border border-slate-200">
         @if (timelineHits().length === 0) {
@@ -382,31 +357,27 @@
 
   @if (activeTab() === 'findreplace') {
     <div class="flex flex-wrap items-end gap-3 text-sm">
-      <label class="inline-flex flex-col gap-1 text-xs">
-        Find
-        <input
-          class="w-48 rounded border border-slate-200 px-2 py-1 font-mono"
-          [(ngModel)]="frFind"
-        />
-      </label>
-      <label class="inline-flex flex-col gap-1 text-xs">
-        Replace with
-        <input
-          class="w-48 rounded border border-slate-200 px-2 py-1 font-mono"
-          [(ngModel)]="frReplace"
-        />
-      </label>
-      <label class="inline-flex cursor-pointer items-center gap-2 text-xs">
-        <input type="checkbox" [(ngModel)]="frCaseInsensitive" />
-        Case-insensitive
-      </label>
-      <button
-        type="button"
-        class="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-800"
+      <sa-text-field
+        label="Find"
+        [(ngModel)]="frFind"
+        fieldClass="w-52"
+        inputClass="font-mono text-sm"
+      />
+      <sa-text-field
+        label="Replace with"
+        [(ngModel)]="frReplace"
+        fieldClass="w-52"
+        inputClass="font-mono text-sm"
+      />
+      <sa-checkbox [(ngModel)]="frCaseInsensitive">Case-insensitive</sa-checkbox>
+      <sa-button
+        variant="flat"
+        ariaLabel="Apply find and replace to all cells"
+        innerClass="!bg-slate-900 px-3 py-1.5 !text-xs font-medium !text-white hover:!bg-slate-800"
         (click)="applyFindReplace()"
       >
         Apply to all cells
-      </button>
+      </sa-button>
     </div>
     <p class="text-xs text-slate-500">
       Literal find string (not regex). Empty find leaves the table unchanged.

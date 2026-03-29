@@ -2,31 +2,26 @@ import { Component, input, signal } from '@angular/core';
 import { BrowserMultiFormatReader } from '@zxing/browser';
 import { BarcodeFormat, DecodeHintType, NotFoundException } from '@zxing/library';
 
+import { SaButtonComponent } from '../../../ui/sa-button.component';
+import { SaFileInputComponent } from '../../../ui/sa-file-input.component';
 import type { ToolDefinition } from '../../models/tool.model';
-
-const PII_PASTE_WARNING =
-  'Do not paste secrets, credentials, or sensitive personal data unless policy allows. All processing happens in this browser session.';
 
 @Component({
   selector: 'sa-barcode-qr-tool',
   standalone: true,
+  imports: [SaFileInputComponent, SaButtonComponent],
   template: `
     <div class="mx-auto max-w-3xl space-y-4">
-      <p class="text-sm leading-relaxed text-slate-600">{{ piiNotice }}</p>
-
       <p class="text-sm text-slate-600">
         Upload an image containing a barcode or QR code. Decoding runs locally in your browser.
       </p>
 
-      <label class="block text-xs font-medium text-slate-700">
-        Image file
-        <input
-          type="file"
-          accept="image/*"
-          class="mt-1 block w-full text-sm text-slate-700 file:mr-3 file:rounded-md file:border file:border-slate-200 file:bg-white file:px-3 file:py-1.5 file:text-sm"
-          (change)="onFile($event)"
-        />
-      </label>
+      <sa-file-input
+        label="Image file"
+        accept="image/*"
+        triggerLabel="Choose image"
+        (fileChange)="onFiles($event)"
+      />
 
       @if (busy()) {
         <p class="text-sm text-slate-600">Decoding…</p>
@@ -42,13 +37,14 @@ const PII_PASTE_WARNING =
         <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-3 text-sm text-emerald-950">
           <p class="font-medium">Format: {{ d.format }}</p>
           <p class="mt-2 break-all font-mono text-xs">{{ d.text }}</p>
-          <button
-            type="button"
-            class="mt-3 text-xs text-emerald-900 underline decoration-emerald-400 hover:decoration-emerald-700"
+          <sa-button
+            variant="text"
+            ariaLabel="Copy decoded text"
+            innerClass="mt-3 !text-xs !text-emerald-900 !underline !decoration-emerald-400 hover:!decoration-emerald-700"
             (click)="copy(d.text)"
           >
             Copy text
-          </button>
+          </sa-button>
         </div>
       }
     </div>
@@ -56,8 +52,6 @@ const PII_PASTE_WARNING =
 })
 export class BarcodeQrToolComponent {
   readonly tool = input.required<ToolDefinition>();
-
-  protected readonly piiNotice = PII_PASTE_WARNING;
 
   private readonly reader = new BrowserMultiFormatReader(
     new Map<DecodeHintType, unknown>([
@@ -85,9 +79,8 @@ export class BarcodeQrToolComponent {
   protected readonly error = signal<string | null>(null);
   protected readonly decoded = signal<{ format: string; text: string } | null>(null);
 
-  protected async onFile(ev: Event): Promise<void> {
-    const input = ev.target as HTMLInputElement;
-    const file = input.files?.[0];
+  protected async onFiles(files: FileList | null): Promise<void> {
+    const file = files?.[0];
     this.error.set(null);
     this.decoded.set(null);
     if (!file) {
@@ -125,7 +118,6 @@ export class BarcodeQrToolComponent {
       this.busy.set(false);
       URL.revokeObjectURL(url);
     }
-    input.value = '';
   }
 
   protected async copy(text: string): Promise<void> {

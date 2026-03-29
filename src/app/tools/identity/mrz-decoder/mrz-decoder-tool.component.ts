@@ -1,8 +1,11 @@
+import { NgClass } from '@angular/common';
 import { Component, computed, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgClass } from '@angular/common';
 import { parse, type ParseResult } from 'mrz';
 
+import { SaButtonComponent } from '../../../ui/sa-button.component';
+import { SaCheckboxComponent } from '../../../ui/sa-checkbox.component';
+import { SaTextareaComponent } from '../../../ui/sa-textarea.component';
 import type { ToolDefinition } from '../../models/tool.model';
 
 function normalizeMrzInput(raw: string): string {
@@ -62,7 +65,7 @@ function diffDays(a: Date, b: Date): number {
 @Component({
   selector: 'sa-mrz-decoder-tool',
   standalone: true,
-  imports: [FormsModule, NgClass],
+  imports: [FormsModule, NgClass, SaCheckboxComponent, SaTextareaComponent, SaButtonComponent],
   template: `
     <div class="mx-auto max-w-5xl space-y-4">
       <p class="text-sm leading-relaxed text-slate-600">
@@ -71,22 +74,25 @@ function diffDays(a: Date, b: Date): number {
         characters are stripped.
       </p>
 
-      <label class="flex cursor-pointer items-center gap-2 text-xs text-slate-700">
-        <input type="checkbox" [(ngModel)]="autocorrect" (ngModelChange)="bump()" />
+      <sa-checkbox
+        class="block text-xs text-slate-700"
+        [(ngModel)]="autocorrect"
+        (ngModelChange)="bump()"
+      >
         Autocorrect single-character OCR errors (when supported)
-      </label>
+      </sa-checkbox>
 
-      <label class="block text-xs font-medium text-slate-700">
-        MRZ text
-        <textarea
-          class="mt-1 min-h-[140px] w-full resize-y rounded-lg border border-slate-200 bg-white p-3 font-mono text-sm leading-relaxed text-slate-900 outline-none focus:border-slate-400"
-          [(ngModel)]="mrzRaw"
-          (ngModelChange)="bump()"
-          placeholder="Example (TD3 passport, 2×44 characters):&#10;P&lt;UTOERIKSSON&lt;&lt;ANNA&lt;MARIA&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&#10;L898902C36UTO7408122F1204159ZE184226B&lt;&lt;&lt;&lt;&lt;10"
-          spellcheck="false"
-          autocomplete="off"
-        ></textarea>
-      </label>
+      <sa-textarea
+        label="MRZ text"
+        [rows]="6"
+        [(ngModel)]="mrzRaw"
+        (ngModelChange)="bump()"
+        placeholder="Example (TD3 passport, 2×44 characters):&#10;P&lt;UTOERIKSSON&lt;&lt;ANNA&lt;MARIA&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&#10;L898902C36UTO7408122F1204159ZE184226B&lt;&lt;&lt;&lt;&lt;10"
+        [spellcheck]="false"
+        autocomplete="off"
+        inputClass="font-mono text-sm leading-relaxed"
+        fieldClass="min-h-[140px]"
+      />
 
       @if (error()) {
         <div
@@ -119,13 +125,14 @@ function diffDays(a: Date, b: Date): number {
               <span class="font-mono font-semibold text-slate-900">{{ r.documentNumber }}</span></span
             >
           }
-          <button
-            type="button"
-            class="ml-auto text-xs text-slate-600 underline decoration-slate-300 hover:decoration-slate-600"
+          <sa-button
+            variant="text"
+            ariaLabel="Copy parsed MRZ as JSON"
+            innerClass="ml-auto !text-xs !text-slate-600 !underline !decoration-slate-300 hover:!decoration-slate-600"
             (click)="copyJson(r)"
           >
             Copy JSON
-          </button>
+          </sa-button>
         </div>
 
         <div class="overflow-hidden rounded-lg border border-slate-200">

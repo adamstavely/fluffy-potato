@@ -11,111 +11,94 @@ import {
   viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, startWith } from 'rxjs';
 
 import { AuditService } from '../../platform/audit.service';
 import { AuthService } from '../../platform/auth.service';
 import { AnalyticsService } from '../../platform/analytics.service';
+import { TeamToolFavoritesService } from '../../platform/team-tool-favorites.service';
 import { UserPrefsService } from '../../platform/user-prefs.service';
 import type { ToolCategory, ToolDefinition } from '../models/tool.model';
 import { TOOL_CATEGORY_ORDER } from '../models/tool.model';
 import { ToolLaunchService } from '../services/tool-launch.service';
 import { ToolRegistryService } from '../services/tool-registry.service';
 import { ToolsIconsModule } from '../tools-icons.module';
-import { ToolCardComponent } from './tool-card.component';
 import { ToolCategoryComponent } from './tool-category.component';
 import { CdkTrapFocus } from '@angular/cdk/a11y';
 
+import { SaSelectComponent, type SaSelectOption } from '../../ui/sa-select.component';
+import { SaTextFieldComponent } from '../../ui/sa-text-field.component';
 import { ToolDetailDrawerComponent } from './tool-detail-drawer.component';
 
 type FilterKey = 'all' | ToolCategory;
+
+type CatalogScopeKey = 'all' | 'mine' | 'team';
 
 @Component({
   selector: 'sa-tools-section',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     ToolsIconsModule,
-    ToolCardComponent,
     ToolCategoryComponent,
     ToolDetailDrawerComponent,
     CdkTrapFocus,
+    SaSelectComponent,
+    SaTextFieldComponent,
   ],
   template: `
     <div class="flex min-h-0 flex-1 flex-col">
-      <div class="mb-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div class="relative max-w-[360px] flex-1">
-          <label class="sr-only" for="tool-search">Search tools</label>
-          <lucide-icon
-            name="Search"
-            [size]="15"
-            class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--app-text-muted)]"
-            aria-hidden="true"
-          />
-          <input
-            id="tool-search"
-            type="search"
-            class="h-[38px] w-full rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] pl-[38px] pr-3 font-sans text-[13.5px] text-[var(--app-text-primary)] placeholder:text-[var(--app-text-muted)] outline-none transition-[border-color] focus:border-[#c4c0ba]"
-            placeholder="Search tools…"
-            [formControl]="searchControl"
-            autocomplete="off"
-          />
-        </div>
-        <div class="flex flex-wrap gap-2" role="group" aria-label="Filter tools by category">
-          @for (chip of filterChips; track chip.key) {
+      <div class="mb-9 flex flex-wrap items-center gap-3">
+        <div
+          class="inline-flex shrink-0 overflow-hidden rounded-lg border border-[var(--app-border)] bg-[var(--app-bg)] p-0.5 divide-x divide-[var(--app-border)]"
+          role="group"
+          aria-label="Catalog scope"
+        >
+          @for (chip of scopeChips; track chip.key) {
             <button
               type="button"
-              class="flex h-[38px] items-center gap-1.5 whitespace-nowrap rounded-lg border px-3.5 font-sans text-[13px] transition-colors"
-              [class.border-[var(--app-accent)]]="activeFilter() === chip.key"
-              [class.bg-[var(--app-accent)]]="activeFilter() === chip.key"
-              [class.text-[var(--app-accent-fg)]]="activeFilter() === chip.key"
-              [class.border-[var(--app-border)]]="activeFilter() !== chip.key"
-              [class.bg-[var(--app-surface)]]="activeFilter() !== chip.key"
-              [class.text-[var(--app-text-secondary)]]="activeFilter() !== chip.key"
-              [class.hover:border-[#c4c0ba]]="activeFilter() !== chip.key"
-              [class.hover:text-[var(--app-text-primary)]]="activeFilter() !== chip.key"
-              [attr.aria-pressed]="activeFilter() === chip.key"
-              (click)="setFilter(chip.key)"
+              class="sa-segmented-btn min-h-[34px] shrink-0 whitespace-nowrap px-3 py-1.5 text-center text-[13px] font-medium leading-tight"
+              [class.sa-segmented-btn--active]="catalogScope() === chip.key"
+              [attr.aria-pressed]="catalogScope() === chip.key ? 'true' : 'false'"
+              (click)="setCatalogScope(chip.key)"
             >
               {{ chip.label }}
             </button>
           }
         </div>
-      </div>
-
-      <section class="mb-10" aria-labelledby="favorites-heading">
-        <h2
-          id="favorites-heading"
-          class="font-display mb-3.5 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--app-text-muted)]"
-        >
-          <span>Favorites</span>
-          <span class="h-px flex-1 bg-[var(--app-border-subtle)]" aria-hidden="true"></span>
-        </h2>
-        @if (favoriteToolList().length === 0) {
-          <p class="py-1 text-[13px] italic text-[var(--app-text-muted)]">
-            Mark a tool as favorite to access it quickly here.
-          </p>
-        } @else {
-          <div
-            class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3.5"
-            role="list"
-          >
-            @for (t of favoriteToolList(); track t.id) {
-              <sa-tool-card
-                role="listitem"
-                [tool]="t"
-                [isFavorited]="favoriteIds().has(t.id)"
-                [isDrawerActive]="drawerTool()?.id === t.id"
-                (favoriteToggle)="toggleFavorite(t.id)"
-                (drawerOpen)="onDrawerRequest($event)"
-                (launched)="onLaunch($event)"
-              />
-            }
+        <div class="flex min-w-0 flex-1 flex-wrap items-center gap-2 sm:flex-nowrap">
+          <sa-select
+            label="Category"
+            fieldId="tool-category-filter"
+            [options]="categoryFilterOptions"
+            [ngModel]="activeFilter()"
+            (ngModelChange)="setFilter($event)"
+            fieldClass="!w-[min(100%,160px)] min-w-[140px] shrink-0"
+          />
+          <div class="min-w-0 flex-1">
+            <sa-text-field
+              floatLabel="always"
+              fieldClass="sa-tools-search w-full min-w-0"
+              [formControl]="searchControl"
+              label="Search"
+              fieldId="tool-search"
+              type="search"
+              placeholder="Type to filter…"
+              autocomplete="off"
+            >
+              <span
+                matPrefix
+                class="inline-flex shrink-0 items-center text-[var(--app-text-muted)]"
+              >
+                <lucide-icon name="Search" [size]="15" aria-hidden="true" />
+              </span>
+            </sa-text-field>
           </div>
-        }
-      </section>
+        </div>
+      </div>
 
       @if (drawerTool()) {
         <div
@@ -154,7 +137,7 @@ type FilterKey = 'all' | ToolCategory;
             #drawerPanel
             cdkTrapFocus
             cdkTrapFocusAutoCapture
-            class="fixed bottom-0 right-0 z-50 flex w-[var(--app-drawer-width)] flex-col border-l border-[var(--app-border)] bg-[var(--app-surface)] shadow-[-8px_0_32px_rgba(0,0,0,0.06)]"
+            class="fixed bottom-0 right-0 z-50 flex w-[var(--app-drawer-width)] flex-col border-l border-[var(--app-border)] bg-[var(--app-surface)] shadow-[var(--app-drawer-shadow)]"
             style="top: 56px"
           >
             <sa-tool-detail-drawer
@@ -175,6 +158,7 @@ export class ToolsSectionComponent {
 
   private readonly registry = inject(ToolRegistryService);
   private readonly prefs = inject(UserPrefsService);
+  private readonly teamFavorites = inject(TeamToolFavoritesService);
   private readonly launch = inject(ToolLaunchService);
   private readonly audit = inject(AuditService);
   private readonly analytics = inject(AnalyticsService);
@@ -205,6 +189,18 @@ export class ToolsSectionComponent {
     initialValue: new Set<string>(),
   });
 
+  readonly teamFavoriteIds = toSignal(this.teamFavorites.getTeamFavoriteToolIds(), {
+    initialValue: new Set<string>(),
+  });
+
+  readonly catalogScope = signal<CatalogScopeKey>('all');
+
+  readonly scopeChips: { key: CatalogScopeKey; label: string }[] = [
+    { key: 'all', label: 'All' },
+    { key: 'mine', label: 'Mine' },
+    { key: 'team', label: 'My Team' },
+  ];
+
   readonly filterChips: { key: FilterKey; label: string }[] = [
     { key: 'all', label: 'All' },
     { key: 'language', label: 'Language' },
@@ -214,10 +210,24 @@ export class ToolsSectionComponent {
     { key: 'productivity', label: 'Productivity' },
   ];
 
+  readonly categoryFilterOptions: SaSelectOption<FilterKey>[] = this.filterChips.map((c) => ({
+    value: c.key,
+    label: c.label,
+  }));
+
   private readonly filtered = computed(() => {
     const q = this.debouncedQuery().trim().toLowerCase();
     const f = this.activeFilter();
+    const scope = this.catalogScope();
+    const fav = this.favoriteIds();
+    const teamFav = this.teamFavoriteIds();
     return this.tools().filter((t) => {
+      if (scope === 'mine' && !fav.has(t.id)) {
+        return false;
+      }
+      if (scope === 'team' && !teamFav.has(t.id)) {
+        return false;
+      }
       if (f !== 'all' && t.category !== f) {
         return false;
       }
@@ -247,11 +257,6 @@ export class ToolsSectionComponent {
   });
 
   readonly visibleCount = computed(() => this.filtered().length);
-
-  readonly favoriteToolList = computed(() => {
-    const ids = this.favoriteIds();
-    return this.tools().filter((t) => ids.has(t.id));
-  });
 
   @HostListener('document:keydown.escape')
   protected onEscape(): void {
@@ -285,6 +290,11 @@ export class ToolsSectionComponent {
         this.analytics.track('tool_searched', { query: q, resultsCount: count });
       });
     });
+  }
+
+  protected setCatalogScope(key: CatalogScopeKey): void {
+    this.catalogScope.set(key);
+    this.analytics.track('tool_catalog_scope', { scope: key });
   }
 
   protected setFilter(key: FilterKey): void {

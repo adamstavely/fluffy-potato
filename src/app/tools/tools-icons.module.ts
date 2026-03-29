@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import {
-  BadgePercent,
   Binary,
+  BookOpen,
   Braces,
   ChefHat,
   CreditCard,
   ExternalLink,
   Fingerprint,
   Globe,
+  IdCard,
   Landmark,
   Languages,
   LayoutGrid,
@@ -59,7 +60,8 @@ import {
       Globe,
       Landmark,
       Phone,
-      BadgePercent,
+      IdCard,
+      BookOpen,
       CreditCard,
       ScanBarcode,
     }),

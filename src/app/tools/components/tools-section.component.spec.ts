@@ -6,6 +6,7 @@ import { BehaviorSubject, of } from 'rxjs';
 import { AuditService } from '../../platform/audit.service';
 import { AuthService } from '../../platform/auth.service';
 import { AnalyticsService } from '../../platform/analytics.service';
+import { TeamToolFavoritesService } from '../../platform/team-tool-favorites.service';
 import { UserPrefsService } from '../../platform/user-prefs.service';
 import type { ToolDefinition } from '../models/tool.model';
 import { ToolLaunchService } from '../services/tool-launch.service';
@@ -14,6 +15,7 @@ import { ToolsSectionComponent } from './tools-section.component';
 
 describe('ToolsSectionComponent', () => {
   let fixture: ComponentFixture<ToolsSectionComponent>;
+  let teamFav$: BehaviorSubject<Set<string>>;
 
   const sampleTool: ToolDefinition = {
     id: 'cyberchef',
@@ -28,10 +30,12 @@ describe('ToolsSectionComponent', () => {
     changelog: [],
     accessLevel: 'All authenticated users',
     auditLogEnabled: true,
+    allProcessingInBrowser: true,
   };
 
   beforeEach(async () => {
     const fav$ = new BehaviorSubject<Set<string>>(new Set());
+    teamFav$ = new BehaviorSubject<Set<string>>(new Set());
     await TestBed.configureTestingModule({
       imports: [ToolsSectionComponent],
       providers: [
@@ -40,6 +44,13 @@ describe('ToolsSectionComponent', () => {
           provide: ToolRegistryService,
           useValue: {
             getVisibleTools: () => of([sampleTool]),
+          },
+        },
+        {
+          provide: TeamToolFavoritesService,
+          useValue: {
+            getTeamFavoriteToolIds: () => teamFav$.asObservable(),
+            snapshotTeamFavorites: () => teamFav$.value,
           },
         },
         {
@@ -84,14 +95,55 @@ describe('ToolsSectionComponent', () => {
   });
 
   it('opens detail drawer when the details control is clicked', () => {
-    const detailBtn = fixture.debugElement.queryAll(By.css('button')).find((b) => {
-      const label = (b.nativeElement as HTMLButtonElement).getAttribute('aria-label');
-      return label === 'View tool details' || label === 'Close tool details';
-    });
-    expect(detailBtn).withContext('Tool details button').toBeTruthy();
+    const detailBtn = fixture.debugElement.query(
+      By.css('sa-tool-card button[aria-label="View tool details"]'),
+    );
+    expect(detailBtn).withContext('Tool details control').toBeTruthy();
     detailBtn!.triggerEventHandler('click', {});
     fixture.detectChanges();
     expect(fixture.nativeElement.textContent).toContain('About');
+  });
+
+  describe('Catalog scope', () => {
+    it('shows no tools on Mine when nothing is favorited', () => {
+      const mineBtn = fixture.debugElement.queryAll(
+        By.css('[aria-label="Catalog scope"] button'),
+      )[1];
+      mineBtn!.triggerEventHandler('click', {});
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toContain('No tools match your filters.');
+    });
+
+    it('shows favorited tools on Mine', () => {
+      TestBed.inject(UserPrefsService).toggleFavorite('cyberchef');
+      fixture.detectChanges();
+      const mineBtn = fixture.debugElement.queryAll(
+        By.css('[aria-label="Catalog scope"] button'),
+      )[1];
+      mineBtn!.triggerEventHandler('click', {});
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toContain('CyberChef');
+    });
+
+    it('shows team-favorited tools on My Team', () => {
+      teamFav$.next(new Set(['cyberchef']));
+      fixture.detectChanges();
+      const teamBtn = fixture.debugElement.queryAll(
+        By.css('[aria-label="Catalog scope"] button'),
+      )[2];
+      expect(teamBtn).withContext('My Team scope').toBeTruthy();
+      teamBtn!.triggerEventHandler('click', {});
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toContain('CyberChef');
+    });
+  });
+
+  describe('Category filter', () => {
+    it('hides tools when category does not match', () => {
+      fixture.componentInstance.activeFilter.set('data');
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toContain('No tools match your filters.');
+    });
   });
 
   describe('Launch', () => {
@@ -100,6 +152,7 @@ describe('ToolsSectionComponent', () => {
     beforeEach(async () => {
       recordLaunchSpy = jasmine.createSpy('recordLaunch');
       const fav$ = new BehaviorSubject<Set<string>>(new Set());
+      const teamFav$ = new BehaviorSubject<Set<string>>(new Set());
       const inAppTool: ToolDefinition = {
         ...sampleTool,
         launchUrl: '/tools/cyberchef',
@@ -113,6 +166,13 @@ describe('ToolsSectionComponent', () => {
             provide: ToolRegistryService,
             useValue: {
               getVisibleTools: () => of([inAppTool]),
+            },
+          },
+          {
+            provide: TeamToolFavoritesService,
+            useValue: {
+              getTeamFavoriteToolIds: () => teamFav$.asObservable(),
+              snapshotTeamFavorites: () => teamFav$.value,
             },
           },
           {

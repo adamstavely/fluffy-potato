@@ -29,7 +29,11 @@ import { TOOL_SCAFFOLD_TOOL_ID } from '../tokens/tool-scaffold-context';
   ],
   template: `
     <div class="flex min-h-screen flex-col bg-slate-50">
-      <sa-branding-bar [title]="config().toolName" [subtitle]="'v' + config().version" />
+      <sa-branding-bar
+        [title]="config().toolName"
+        [subtitle]="'v' + config().version"
+        [centerBanner]="config().allProcessingInBrowser ? 'browser' : 'external'"
+      />
       <div class="flex-1 p-4">
         @if (loadError()) {
           <div

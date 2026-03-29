@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 
 import { ExternalLink, Star, X } from 'lucide-angular';
 
+import { SaIconButtonComponent } from '../../ui/sa-icon-button.component';
 import { ToolsIconsModule } from '../tools-icons.module';
 import { ToolLaunchService } from '../services/tool-launch.service';
 import type { ChangelogBump, ToolDefinition } from '../models/tool.model';
@@ -11,7 +12,7 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
 @Component({
   selector: 'sa-tool-detail-drawer',
   standalone: true,
-  imports: [ToolsIconsModule, RouterLink],
+  imports: [ToolsIconsModule, RouterLink, SaIconButtonComponent],
   template: `
     @if (tool()) {
       <div
@@ -40,28 +41,29 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
             </div>
           </div>
           <div class="flex shrink-0 items-center gap-1">
-            <button
-              type="button"
-              class="flex size-[30px] items-center justify-center rounded-md border-0 bg-transparent text-[var(--app-text-muted)] transition-colors hover:bg-[var(--app-bg)] hover:text-[#d4af37]"
-              [class.text-[#d4af37]]="isFavorited()"
-              [attr.aria-label]="isFavorited() ? 'Remove from favorites' : 'Add to favorites'"
+            <sa-icon-button
+              [ariaLabel]="isFavorited() ? 'Remove from favorites' : 'Add to favorites'"
+              [innerClass]="drawerFavBtnClass()"
               (click)="favoriteToggle.emit(); $event.stopPropagation()"
             >
               <lucide-icon
                 [img]="Star"
                 [size]="15"
                 aria-hidden="true"
-                [class]="isFavorited() ? 'fill-[#d4af37]' : ''"
+                [class]="
+                  isFavorited()
+                    ? 'fill-[var(--app-favorite-gold)] stroke-[var(--app-favorite-gold)]'
+                    : ''
+                "
               />
-            </button>
-            <button
-              type="button"
-              class="flex size-[30px] shrink-0 items-center justify-center rounded-md border border-[var(--app-border)] bg-transparent text-[var(--app-text-secondary)] transition-colors hover:bg-[var(--app-bg)] hover:text-[var(--app-text-primary)]"
+            </sa-icon-button>
+            <sa-icon-button
+              ariaLabel="Close detail"
+              innerClass="flex size-[30px] shrink-0 items-center justify-center rounded-md border border-[var(--app-border)] bg-transparent text-[var(--app-text-secondary)] transition-colors hover:bg-[var(--app-bg)] hover:text-[var(--app-text-primary)]"
               (click)="drawerClose.emit()"
-              aria-label="Close detail"
             >
               <lucide-icon [img]="X" [size]="15" aria-hidden="true" />
-            </button>
+            </sa-icon-button>
           </div>
         </div>
 
@@ -167,7 +169,7 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
           @if (tool(); as t) {
             @if (useRouterLinkForLaunch(t)) {
               <a
-                class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg border-0 bg-[var(--app-accent)] font-sans text-[13.5px] font-medium tracking-tight text-[var(--app-accent-fg)] no-underline transition-opacity hover:opacity-85"
+                class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-[var(--app-radius-button)] border-0 bg-[var(--app-accent)] font-sans text-[13.5px] font-medium tracking-tight text-[var(--app-accent-fg)] no-underline transition-opacity hover:opacity-85"
                 [routerLink]="['/tools', t.id]"
                 [attr.aria-label]="'Launch ' + t.name"
                 (click)="onLaunch()"
@@ -177,7 +179,7 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
               </a>
             } @else {
               <a
-                class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg border-0 bg-[var(--app-accent)] font-sans text-[13.5px] font-medium tracking-tight text-[var(--app-accent-fg)] no-underline transition-opacity hover:opacity-85"
+                class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-[var(--app-radius-button)] border-0 bg-[var(--app-accent)] font-sans text-[13.5px] font-medium tracking-tight text-[var(--app-accent-fg)] no-underline transition-opacity hover:opacity-85"
                 [href]="launchHref()"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -224,6 +226,12 @@ export class ToolDetailDrawerComponent {
   protected readonly launchHref = computed(() => {
     const t = this.tool();
     return t ? this.launch.getLaunchHref(t) : '#';
+  });
+
+  protected readonly drawerFavBtnClass = computed(() => {
+    const base =
+      'flex size-[30px] items-center justify-center rounded-md border-0 bg-transparent text-[var(--app-text-muted)] transition-colors hover:bg-[var(--app-bg)] hover:text-[var(--app-favorite-gold)]';
+    return this.isFavorited() ? `${base} text-[var(--app-favorite-gold)]` : base;
   });
 
   protected useRouterLinkForLaunch(t: ToolDefinition): boolean {

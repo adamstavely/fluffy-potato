@@ -1,6 +1,9 @@
 import { Component, computed, effect, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { SaButtonComponent } from '../../../ui/sa-button.component';
+import { SaSelectComponent } from '../../../ui/sa-select.component';
+import { SaTextFieldComponent } from '../../../ui/sa-text-field.component';
 import type { ToolDefinition } from '../../models/tool.model';
 import {
   convertValue,
@@ -12,7 +15,7 @@ import {
 @Component({
   selector: 'sa-unit-converter-tool',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, SaSelectComponent, SaTextFieldComponent, SaButtonComponent],
   template: `
     <div class="mx-auto max-w-3xl space-y-5">
       <p class="text-sm leading-relaxed text-slate-600">
@@ -21,56 +24,37 @@ import {
       </p>
 
       <div class="grid gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:grid-cols-2">
-        <label class="block text-xs font-medium text-slate-700 sm:col-span-2">
-          Measure
-          <select
-            class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900"
-            [ngModel]="measure()"
-            (ngModelChange)="measure.set($event)"
-          >
-            @for (m of measures(); track m) {
-              <option [value]="m">{{ measureLabelFn(m) }}</option>
-            }
-          </select>
-        </label>
+        <sa-select
+          label="Measure"
+          [options]="measureOptions()"
+          [ngModel]="measure()"
+          (ngModelChange)="measure.set($event)"
+          fieldClass="sm:col-span-2"
+        />
 
-        <label class="block text-xs font-medium text-slate-700">
-          From
-          <select
-            class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900"
-            [ngModel]="fromUnit()"
-            (ngModelChange)="fromUnit.set($event)"
-          >
-            @for (u of units(); track u.abbr) {
-              <option [value]="u.abbr">{{ u.singular }} ({{ u.abbr }})</option>
-            }
-          </select>
-        </label>
+        <sa-select
+          label="From"
+          [options]="unitOptions()"
+          [ngModel]="fromUnit()"
+          (ngModelChange)="fromUnit.set($event)"
+        />
 
-        <label class="block text-xs font-medium text-slate-700">
-          To
-          <select
-            class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900"
-            [ngModel]="toUnit()"
-            (ngModelChange)="toUnit.set($event)"
-          >
-            @for (u of units(); track u.abbr) {
-              <option [value]="u.abbr">{{ u.singular }} ({{ u.abbr }})</option>
-            }
-          </select>
-        </label>
+        <sa-select
+          label="To"
+          [options]="unitOptions()"
+          [ngModel]="toUnit()"
+          (ngModelChange)="toUnit.set($event)"
+        />
 
-        <label class="block text-xs font-medium text-slate-700 sm:col-span-2">
-          Value
-          <input
-            type="text"
-            inputmode="decimal"
-            class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 font-mono text-sm text-slate-900"
-            [ngModel]="valueText()"
-            (ngModelChange)="onValueChange($event)"
-            autocomplete="off"
-          />
-        </label>
+        <sa-text-field
+          label="Value"
+          inputmode="decimal"
+          inputClass="font-mono text-sm"
+          [ngModel]="valueText()"
+          (ngModelChange)="onValueChange($event)"
+          autocomplete="off"
+          fieldClass="sm:col-span-2"
+        />
       </div>
 
       @if (conversion().error) {
@@ -86,14 +70,15 @@ import {
           <p class="text-xs font-medium uppercase tracking-wide text-slate-500">Result</p>
           <p class="font-mono text-lg font-semibold text-slate-900">{{ conversion().result }}</p>
         </div>
-        <button
-          type="button"
-          class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-800 hover:bg-slate-50 disabled:opacity-50"
+        <sa-button
+          variant="stroked"
+          ariaLabel="Copy conversion result"
+          innerClass="px-3 py-2 text-sm font-medium"
           [disabled]="!canCopy()"
           (click)="copyResult()"
         >
           Copy
-        </button>
+        </sa-button>
       </div>
     </div>
   `,
@@ -111,6 +96,14 @@ export class UnitConverterToolComponent {
   protected readonly measures = signal(listMeasures());
 
   protected readonly units = computed(() => listUnitsForMeasure(this.measure()));
+
+  protected readonly measureOptions = computed(() =>
+    this.measures().map((m) => ({ value: m, label: this.measureLabelFn(m) })),
+  );
+
+  protected readonly unitOptions = computed(() =>
+    this.units().map((u) => ({ value: u.abbr, label: `${u.singular} (${u.abbr})` })),
+  );
 
   protected readonly conversion = computed((): { result: string; error: string | null } => {
     const raw = this.valueText().trim();

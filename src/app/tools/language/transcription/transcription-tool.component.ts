@@ -1,6 +1,10 @@
 import { Component, input, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { SaButtonComponent } from '../../../ui/sa-button.component';
+import { SaFileInputComponent } from '../../../ui/sa-file-input.component';
+import { SaSelectComponent } from '../../../ui/sa-select.component';
+import { SaTextareaComponent } from '../../../ui/sa-textarea.component';
 import type { ToolDefinition } from '../../models/tool.model';
 
 /** Narrow typings for Web Speech API (project tsconfig omits full DOM typings). */
@@ -64,7 +68,7 @@ function loadWhisperTranscriber(): Promise<FileTranscriber> {
 @Component({
   selector: 'sa-transcription-tool',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, SaFileInputComponent, SaButtonComponent, SaSelectComponent, SaTextareaComponent],
   template: `
     <div class="mx-auto max-w-3xl space-y-4">
       <p class="text-sm leading-relaxed text-slate-600">
@@ -105,24 +109,12 @@ function loadWhisperTranscriber(): Promise<FileTranscriber> {
           Drop a file here or choose one. Video must contain an audio track your browser can decode.
         </p>
         <div class="mt-3 flex flex-wrap items-center gap-2">
-          <input
-            #fileInput
-            id="transcription-file-input"
-            type="file"
-            class="sr-only"
+          <sa-file-input
+            label="Audio or video file"
             accept="audio/*,video/*"
-            aria-describedby="transcription-file-upload-desc"
-            (change)="onFileInputChange($event)"
+            triggerLabel="Choose file…"
+            (fileChange)="onFilesFromPicker($event)"
           />
-          <button
-            type="button"
-            class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-            [disabled]="fileTranscribing()"
-            aria-controls="transcription-file-input"
-            (click)="fileInput.click()"
-          >
-            Choose file…
-          </button>
           @if (fileTranscribing()) {
             <span class="text-sm text-slate-600">Transcribing… (first run may download the model)</span>
           }
@@ -130,65 +122,63 @@ function loadWhisperTranscriber(): Promise<FileTranscriber> {
       </div>
 
       <div class="flex flex-wrap items-end gap-3">
-        <label class="block min-w-[200px] text-xs font-medium text-slate-700">
-          Recognition language
-          <select
-            class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-400"
-            [(ngModel)]="lang"
-            [disabled]="listening() || fileTranscribing()"
-          >
-            @for (l of langOptions; track l.code) {
-              <option [value]="l.code">{{ l.label }}</option>
-            }
-          </select>
-        </label>
+        <sa-select
+          label="Recognition language"
+          [options]="langSelectOptions"
+          [(ngModel)]="lang"
+          fieldClass="min-w-[200px]"
+          [hostDisabled]="listening() || fileTranscribing()"
+        />
         <div class="flex flex-wrap gap-2">
           @if (!listening()) {
-            <button
-              type="button"
-              class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+            <sa-button
+              variant="flat"
+              ariaLabel="Start speech recognition"
+              innerClass="!bg-slate-900 px-4 py-2 text-sm font-medium !text-white hover:!opacity-90 disabled:!cursor-not-allowed disabled:!opacity-50"
               [disabled]="!supported() || fileTranscribing()"
               (click)="start()"
             >
               Start listening
-            </button>
+            </sa-button>
           } @else {
-            <button
-              type="button"
-              class="rounded-lg bg-rose-700 px-4 py-2 text-sm font-medium text-white hover:opacity-90"
+            <sa-button
+              variant="flat"
+              ariaLabel="Stop speech recognition"
+              innerClass="!bg-rose-700 px-4 py-2 text-sm font-medium !text-white hover:!opacity-90"
               (click)="stop()"
             >
               Stop
-            </button>
+            </sa-button>
           }
-          <button
-            type="button"
-            class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+          <sa-button
+            variant="stroked"
+            ariaLabel="Clear transcript"
+            innerClass="px-3 py-2 text-sm"
             [disabled]="!transcriptText"
             (click)="clear()"
           >
             Clear text
-          </button>
-          <button
-            type="button"
-            class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+          </sa-button>
+          <sa-button
+            variant="stroked"
+            ariaLabel="Copy transcript"
+            innerClass="px-3 py-2 text-sm"
             [disabled]="!transcriptText"
             (click)="copy()"
           >
             Copy
-          </button>
+          </sa-button>
         </div>
       </div>
 
-      <label class="block text-xs font-medium text-slate-700">
-        Transcript
-        <textarea
-          class="mt-1 min-h-[200px] w-full resize-y rounded-lg border border-slate-200 bg-white p-3 text-sm text-slate-900 outline-none focus:border-slate-400"
-          [(ngModel)]="transcriptText"
-          placeholder="Spoken text will appear here…"
-          spellcheck="true"
-        ></textarea>
-      </label>
+      <sa-textarea
+        label="Transcript"
+        [rows]="10"
+        [(ngModel)]="transcriptText"
+        placeholder="Spoken text will appear here…"
+        [spellcheck]="true"
+        fieldClass="min-h-[200px]"
+      />
     </div>
   `,
 })
@@ -206,7 +196,7 @@ export class TranscriptionToolComponent implements OnInit {
   protected transcriptText = '';
   protected lang = 'en-US';
 
-  protected readonly langOptions = [
+  protected readonly langSelectOptions = [
     { code: 'en-US', label: 'English (US)' },
     { code: 'en-GB', label: 'English (UK)' },
     { code: 'es-ES', label: 'Spanish (Spain)' },
@@ -217,7 +207,7 @@ export class TranscriptionToolComponent implements OnInit {
     { code: 'ko-KR', label: 'Korean' },
     { code: 'zh-CN', label: 'Chinese (Mandarin)' },
     { code: 'pt-BR', label: 'Portuguese (Brazil)' },
-  ];
+  ].map((l) => ({ value: l.code, label: l.label }));
 
   ngOnInit(): void {
     const Ctor = this.getSpeechRecognitionCtor();
@@ -289,10 +279,8 @@ export class TranscriptionToolComponent implements OnInit {
     }
   }
 
-  protected onFileInputChange(ev: Event): void {
-    const input = ev.target as HTMLInputElement;
-    const file = input.files?.[0];
-    input.value = '';
+  protected onFilesFromPicker(files: FileList | null): void {
+    const file = files?.[0];
     if (file) {
       void this.transcribeFile(file);
     }

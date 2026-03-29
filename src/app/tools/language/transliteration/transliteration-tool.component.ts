@@ -1,6 +1,9 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { SaButtonComponent } from '../../../ui/sa-button.component';
+import { SaSelectComponent } from '../../../ui/sa-select.component';
+import { SaTextareaComponent } from '../../../ui/sa-textarea.component';
 import type { ToolDefinition } from '../../models/tool.model';
 import {
   transliterateText,
@@ -28,7 +31,7 @@ const PRESETS: { id: TransliterationPreset; label: string; hint: string }[] = [
 @Component({
   selector: 'sa-transliteration-tool',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, SaSelectComponent, SaTextareaComponent, SaButtonComponent],
   template: `
     <div class="mx-auto max-w-6xl space-y-4">
       <p class="text-sm leading-relaxed text-slate-600">
@@ -36,52 +39,53 @@ const PRESETS: { id: TransliterationPreset; label: string; hint: string }[] = [
         meaning (transliteration). This runs entirely in your browser.
       </p>
 
-      <label class="block text-xs font-medium text-slate-700">
-        Preset
-        <select
-          class="mt-1 w-full max-w-md rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-400"
-          [ngModel]="preset()"
-          (ngModelChange)="onPresetChange($event)"
-        >
-          @for (p of presets; track p.id) {
-            <option [value]="p.id">{{ p.label }}</option>
-          }
-        </select>
-      </label>
+      <sa-select
+        label="Preset"
+        [options]="presetOptions"
+        [ngModel]="preset()"
+        (ngModelChange)="onPresetChange($event)"
+        fieldClass="max-w-md"
+      />
 
       <p class="text-xs text-slate-500">{{ activeHint() }}</p>
 
       <div class="grid gap-4 md:grid-cols-2 md:items-stretch">
-        <label class="flex min-h-0 flex-col text-xs font-medium text-slate-700">
-          Input
-          <textarea
-            class="mt-1 min-h-[180px] flex-1 resize-y rounded-lg border border-slate-200 bg-white p-3 font-mono text-sm text-slate-900 outline-none focus:border-slate-400 md:min-h-[240px]"
-            [(ngModel)]="inputText"
-            (ngModelChange)="apply()"
-            placeholder="Paste text…"
-            spellcheck="false"
-          ></textarea>
-        </label>
+        <sa-textarea
+          label="Input"
+          [rows]="10"
+          [(ngModel)]="inputText"
+          (ngModelChange)="apply()"
+          placeholder="Paste text…"
+          [spellcheck]="false"
+          inputClass="font-mono text-sm"
+          fieldClass="min-h-[180px] md:min-h-[240px]"
+        />
 
-        <div class="flex min-h-0 flex-col">
-          <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-medium text-slate-700">
-            <label for="transliteration-output">Output</label>
-            <button
-              type="button"
-              class="shrink-0 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-normal text-slate-700 hover:bg-slate-50"
+        <div class="flex min-h-0 flex-col gap-1">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-medium text-slate-700" id="transliteration-output-label">Output</span>
+            <sa-button
+              variant="stroked"
+              ariaLabel="Copy transliteration output"
+              innerClass="shrink-0 px-3 py-1.5 !text-sm !font-normal"
               [disabled]="!output()"
               (click)="copy()"
             >
               Copy output
-            </button>
+            </sa-button>
           </div>
-          <textarea
-            id="transliteration-output"
-            class="mt-1 min-h-[180px] w-full flex-1 resize-y rounded-lg border border-slate-200 bg-slate-50 p-3 font-mono text-sm text-slate-900 outline-none md:min-h-[240px]"
-            [value]="output()"
-            readonly
-            spellcheck="false"
-          ></textarea>
+          <sa-textarea
+            label="Transliteration output"
+            [labelHidden]="true"
+            ariaLabelledby="transliteration-output-label"
+            fieldId="transliteration-output"
+            [rows]="10"
+            [ngModel]="output()"
+            [readOnly]="true"
+            [spellcheck]="false"
+            inputClass="font-mono text-sm bg-slate-50"
+            fieldClass="min-h-[180px] md:min-h-[240px]"
+          />
         </div>
       </div>
     </div>
@@ -90,7 +94,7 @@ const PRESETS: { id: TransliterationPreset; label: string; hint: string }[] = [
 export class TransliterationToolComponent {
   readonly tool = input.required<ToolDefinition>();
 
-  protected readonly presets = PRESETS;
+  protected readonly presetOptions = PRESETS.map((p) => ({ value: p.id, label: p.label }));
   protected readonly preset = signal<TransliterationPreset>('cyrillic-latin');
   protected inputText = '';
 
@@ -101,8 +105,8 @@ export class TransliterationToolComponent {
     return PRESETS.find((p) => p.id === id)?.hint ?? '';
   });
 
-  protected onPresetChange(value: string): void {
-    this.preset.set(value as TransliterationPreset);
+  protected onPresetChange(value: TransliterationPreset): void {
+    this.preset.set(value);
     this.apply();
   }
 

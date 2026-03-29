@@ -22,7 +22,8 @@
       }
     ],
     "accessLevel": "All authenticated users",
-    "auditLogEnabled": true
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
   },
   {
     "id": "translation",
@@ -47,7 +48,8 @@
       }
     ],
     "accessLevel": "All authenticated users",
-    "auditLogEnabled": true
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": false
   },
   {
     "id": "transcription",
@@ -72,7 +74,8 @@
       }
     ],
     "accessLevel": "All authenticated users",
-    "auditLogEnabled": true
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
   },
   {
     "id": "transliteration",
@@ -97,7 +100,8 @@
       }
     ],
     "accessLevel": "All authenticated users",
-    "auditLogEnabled": true
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
   },
   {
     "id": "list-compare",
@@ -128,7 +132,8 @@
       }
     ],
     "accessLevel": "All authenticated users",
-    "auditLogEnabled": true
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
   },
   {
     "id": "table-workspace",
@@ -155,7 +160,8 @@
       }
     ],
     "accessLevel": "All authenticated users",
-    "auditLogEnabled": true
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
   },
   {
     "id": "mrz-decoder",
@@ -186,7 +192,8 @@
       }
     ],
     "accessLevel": "All authenticated users",
-    "auditLogEnabled": true
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
   },
   {
     "id": "iban-validator",
@@ -217,7 +224,8 @@
       }
     ],
     "accessLevel": "All authenticated users",
-    "auditLogEnabled": true
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
   },
   {
     "id": "phone-number",
@@ -242,7 +250,8 @@
       }
     ],
     "accessLevel": "All authenticated users",
-    "auditLogEnabled": true
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
   },
   {
     "id": "tax-id",
@@ -251,7 +260,7 @@
     "description": "Validate EU VAT numbers (checksum for DE and NL; format checks for FR, GB, ES), US EIN prefix ranges, and UK National Insurance format. Does not prove a number is issued or active.",
     "version": "1.0.0",
     "category": "identity",
-    "icon": "BadgePercent",
+    "icon": "IdCard",
     "launchUrl": "/tools/tax-id",
     "maintainer": {
       "teamName": "Platform Core",
@@ -267,7 +276,8 @@
       }
     ],
     "accessLevel": "All authenticated users",
-    "auditLogEnabled": true
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
   },
   {
     "id": "payment-card",
@@ -298,7 +308,8 @@
       }
     ],
     "accessLevel": "All authenticated users",
-    "auditLogEnabled": true
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
   },
   {
     "id": "barcode-qr",
@@ -323,7 +334,8 @@
       }
     ],
     "accessLevel": "All authenticated users",
-    "auditLogEnabled": true
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
   },
   {
     "id": "pomodoro",
@@ -348,7 +360,8 @@
       }
     ],
     "accessLevel": "All authenticated users",
-    "auditLogEnabled": true
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
   },
   {
     "id": "unit-converter",
@@ -373,7 +386,8 @@
       }
     ],
     "accessLevel": "All authenticated users",
-    "auditLogEnabled": true
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
   },
   {
     "id": "world-clock",
@@ -398,6 +412,41 @@
       }
     ],
     "accessLevel": "All authenticated users",
-    "auditLogEnabled": true
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
+  },
+  {
+    "id": "speed-reader",
+    "name": "Speed Reader",
+    "shortDescription": "RSVP reading with ORP pivot, fonts, and text, PDF, or Word import.",
+    "description": "Paste text or load a plain-text file, PDF, or Word document (.docx) with client-side extraction. Adjust words per minute, font size and family, and read with Spritz-style optimal recognition point highlighting. Settings and text can be saved in this browser.",
+    "version": "1.1.0",
+    "category": "productivity",
+    "icon": "BookOpen",
+    "launchUrl": "/tools/speed-reader",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.1.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Import Microsoft Word .docx files (Mammoth, client-side text extraction)"]
+      },
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": [
+          "Initial speed reader: RSVP, ORP pivot, WPM, fonts, .txt and PDF import"
+        ]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
   }
 ]

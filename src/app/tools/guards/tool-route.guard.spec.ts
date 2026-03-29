@@ -30,6 +30,7 @@ describe('toolRouteGuard', () => {
       changelog: [],
       accessLevel: 'All authenticated users',
       auditLogEnabled: true,
+      allProcessingInBrowser: true,
       ...over,
     }) as ToolDefinition;
 
