@@ -55,7 +55,18 @@ const toolClassName = `${pascalParts.join('')}ToolComponent`;
 
 const componentTemplatePath = join(templateDir, 'tool-component.template.ts');
 let componentSrc = readFileSync(componentTemplatePath, 'utf8');
-componentSrc = componentSrc.replaceAll('__TOOL_ID__', toolId).replaceAll('__TOOL_CLASS__', toolClassName);
+componentSrc = componentSrc
+  .replaceAll('__TOOL_ID__', toolId)
+  .replaceAll('__TOOL_CLASS__', toolClassName)
+  // Template imports resolve from `getting-started/scaffold-template/`; generated tools live under `src/app/tools/<category>/<tool-id>/`.
+  .replaceAll(
+    "from '../../src/app/tools/models/tool.model'",
+    "from '../../models/tool.model'",
+  )
+  .replaceAll(
+    "from '../../src/app/ui/sa-text-field.component'",
+    "from '../../../ui/sa-text-field.component'",
+  );
 const componentFile = join(destDir, `${toolId}-tool.component.ts`);
 writeFileSync(componentFile, componentSrc);
 

@@ -54,7 +54,7 @@ import { ToolLaunchService } from '../services/tool-launch.service';
         >
           <lucide-icon
             [img]="Star"
-            [size]="10"
+            [size]="18"
             aria-hidden="true"
             [class]="
               isFavorited()
@@ -130,7 +130,7 @@ export class ToolCardComponent {
 
   protected readonly favIconBtnClass = computed(() => {
     const base =
-      'flex size-6 shrink-0 items-center justify-center rounded-md border-0 bg-transparent p-0 text-[var(--app-text-muted)] transition-colors hover:bg-[var(--app-bg)] hover:text-[var(--app-favorite-gold)] [--mdc-icon-button-state-layer-size:1.5rem]';
+      'flex size-6 shrink-0 items-center justify-center rounded-md border-0 bg-transparent p-0 text-[var(--app-text-muted)] transition-colors hover:bg-[var(--app-bg)] hover:text-[var(--app-favorite-gold)] [--mdc-icon-button-state-layer-size:1.5rem] [--mdc-icon-button-icon-size:18px]';
     return this.isFavorited() ? `${base} text-[var(--app-favorite-gold)]` : base;
   });
 

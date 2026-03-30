@@ -1,6 +1,7 @@
 import { Type } from '@angular/core';
 
 import { BarcodeQrToolComponent } from './data/barcode-qr/barcode-qr-tool.component';
+import { ImageMetadataStripToolComponent } from './data/image-metadata-strip/image-metadata-strip-tool.component';
 import { CyberChefHostComponent } from './data/cyberchef/cyberchef-host.component';
 import { IbanToolComponent } from './financial/iban/iban-tool.component';
 import { ListCompareToolComponent } from './data/list-compare/list-compare-tool.component';
@@ -32,6 +33,7 @@ export const TOOL_HOST_COMPONENTS: Record<string, Type<unknown>> = {
   'tax-id': TaxIdToolComponent,
   'payment-card': PaymentCardToolComponent,
   'barcode-qr': BarcodeQrToolComponent,
+  'image-metadata-strip': ImageMetadataStripToolComponent,
   pomodoro: PomodoroToolComponent,
   'unit-converter': UnitConverterToolComponent,
   'world-clock': WorldClockToolComponent,

@@ -48,7 +48,7 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
             >
               <lucide-icon
                 [img]="Star"
-                [size]="15"
+                [size]="18"
                 aria-hidden="true"
                 [class]="
                   isFavorited()
@@ -230,7 +230,7 @@ export class ToolDetailDrawerComponent {
 
   protected readonly drawerFavBtnClass = computed(() => {
     const base =
-      'flex size-[30px] items-center justify-center rounded-md border-0 bg-transparent text-[var(--app-text-muted)] transition-colors hover:bg-[var(--app-bg)] hover:text-[var(--app-favorite-gold)]';
+      'flex size-[30px] items-center justify-center rounded-md border-0 bg-transparent text-[var(--app-text-muted)] transition-colors hover:bg-[var(--app-bg)] hover:text-[var(--app-favorite-gold)] [--mdc-icon-button-icon-size:18px]';
     return this.isFavorited() ? `${base} text-[var(--app-favorite-gold)]` : base;
   });
 

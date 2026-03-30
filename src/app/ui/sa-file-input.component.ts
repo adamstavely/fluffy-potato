@@ -25,6 +25,7 @@ let nextFileId = 0;
         [id]="inputId"
         [disabled]="disabled()"
         [attr.accept]="accept() || null"
+        [multiple]="multiple()"
         [attr.aria-labelledby]="labelId"
         (change)="emitFiles($event)"
       />
@@ -44,6 +45,8 @@ export class SaFileInputComponent {
   readonly label = input.required<string>();
   readonly triggerLabel = input<string>('Choose file');
   readonly accept = input<string | undefined>(undefined);
+  /** Allow choosing more than one file (native `multiple` attribute). */
+  readonly multiple = input(false, { transform: booleanAttribute });
   /** Hide the label visually; it remains for `aria-labelledby`. */
   readonly labelHidden = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });

@@ -1,8 +1,8 @@
 import { Component, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { SaTextFieldComponent } from '../../../ui/sa-text-field.component';
-import type { ToolDefinition } from '../../models/tool.model';
+import { SaTextFieldComponent } from '../../src/app/ui/sa-text-field.component';
+import type { ToolDefinition } from '../../src/app/tools/models/tool.model';
 
 /**
  * Standalone tool host — replace the placeholder UI with real behavior.

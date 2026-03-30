@@ -338,6 +338,32 @@
     "allProcessingInBrowser": true
   },
   {
+    "id": "image-metadata-strip",
+    "name": "Image metadata stripper",
+    "shortDescription": "Remove EXIF and embedded metadata before upload or share.",
+    "description": "Re-encode images in your browser so EXIF, GPS, and other metadata are not included in the saved file. Use for field photos and comms assets. JPEG and PNG stay as JPEG/PNG when supported; other raster types export as PNG. Animated GIFs become a single frame.",
+    "version": "1.0.0",
+    "category": "data",
+    "icon": "ImageOff",
+    "launchUrl": "/tools/image-metadata-strip",
+    "maintainer": {
+      "teamName": "Data Tools",
+      "party": "first_party",
+      "contact": "mailto:data-tools@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial client-side canvas re-encode stripper"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
+  },
+  {
     "id": "pomodoro",
     "name": "Pomodoro Timer",
     "shortDescription": "Focus and break timer with configurable intervals.",
