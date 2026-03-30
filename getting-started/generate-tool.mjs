@@ -14,6 +14,8 @@ const TOOL_CATEGORIES = [
   'identity',
   'financial',
   'productivity',
+  'temporal',
+  'geospatial',
 ];
 
 const __dirname = dirname(fileURLToPath(import.meta.url));

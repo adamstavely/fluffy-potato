@@ -3,7 +3,9 @@ export type ToolCategory =
   | 'data'
   | 'identity'
   | 'financial'
-  | 'productivity';
+  | 'productivity'
+  | 'temporal'
+  | 'geospatial';
 
 export type ChangelogBump = 'major' | 'minor' | 'patch';
 
@@ -56,6 +58,8 @@ export const TOOL_CATEGORY_LABEL: Record<ToolCategory, string> = {
   identity: 'Identity',
   financial: 'Financial',
   productivity: 'Productivity',
+  temporal: 'Temporal',
+  geospatial: 'Geospatial',
 };
 
 export const TOOL_CATEGORY_ORDER: ToolCategory[] = [
@@ -64,4 +68,6 @@ export const TOOL_CATEGORY_ORDER: ToolCategory[] = [
   'identity',
   'financial',
   'productivity',
+  'temporal',
+  'geospatial',
 ];

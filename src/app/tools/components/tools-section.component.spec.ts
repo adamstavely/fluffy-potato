@@ -73,6 +73,7 @@ describe('ToolsSectionComponent', () => {
           provide: ToolLaunchService,
           useValue: {
             getLaunchHref: () => 'https://example.com/t',
+            getLaunchTarget: () => '_blank' as const,
             isExternalLaunch: () => true,
             recordLaunch: () => {},
             launchTool: () => {},
@@ -187,6 +188,7 @@ describe('ToolsSectionComponent', () => {
             provide: ToolLaunchService,
             useValue: {
               getLaunchHref: () => 'http://localhost/tools/cyberchef',
+              getLaunchTarget: () => '_blank' as const,
               isExternalLaunch: () => false,
               recordLaunch: recordLaunchSpy,
               launchTool: () => {},

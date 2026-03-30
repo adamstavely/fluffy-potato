@@ -17,7 +17,7 @@ Each tool is one object in the registry array. The shape matches `ToolDefinition
 | `shortDescription` | Yes | One line on tool cards. |
 | `description` | Yes | Longer copy for the detail drawer. |
 | `version` | Yes | Semver string; must stay in sync with what the shell expects (see [Version and identity consistency](#version-and-identity-consistency)). |
-| `category` | Yes | One of: `language`, `data`, `identity`, `financial`, `productivity`. |
+| `category` | Yes | One of: `language`, `data`, `identity`, `financial`, `productivity`, `temporal`, `geospatial`. |
 | `icon` | Yes | **Lucide** icon name in **PascalCase** (e.g. `Languages`, `Braces`). The app only renders icons that are registered in `src/app/tools/tools-icons.module.ts`. |
 | `launchUrl` | Yes | Where **Launch** navigates (see [Two ways to integrate](#two-ways-to-integrate)). |
 | `maintainer` | Yes | `teamName`, `party` (`first_party` \| `third_party`), `contact`. |
@@ -79,7 +79,7 @@ From the repo root:
 npm run generate-tool -- <category> <tool-id>
 ```
 
-**Categories** (must match `ToolCategory` in `src/app/tools/models/tool.model.ts`): `language`, `data`, `identity`, `financial`, `productivity`.
+**Categories** (must match `ToolCategory` in `src/app/tools/models/tool.model.ts`): `language`, `data`, `identity`, `financial`, `productivity`, `temporal`, `geospatial`.
 
 **`<tool-id>`** must match `^[a-z0-9-]+$` (lowercase letters, digits, hyphens). It becomes the route segment `/tools/<tool-id>` and the registry `id`.
 

@@ -104,6 +104,32 @@
     "allProcessingInBrowser": true
   },
   {
+    "id": "glossary",
+    "name": "Glossary",
+    "shortDescription": "Browse the SuperApp glossary of terms and definitions.",
+    "description": "Opens the parent SuperApp glossary in the main window (top frame). Use it to look up terminology and shared definitions across the platform.",
+    "version": "1.0.0",
+    "category": "language",
+    "icon": "BookOpen",
+    "launchUrl": "/glossary",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Catalog entry linking to parent glossary"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
+  },
+  {
     "id": "list-compare",
     "name": "List Compare",
     "shortDescription": "Compare lines or crosswalk two delimited tables by key.",
@@ -312,6 +338,32 @@
     "allProcessingInBrowser": true
   },
   {
+    "id": "crypto-wallet-validator",
+    "name": "Crypto Wallet Address Validator",
+    "shortDescription": "Bitcoin Base58Check and Ethereum EIP-55 checksum validation.",
+    "description": "Verify Bitcoin P2PKH/P2SH addresses with Base58Check (double SHA-256 checksum) and Ethereum hex addresses with EIP-55 mixed-case checksum (Keccak-256). All checks run locally in your browser; Bech32 (bc1) is not covered.",
+    "version": "1.0.0",
+    "category": "financial",
+    "icon": "Wallet",
+    "launchUrl": "/tools/crypto-wallet-validator",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial Base58Check and EIP-55 validators"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
+  },
+  {
     "id": "barcode-qr",
     "name": "Barcode & QR",
     "shortDescription": "Decode barcodes and QR codes from an image file.",
@@ -395,7 +447,7 @@
     "shortDescription": "Convert length, mass, speed, temperature, and more.",
     "description": "Convert between units for length, mass, volume, area, speed, temperature, pressure, digital storage, time, and other measures. All calculations run locally in your browser.",
     "version": "1.0.0",
-    "category": "productivity",
+    "category": "data",
     "icon": "Scale",
     "launchUrl": "/tools/unit-converter",
     "maintainer": {
@@ -421,7 +473,7 @@
     "shortDescription": "Track multiple time zones with live updating clocks.",
     "description": "Add cities from a curated list of IANA time zones, see local date and time with second precision, and keep your selection saved in this browser. No network calls.",
     "version": "1.0.0",
-    "category": "productivity",
+    "category": "temporal",
     "icon": "Globe",
     "launchUrl": "/tools/world-clock",
     "maintainer": {
@@ -448,7 +500,7 @@
     "description": "Paste text or load a plain-text file, PDF, or Word document (.docx) with client-side extraction. Adjust words per minute, font size and family, and read with Spritz-style optimal recognition point highlighting. Settings and text can be saved in this browser.",
     "version": "1.1.0",
     "category": "productivity",
-    "icon": "BookOpen",
+    "icon": "Gauge",
     "launchUrl": "/tools/speed-reader",
     "maintainer": {
       "teamName": "Platform Core",
@@ -586,7 +638,7 @@
     "description": "Describe your situation and options; the assistant outlines tradeoffs and a suggested direction. Uses your platform LLM.",
     "version": "1.0.0",
     "category": "productivity",
-    "icon": "HelpCircle",
+    "icon": "MessageCircleQuestionMark",
     "launchUrl": "/tools/consultant",
     "maintainer": {
       "teamName": "Platform Core",
@@ -638,7 +690,7 @@
     "description": "Paste unstructured notes or a braindump; the assistant returns a concise list of next actions. Uses your platform LLM.",
     "version": "1.0.0",
     "category": "productivity",
-    "icon": "ListTree",
+    "icon": "ListStart",
     "launchUrl": "/tools/compiler",
     "maintainer": {
       "teamName": "Platform Core",
@@ -651,6 +703,266 @@
         "date": "2026-03-29",
         "bump": "minor",
         "notes": ["Initial Compiler (hosted LLM)"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": false
+  },
+  {
+    "id": "regex-pattern-tester",
+    "name": "Regex Pattern Tester",
+    "shortDescription": "Build and test regular expressions against sample text.",
+    "description": "Enter a JavaScript-style pattern and flags, paste sample text, and inspect matches and capture groups. Optional replacement preview.",
+    "version": "1.0.0",
+    "category": "data",
+    "icon": "Regex",
+    "launchUrl": "/tools/regex-pattern-tester",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial regex pattern tester"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
+  },
+  {
+    "id": "base64-encode-decode",
+    "name": "Base64 Encode/Decode",
+    "shortDescription": "Encode UTF-8 text to Base64 or decode Base64 back to text.",
+    "description": "Convert between plain text and Base64 using UTF-8. Optional URL-safe alphabet (RFC 4648). Whitespace is ignored when decoding.",
+    "version": "1.0.0",
+    "category": "data",
+    "icon": "Binary",
+    "launchUrl": "/tools/base64-encode-decode",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial Base64 encode/decode"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
+  },
+  {
+    "id": "imei-decoder",
+    "name": "IMEI Decoder",
+    "shortDescription": "IMEI structure, Luhn check, and TAC display.",
+    "description": "Validate a 15-digit IMEI with Luhn, split TAC and serial fields, and show illustrative TAC hints (not a full GSMA database).",
+    "version": "1.0.0",
+    "category": "identity",
+    "icon": "Smartphone",
+    "launchUrl": "/tools/imei-decoder",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial IMEI decoder"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
+  },
+  {
+    "id": "vin-decoder",
+    "name": "VIN Decoder",
+    "shortDescription": "Vehicle identification number breakdown and check digit.",
+    "description": "Parse WMI, VDS, and VIS fields, decode model-year code (30-year cycle), verify ISO check digit, and show curated WMI hints.",
+    "version": "1.0.0",
+    "category": "identity",
+    "icon": "Car",
+    "launchUrl": "/tools/vin-decoder",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial VIN decoder"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
+  },
+  {
+    "id": "epoch-timestamp",
+    "name": "Unix / Epoch Timestamp Converter",
+    "shortDescription": "Convert between epoch and ISO time with time zones.",
+    "description": "Edit Unix time in seconds or milliseconds, sync with ISO 8601 (UTC), and view formatted wall time in a chosen IANA time zone.",
+    "version": "1.0.0",
+    "category": "temporal",
+    "icon": "CalendarClock",
+    "launchUrl": "/tools/epoch-timestamp",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial epoch timestamp converter"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
+  },
+  {
+    "id": "datetime-normalizer",
+    "name": "Date/Time Normalizer",
+    "shortDescription": "Normalize mixed date formats to ISO lines.",
+    "description": "Paste one value per line: ISO, numeric epoch, or ambiguous numeric dates with EU or US month/day order. Outputs ISO 8601 (UTC) per line.",
+    "version": "1.0.0",
+    "category": "temporal",
+    "icon": "CalendarRange",
+    "launchUrl": "/tools/datetime-normalizer",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial date/time normalizer"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
+  },
+  {
+    "id": "timeline-builder",
+    "name": "Timeline Builder",
+    "shortDescription": "Sort events and view a simple chronology.",
+    "description": "Enter events as a timestamp (ISO or Unix) plus a label separated by tab, pipe, or space. Events sort chronologically with a vertical timeline layout.",
+    "version": "1.0.0",
+    "category": "temporal",
+    "icon": "GitBranch",
+    "launchUrl": "/tools/timeline-builder",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial timeline builder"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
+  },
+  {
+    "id": "duration-calculator",
+    "name": "Duration Calculator",
+    "shortDescription": "Elapsed time, business days, and calendar offsets.",
+    "description": "Compute elapsed span between two ISO instants (with weekday counts excluding weekends in UTC) and add years, months, and days for statute-style date math (informational only).",
+    "version": "1.0.0",
+    "category": "temporal",
+    "icon": "Hourglass",
+    "launchUrl": "/tools/duration-calculator",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial duration calculator"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
+  },
+  {
+    "id": "coordinate-converter",
+    "name": "Coordinate Converter",
+    "shortDescription": "Decimal degrees, DMS, UTM, and MGRS (WGS84).",
+    "description": "Parse decimal degrees, MGRS, or UTM and show equivalent formats on the WGS84 ellipsoid using in-browser conversion libraries.",
+    "version": "1.0.0",
+    "category": "geospatial",
+    "icon": "MapPin",
+    "launchUrl": "/tools/coordinate-converter",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial coordinate converter"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": true
+  },
+  {
+    "id": "georepo",
+    "name": "GeoRepo",
+    "shortDescription": "Polygon layers and vector data for geospatial queries and map integration.",
+    "description": "External hosted platform for polygon features, administrative boundaries, and reference datasets. Use it to store and query geospatial data, publish OGC WFS/WMS layers, and integrate with GIS clients. Opens georepo.com in a new tab.",
+    "version": "1.0.0",
+    "category": "geospatial",
+    "icon": "Layers",
+    "launchUrl": "https://georepo.com/",
+    "maintainer": {
+      "teamName": "GeoRepo",
+      "party": "third_party",
+      "contact": "https://georepo.com/"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Catalog entry linking to GeoRepo (external)"]
       }
     ],
     "accessLevel": "All authenticated users",

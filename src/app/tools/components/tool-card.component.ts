@@ -86,7 +86,7 @@ import { ToolLaunchService } from '../services/tool-launch.service';
           <a
             class="inline-flex h-[34px] flex-1 items-center justify-center gap-1.5 rounded-[7px] border-0 bg-[var(--app-accent)] font-sans text-[13px] font-medium tracking-tight text-[var(--app-accent-fg)] no-underline transition-opacity hover:opacity-85"
             [href]="launchHref()"
-            target="_blank"
+            [attr.target]="launchTarget()"
             rel="noopener noreferrer"
             [attr.aria-label]="'Launch ' + tool().name"
             (click)="onLaunch('card')"
@@ -125,6 +125,8 @@ export class ToolCardComponent {
 
   /** Memoized: avoid calling `getLaunchHref` on every change-detection pass (template-bound). */
   protected readonly launchHref = computed(() => this.launch.getLaunchHref(this.tool()));
+
+  protected readonly launchTarget = computed(() => this.launch.getLaunchTarget(this.tool()));
 
   protected readonly useRouterLinkForLaunch = computed(() => !this.launch.isExternalLaunch(this.tool()));
 

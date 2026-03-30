@@ -10,6 +10,12 @@ import type { ToolDefinition } from '../models/tool.model';
 /** External tools use https? launch URLs; in-app tools open at `/tools/:toolId` (canonical path from `tool.id`). */
 const EXTERNAL_URL = /^https?:\/\//i;
 
+/** Path-only URL outside `/tools/*` (e.g. parent shell route `/glossary`). */
+function isParentAppPathLaunch(launchUrl: string): boolean {
+  const t = launchUrl.trim();
+  return t.startsWith('/') && !t.startsWith('/tools/');
+}
+
 /**
  * Ensures a non-empty path starting with `/`, never `//…` (scheme-relative), never bare `/` alone.
  * `prepareExternalUrl` can return `''` or `/` in edge cases; `new URL('', origin)` yields origin-only hrefs.
@@ -42,6 +48,9 @@ export class ToolLaunchService {
    */
   isExternalLaunch(tool: ToolDefinition): boolean {
     const lu = tool.launchUrl?.trim() ?? '';
+    if (isParentAppPathLaunch(lu)) {
+      return true;
+    }
     if (!lu || !EXTERNAL_URL.test(lu)) {
       return false;
     }
@@ -70,6 +79,18 @@ export class ToolLaunchService {
     return this.resolveLaunchUrl(tool);
   }
 
+  /**
+   * Anchor `target` for catalog launch. Parent-app paths use `_top` so embedded tools break out
+   * to the shell; https links use `_blank`.
+   */
+  getLaunchTarget(tool: ToolDefinition): '_blank' | '_top' {
+    const lu = tool.launchUrl?.trim() ?? '';
+    if (isParentAppPathLaunch(lu)) {
+      return '_top';
+    }
+    return '_blank';
+  }
+
   /** Audit + analytics only (navigation is via anchor `href` or `launchTool`). */
   recordLaunch(tool: ToolDefinition, source: ToolLaunchSource): void {
     const url = this.getLaunchHref(tool);
@@ -87,7 +108,8 @@ export class ToolLaunchService {
     if (!environment.production) {
       console.debug('[ToolLaunchService] launch', { toolId: tool.id, url });
     }
-    window.open(url, '_blank', 'noopener,noreferrer');
+    const target = this.getLaunchTarget(tool);
+    window.open(url, target, 'noopener,noreferrer');
     this.recordLaunch(tool, source);
   }
 
@@ -108,6 +130,14 @@ export class ToolLaunchService {
         }
       }
       return lu;
+    }
+    if (isParentAppPathLaunch(lu)) {
+      const prepared = this.location.prepareExternalUrl(lu);
+      const normalized = normalizeInAppPath(prepared, lu);
+      if (typeof window === 'undefined') {
+        return normalized;
+      }
+      return `${window.location.origin}${normalized}`;
     }
     return this.absoluteInAppUrl(tool.id);
   }

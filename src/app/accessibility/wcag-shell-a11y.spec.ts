@@ -55,6 +55,7 @@ describe('WCAG smoke (axe) — tools catalog shell', () => {
           provide: ToolLaunchService,
           useValue: {
             getLaunchHref: () => 'https://example.com/t',
+            getLaunchTarget: () => '_blank' as const,
             isExternalLaunch: () => true,
             recordLaunch: () => {},
             launchTool: () => {},

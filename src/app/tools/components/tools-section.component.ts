@@ -205,6 +205,8 @@ export class ToolsSectionComponent {
     { key: 'identity', label: 'Identity' },
     { key: 'financial', label: 'Financial' },
     { key: 'productivity', label: 'Productivity' },
+    { key: 'temporal', label: 'Temporal' },
+    { key: 'geospatial', label: 'Geospatial' },
   ];
 
   readonly categoryFilterOptions: SaSelectOption<FilterKey>[] = this.filterChips.map((c) => ({
@@ -246,6 +248,8 @@ export class ToolsSectionComponent {
       identity: [],
       financial: [],
       productivity: [],
+      temporal: [],
+      geospatial: [],
     };
     for (const t of this.filtered()) {
       out[t.category].push(t);

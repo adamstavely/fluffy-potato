@@ -55,6 +55,41 @@ describe('ToolLaunchService', () => {
     expect(service.isExternalLaunch(baseTool({ launchUrl: '/tools/cyberchef' }))).toBe(false);
   });
 
+  it('isExternalLaunch is true for parent-app path outside /tools', () => {
+    expect(
+      service.isExternalLaunch(
+        baseTool({ id: 'glossary', launchUrl: '/glossary' }),
+      ),
+    ).toBe(true);
+  });
+
+  it('getLaunchHref resolves parent-app path with origin + Location', () => {
+    expect(
+      service.getLaunchHref(baseTool({ id: 'glossary', launchUrl: '/glossary' })),
+    ).toBe(expectOriginPlusPath('/glossary'));
+  });
+
+  it('getLaunchTarget is _top for parent-app path', () => {
+    expect(
+      service.getLaunchTarget(baseTool({ id: 'glossary', launchUrl: '/glossary' })),
+    ).toBe('_top');
+  });
+
+  it('getLaunchTarget is _blank for https external', () => {
+    expect(
+      service.getLaunchTarget(baseTool({ launchUrl: 'https://example.com/t' })),
+    ).toBe('_blank');
+  });
+
+  it('launchTool uses _top for parent-app path', () => {
+    service.launchTool(baseTool({ id: 'glossary', launchUrl: '/glossary' }), 'card');
+    expect(openSpy).toHaveBeenCalledWith(
+      expectOriginPlusPath('/glossary'),
+      '_top',
+      'noopener,noreferrer',
+    );
+  });
+
   it('isExternalLaunch is false for same-origin root https launchUrl', () => {
     const origin = window.location.origin;
     expect(service.isExternalLaunch(baseTool({ launchUrl: `${origin}/` }))).toBe(false);

@@ -181,7 +181,7 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
               <a
                 class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-[var(--app-radius-button)] border-0 bg-[var(--app-accent)] font-sans text-[13.5px] font-medium tracking-tight text-[var(--app-accent-fg)] no-underline transition-opacity hover:opacity-85"
                 [href]="launchHref()"
-                target="_blank"
+                [attr.target]="drawerLaunchTarget()"
                 rel="noopener noreferrer"
                 [attr.aria-label]="'Launch ' + t.name"
                 (click)="onLaunch()"
@@ -226,6 +226,11 @@ export class ToolDetailDrawerComponent {
   protected readonly launchHref = computed(() => {
     const t = this.tool();
     return t ? this.launch.getLaunchHref(t) : '#';
+  });
+
+  protected readonly drawerLaunchTarget = computed(() => {
+    const t = this.tool();
+    return t ? this.launch.getLaunchTarget(t) : '_blank';
   });
 
   protected readonly drawerFavBtnClass = computed(() => {
