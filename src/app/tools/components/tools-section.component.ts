@@ -102,17 +102,14 @@ type CatalogScopeKey = 'all' | 'mine' | 'team';
 
       @if (drawerTool()) {
         <div
-          class="fixed inset-0 z-40 bg-black/[0.08]"
+          class="fixed inset-0 z-[90] bg-black/[0.08]"
           role="presentation"
           (click)="closeDrawer()"
         ></div>
       }
 
       <div class="relative flex min-h-0 flex-1">
-        <div
-          class="relative z-10 min-w-0 flex-1 transition-[margin] duration-300 ease-out"
-          [ngClass]="drawerTool() ? 'mr-[var(--app-drawer-width)]' : ''"
-        >
+        <div class="relative min-w-0 flex-1">
           @for (cat of TOOL_CATEGORY_ORDER; track cat) {
             @if (grouped()[cat].length > 0) {
               <sa-tool-category
@@ -137,7 +134,7 @@ type CatalogScopeKey = 'all' | 'mine' | 'team';
             #drawerPanel
             cdkTrapFocus
             cdkTrapFocusAutoCapture
-            class="fixed bottom-0 right-0 z-50 flex w-[var(--app-drawer-width)] flex-col border-l border-[var(--app-border)] bg-[var(--app-surface)] shadow-[var(--app-drawer-shadow)]"
+            class="fixed bottom-0 right-0 z-[100] flex w-[var(--app-drawer-width)] flex-col border-l border-[var(--app-border)] bg-[var(--app-surface)] shadow-[var(--app-drawer-shadow)]"
             style="top: 56px"
           >
             <sa-tool-detail-drawer

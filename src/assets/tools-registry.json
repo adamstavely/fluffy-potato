@@ -448,5 +448,187 @@
     "accessLevel": "All authenticated users",
     "auditLogEnabled": true,
     "allProcessingInBrowser": true
+  },
+  {
+    "id": "magic-todo",
+    "name": "Magic To-Do",
+    "shortDescription": "Break a goal into clear subtasks with the hosted assistant.",
+    "description": "Describe a task or goal; the assistant returns an ordered list of actionable steps. Uses your platform LLM; prompts are original and not copied from third-party sites.",
+    "version": "1.0.0",
+    "category": "productivity",
+    "icon": "ListTodo",
+    "launchUrl": "/tools/magic-todo",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial Magic To-Do (hosted OpenAI-compatible LLM)"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": false
+  },
+  {
+    "id": "formalizer",
+    "name": "Formalizer",
+    "shortDescription": "Rewrite text for a chosen tone using the hosted assistant.",
+    "description": "Paste text and pick a tone (e.g. professional, friendly, concise). The assistant rephrases while preserving meaning. Uses your platform LLM.",
+    "version": "1.0.0",
+    "category": "productivity",
+    "icon": "PenLine",
+    "launchUrl": "/tools/formalizer",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial Formalizer (hosted LLM)"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": false
+  },
+  {
+    "id": "judge",
+    "name": "Judge",
+    "shortDescription": "Read a short text for tone and intent with the hosted assistant.",
+    "description": "Paste a message or note; the assistant summarizes likely emotional tone and intent. Not a substitute for professional judgment. Uses your platform LLM.",
+    "version": "1.0.0",
+    "category": "productivity",
+    "icon": "Gavel",
+    "launchUrl": "/tools/judge",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial Judge (hosted LLM)"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": false
+  },
+  {
+    "id": "professor",
+    "name": "Professor",
+    "shortDescription": "Explain a topic or question with the hosted assistant.",
+    "description": "Ask for a clear explanation of a concept or question. The assistant responds with structured, readable prose. Uses your platform LLM.",
+    "version": "1.0.0",
+    "category": "productivity",
+    "icon": "GraduationCap",
+    "launchUrl": "/tools/professor",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial Professor (hosted LLM)"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": false
+  },
+  {
+    "id": "consultant",
+    "name": "Consultant",
+    "shortDescription": "Compare options and get a practical take with the hosted assistant.",
+    "description": "Describe your situation and options; the assistant outlines tradeoffs and a suggested direction. Uses your platform LLM.",
+    "version": "1.0.0",
+    "category": "productivity",
+    "icon": "HelpCircle",
+    "launchUrl": "/tools/consultant",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial Consultant (hosted LLM)"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": false
+  },
+  {
+    "id": "estimator",
+    "name": "Estimator",
+    "shortDescription": "Rough time estimate for an activity with the hosted assistant.",
+    "description": "Describe what needs doing; the assistant gives a range and what would change the estimate. Uses your platform LLM.",
+    "version": "1.0.0",
+    "category": "productivity",
+    "icon": "Clock",
+    "launchUrl": "/tools/estimator",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial Estimator (hosted LLM)"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": false
+  },
+  {
+    "id": "compiler",
+    "name": "Compiler",
+    "shortDescription": "Turn notes into actionable items with the hosted assistant.",
+    "description": "Paste unstructured notes or a braindump; the assistant returns a concise list of next actions. Uses your platform LLM.",
+    "version": "1.0.0",
+    "category": "productivity",
+    "icon": "ListTree",
+    "launchUrl": "/tools/compiler",
+    "maintainer": {
+      "teamName": "Platform Core",
+      "party": "first_party",
+      "contact": "mailto:platform@example.com"
+    },
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-03-29",
+        "bump": "minor",
+        "notes": ["Initial Compiler (hosted LLM)"]
+      }
+    ],
+    "accessLevel": "All authenticated users",
+    "auditLogEnabled": true,
+    "allProcessingInBrowser": false
   }
 ]

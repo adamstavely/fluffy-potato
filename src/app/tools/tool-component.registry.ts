@@ -7,6 +7,7 @@ import { ListCompareToolComponent } from './data/list-compare/list-compare-tool.
 import { TableWorkspaceToolComponent } from './data/table-workspace/table-workspace-tool.component';
 import { MrzDecoderToolComponent } from './identity/mrz-decoder/mrz-decoder-tool.component';
 import { PaymentCardToolComponent } from './financial/payment-card/payment-card-tool.component';
+import { GoblinLlmToolComponent } from './productivity/goblin-llm/goblin-llm-tool.component';
 import { PomodoroToolComponent } from './productivity/pomodoro/pomodoro-tool.component';
 import { SpeedReaderToolComponent } from './productivity/speed-reader/speed-reader-tool.component';
 import { PhoneNumberToolComponent } from './identity/phone-number/phone-number-tool.component';
@@ -35,6 +36,13 @@ export const TOOL_HOST_COMPONENTS: Record<string, Type<unknown>> = {
   'unit-converter': UnitConverterToolComponent,
   'world-clock': WorldClockToolComponent,
   'speed-reader': SpeedReaderToolComponent,
+  'magic-todo': GoblinLlmToolComponent,
+  formalizer: GoblinLlmToolComponent,
+  judge: GoblinLlmToolComponent,
+  professor: GoblinLlmToolComponent,
+  consultant: GoblinLlmToolComponent,
+  estimator: GoblinLlmToolComponent,
+  compiler: GoblinLlmToolComponent,
 };
 
 export function resolveToolHostComponent(toolId: string): Type<unknown> | null {

@@ -28,14 +28,14 @@ import { ToolLaunchService } from '../services/tool-launch.service';
       class="relative flex h-full cursor-default flex-col rounded-[var(--app-radius-card)] border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[var(--app-shadow-card)] transition-[box-shadow,border-color,transform] duration-200 hover:-translate-y-px hover:border-[#d8d4ce] hover:shadow-[var(--app-shadow-card-hover)]"
       [ngClass]="articleActiveClass()"
     >
-      <div class="mb-3 flex items-start justify-between">
-        <div class="flex min-w-0 items-center gap-2.5">
+      <div class="mb-3 flex items-start justify-between gap-2">
+        <div class="flex min-w-0 items-start gap-2.5">
           <div
             class="flex size-9 shrink-0 items-center justify-center rounded-[9px] text-[var(--app-text-primary)]"
           >
             <lucide-icon [name]="tool().icon" [size]="36" aria-hidden="true" />
           </div>
-          <div class="min-w-0">
+          <div class="min-w-0 flex-1">
             <h3
               class="font-display truncate text-[15px] font-semibold leading-tight tracking-tight text-[var(--app-text-primary)]"
             >
@@ -47,13 +47,14 @@ import { ToolLaunchService } from '../services/tool-launch.service';
           </div>
         </div>
         <sa-icon-button
+          class="shrink-0 self-start"
           [ariaLabel]="isFavorited() ? 'Remove from favorites' : 'Add to favorites'"
           [innerClass]="favIconBtnClass()"
           (click)="favoriteToggle.emit(); $event.stopPropagation()"
         >
           <lucide-icon
             [img]="Star"
-            [size]="15"
+            [size]="10"
             aria-hidden="true"
             [class]="
               isFavorited()
@@ -129,7 +130,7 @@ export class ToolCardComponent {
 
   protected readonly favIconBtnClass = computed(() => {
     const base =
-      'flex size-7 shrink-0 items-center justify-center rounded-md border-0 bg-transparent text-[var(--app-text-muted)] transition-colors hover:bg-[var(--app-bg)] hover:text-[var(--app-favorite-gold)]';
+      'flex size-6 shrink-0 items-center justify-center rounded-md border-0 bg-transparent p-0 text-[var(--app-text-muted)] transition-colors hover:bg-[var(--app-bg)] hover:text-[var(--app-favorite-gold)] [--mdc-icon-button-state-layer-size:1.5rem]';
     return this.isFavorited() ? `${base} text-[var(--app-favorite-gold)]` : base;
   });
 
