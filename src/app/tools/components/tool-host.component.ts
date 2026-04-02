@@ -22,11 +22,11 @@ type ToolHostLoadState =
     @if (loadState().kind === 'loading') {
       <p class="p-6 text-sm text-slate-600">Loading tool…</p>
     }
-    @if (readyTool(); as t) {
-      <sa-tool-scaffold [config]="scaffoldConfig(t)">
+    @if (readyTool()) {
+      <sa-tool-scaffold [config]="scaffoldConfig()!">
         <ng-container
-          [ngComponentOutlet]="hostComponentType(t)!"
-          [ngComponentOutletInputs]="hostInputs(t)"
+          [ngComponentOutlet]="hostComponentType()!"
+          [ngComponentOutletInputs]="hostInputs()"
         />
       </sa-tool-scaffold>
     }
@@ -44,7 +44,7 @@ export class ToolHostComponent {
         if (!id) {
           return of<ToolHostLoadState>({ kind: 'missing' });
         }
-        return this.registry.getToolByIdAny(id).pipe(
+        return this.registry.getToolById(id).pipe(
           map((tool): ToolHostLoadState => {
             if (!tool) {
               return { kind: 'missing' };
@@ -65,6 +65,33 @@ export class ToolHostComponent {
     return s.kind === 'ready' ? s.tool : null;
   });
 
+  /** Resolved registry entry — single lookup shared by all derived computeds below. */
+  private readonly resolvedEntry = computed(() => {
+    const tool = this.readyTool();
+    if (!tool) return null;
+    const entry = resolveToolHostComponent(tool.id);
+    return entry ? { tool, entry } : null;
+  });
+
+  readonly hostComponentType = computed(() => this.resolvedEntry()?.entry.component ?? null);
+
+  readonly hostInputs = computed((): Record<string, unknown> => {
+    const r = this.resolvedEntry();
+    if (!r) return {};
+    return r.entry.passToolInput ? { tool: r.tool } : {};
+  });
+
+  readonly scaffoldConfig = computed(() => {
+    const tool = this.readyTool();
+    if (!tool) return null;
+    return {
+      toolId: tool.id,
+      toolName: tool.name,
+      version: tool.version,
+      allProcessingInBrowser: tool.allProcessingInBrowser ?? true,
+    };
+  });
+
   constructor() {
     effect(() => {
       if (this.loadState().kind === 'missing') {
@@ -72,22 +99,4 @@ export class ToolHostComponent {
       }
     });
   }
-
-  hostComponentType(tool: ToolDefinition) {
-    return resolveToolHostComponent(tool.id);
-  }
-
-  readonly hostInputs = (tool: ToolDefinition): Record<string, unknown> => {
-    if (tool.id === 'cyberchef') {
-      return {};
-    }
-    return { tool };
-  };
-
-  readonly scaffoldConfig = (tool: ToolDefinition) => ({
-    toolId: tool.id,
-    toolName: tool.name,
-    version: tool.version,
-    allProcessingInBrowser: tool.allProcessingInBrowser ?? true,
-  });
 }

@@ -69,7 +69,7 @@ export class ToolScaffoldComponent implements OnInit, OnDestroy {
     this.audit.logEntry(c.toolId, userId);
     this.analytics.trackPageView(c.toolId);
     this.registry
-      .getToolByIdAny(c.toolId)
+      .getToolById(c.toolId)
       .pipe(take(1))
       .subscribe((def) => {
         if (!def) {

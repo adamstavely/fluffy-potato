@@ -271,7 +271,8 @@ export class ToolDetailDrawerComponent {
       return '#';
     }
     const c = t.maintainer.contact;
-    if (c.startsWith('http') || c.startsWith('mailto:')) {
+    // Allowlist only safe schemes — anything else (javascript:, data:, etc.) renders as '#'
+    if (c.startsWith('https://') || c.startsWith('http://') || c.startsWith('mailto:')) {
       return c;
     }
     return '#';

@@ -17,7 +17,7 @@ export const toolRouteGuard: CanActivateFn = async (route) => {
   }
   const tool =
     registry.lookupBundledToolById(toolId) ??
-    (await firstValueFrom(registry.getToolByIdAny(toolId)));
+    (await firstValueFrom(registry.getToolById(toolId)));
   if (!tool) {
     return notFound();
   }

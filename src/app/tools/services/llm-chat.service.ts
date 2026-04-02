@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { timeout } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 
@@ -49,7 +50,7 @@ export class LlmChatService {
       body['temperature'] = options.temperature;
     }
     const res = await firstValueFrom(
-      this.http.post<OpenAiChatCompletionResponse>(url, body),
+      this.http.post<OpenAiChatCompletionResponse>(url, body).pipe(timeout(30_000)),
     );
     if (res.error?.message) {
       throw new Error(res.error.message);
