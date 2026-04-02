@@ -30,46 +30,54 @@ import { TranscriptionToolComponent } from './language/transcription/transcripti
 import { TransliterationToolComponent } from './language/transliteration/transliteration-tool.component';
 import { GlossaryToolComponent } from './language/glossary/glossary-tool.component';
 import { TranslationToolComponent } from './language/translation/translation-tool.component';
-/** Map `toolId` → host component. Every in-app tool in the registry must have an entry. */
-export const TOOL_HOST_COMPONENTS: Record<string, Type<unknown>> = {
-  cyberchef: CyberChefHostComponent,
-  translation: TranslationToolComponent,
-  glossary: GlossaryToolComponent,
-  transcription: TranscriptionToolComponent,
-  transliteration: TransliterationToolComponent,
-  'list-compare': ListCompareToolComponent,
-  'table-workspace': TableWorkspaceToolComponent,
-  'mrz-decoder': MrzDecoderToolComponent,
-  'iban-validator': IbanToolComponent,
-  'crypto-wallet-validator': CryptoWalletValidatorToolComponent,
-  'phone-number': PhoneNumberToolComponent,
-  'tax-id': TaxIdToolComponent,
-  'payment-card': PaymentCardToolComponent,
-  'barcode-qr': BarcodeQrToolComponent,
-  'image-metadata-strip': ImageMetadataStripToolComponent,
-  'regex-pattern-tester': RegexPatternTesterToolComponent,
-  'base64-encode-decode': Base64EncodeDecodeToolComponent,
-  'imei-decoder': ImeiDecoderToolComponent,
-  'vin-decoder': VinDecoderToolComponent,
-  'epoch-timestamp': EpochTimestampToolComponent,
-  'datetime-normalizer': DatetimeNormalizerToolComponent,
-  'timeline-builder': TimelineBuilderToolComponent,
-  'duration-calculator': DurationCalculatorToolComponent,
-  'coordinate-converter': CoordinateConverterToolComponent,
-  georepo: GeoRepoToolComponent,
-  pomodoro: PomodoroToolComponent,
-  'unit-converter': UnitConverterToolComponent,
-  'world-clock': WorldClockToolComponent,
-  'speed-reader': SpeedReaderToolComponent,
-  'magic-todo': GoblinLlmToolComponent,
-  formalizer: GoblinLlmToolComponent,
-  judge: GoblinLlmToolComponent,
-  professor: GoblinLlmToolComponent,
-  consultant: GoblinLlmToolComponent,
-  estimator: GoblinLlmToolComponent,
-  compiler: GoblinLlmToolComponent,
+
+export interface ToolHostEntry {
+  component: Type<unknown>;
+  /** Whether to pass the `ToolDefinition` as a `tool` input to the component. */
+  passToolInput: boolean;
+}
+
+/** Map `toolId` → host component entry. Every in-app tool in the registry must have an entry. */
+export const TOOL_HOST_COMPONENTS: Record<string, ToolHostEntry> = {
+  // CyberChef manages its own data and does not accept a `tool` input
+  cyberchef: { component: CyberChefHostComponent, passToolInput: false },
+  translation: { component: TranslationToolComponent, passToolInput: true },
+  glossary: { component: GlossaryToolComponent, passToolInput: true },
+  transcription: { component: TranscriptionToolComponent, passToolInput: true },
+  transliteration: { component: TransliterationToolComponent, passToolInput: true },
+  'list-compare': { component: ListCompareToolComponent, passToolInput: true },
+  'table-workspace': { component: TableWorkspaceToolComponent, passToolInput: true },
+  'mrz-decoder': { component: MrzDecoderToolComponent, passToolInput: true },
+  'iban-validator': { component: IbanToolComponent, passToolInput: true },
+  'crypto-wallet-validator': { component: CryptoWalletValidatorToolComponent, passToolInput: true },
+  'phone-number': { component: PhoneNumberToolComponent, passToolInput: true },
+  'tax-id': { component: TaxIdToolComponent, passToolInput: true },
+  'payment-card': { component: PaymentCardToolComponent, passToolInput: true },
+  'barcode-qr': { component: BarcodeQrToolComponent, passToolInput: true },
+  'image-metadata-strip': { component: ImageMetadataStripToolComponent, passToolInput: true },
+  'regex-pattern-tester': { component: RegexPatternTesterToolComponent, passToolInput: true },
+  'base64-encode-decode': { component: Base64EncodeDecodeToolComponent, passToolInput: true },
+  'imei-decoder': { component: ImeiDecoderToolComponent, passToolInput: true },
+  'vin-decoder': { component: VinDecoderToolComponent, passToolInput: true },
+  'epoch-timestamp': { component: EpochTimestampToolComponent, passToolInput: true },
+  'datetime-normalizer': { component: DatetimeNormalizerToolComponent, passToolInput: true },
+  'timeline-builder': { component: TimelineBuilderToolComponent, passToolInput: true },
+  'duration-calculator': { component: DurationCalculatorToolComponent, passToolInput: true },
+  'coordinate-converter': { component: CoordinateConverterToolComponent, passToolInput: true },
+  georepo: { component: GeoRepoToolComponent, passToolInput: true },
+  pomodoro: { component: PomodoroToolComponent, passToolInput: true },
+  'unit-converter': { component: UnitConverterToolComponent, passToolInput: true },
+  'world-clock': { component: WorldClockToolComponent, passToolInput: true },
+  'speed-reader': { component: SpeedReaderToolComponent, passToolInput: true },
+  'magic-todo': { component: GoblinLlmToolComponent, passToolInput: true },
+  formalizer: { component: GoblinLlmToolComponent, passToolInput: true },
+  judge: { component: GoblinLlmToolComponent, passToolInput: true },
+  professor: { component: GoblinLlmToolComponent, passToolInput: true },
+  consultant: { component: GoblinLlmToolComponent, passToolInput: true },
+  estimator: { component: GoblinLlmToolComponent, passToolInput: true },
+  compiler: { component: GoblinLlmToolComponent, passToolInput: true },
 };
 
-export function resolveToolHostComponent(toolId: string): Type<unknown> | null {
+export function resolveToolHostComponent(toolId: string): ToolHostEntry | null {
   return TOOL_HOST_COMPONENTS[toolId] ?? null;
 }

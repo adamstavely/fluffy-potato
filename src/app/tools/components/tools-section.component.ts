@@ -135,7 +135,7 @@ type CatalogScopeKey = 'all' | 'mine' | 'team';
             cdkTrapFocus
             cdkTrapFocusAutoCapture
             class="fixed bottom-0 right-0 z-[100] flex w-[var(--app-drawer-width)] flex-col border-l border-[var(--app-border)] bg-[var(--app-surface)] shadow-[var(--app-drawer-shadow)]"
-            style="top: 56px"
+            style="top: var(--app-header-height)"
           >
             <sa-tool-detail-drawer
               [tool]="dt"

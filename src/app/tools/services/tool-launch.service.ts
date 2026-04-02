@@ -126,7 +126,8 @@ export class ToolLaunchService {
             }
           }
         } catch {
-          /* ignore invalid URL */
+          // Malformed URL — do not expose the raw string as an href
+          return this.absoluteInAppUrl(tool.id);
         }
       }
       return lu;

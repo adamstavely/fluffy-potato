@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { catchError, map, shareReplay } from 'rxjs/operators';
+import { catchError, map, shareReplay, timeout } from 'rxjs/operators';
 
 import bundledToolsRegistry from '../../../assets/tools-registry.json';
 import { environment } from '../../../environments/environment';
@@ -22,10 +22,6 @@ export class ToolRegistryService {
   }
 
   getToolById(id: string): Observable<ToolDefinition | undefined> {
-    return this.fetchRawTools().pipe(map((tools) => tools.find((t) => t.id === id)));
-  }
-
-  getToolByIdAny(id: string): Observable<ToolDefinition | undefined> {
     return this.fetchRawTools().pipe(map((tools) => tools.find((t) => t.id === id)));
   }
 
@@ -57,13 +53,15 @@ export class ToolRegistryService {
 
     if (!api) {
       return this.http.get<ToolDefinition[]>(fallbackUrl).pipe(
+        timeout(10_000),
         catchError(() => of([])),
         map(withBundledFallback),
       );
     }
 
     return this.http.get<ToolDefinition[]>(api).pipe(
-      catchError(() => this.http.get<ToolDefinition[]>(fallbackUrl)),
+      timeout(10_000),
+      catchError(() => this.http.get<ToolDefinition[]>(fallbackUrl).pipe(timeout(10_000))),
       catchError(() => of([])),
       map(withBundledFallback),
     );
