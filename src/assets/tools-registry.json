@@ -18,7 +18,9 @@
         "version": "10.22.1",
         "date": "2026-03-28",
         "bump": "patch",
-        "notes": ["Bundled upstream v10.22.1 static build (wrapper MVP)"]
+        "notes": [
+          "Bundled upstream v10.22.1 static build (wrapper MVP)"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -44,7 +46,9 @@
         "version": "1.0.0",
         "date": "2026-03-28",
         "bump": "minor",
-        "notes": ["Initial in-app translation tool"]
+        "notes": [
+          "Initial in-app translation tool"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -70,7 +74,9 @@
         "version": "1.0.0",
         "date": "2026-03-28",
         "bump": "minor",
-        "notes": ["Initial Web Speech transcription tool"]
+        "notes": [
+          "Initial Web Speech transcription tool"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -96,7 +102,9 @@
         "version": "1.0.0",
         "date": "2026-03-28",
         "bump": "minor",
-        "notes": ["Initial client-side transliteration presets"]
+        "notes": [
+          "Initial client-side transliteration presets"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -122,7 +130,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Catalog entry linking to parent glossary"]
+        "notes": [
+          "Catalog entry linking to parent glossary"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -148,13 +158,17 @@
         "version": "1.1.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Crosswalk mode: key columns, delimiter options, fuzzy key similarity, shared data helpers"]
+        "notes": [
+          "Crosswalk mode: key columns, delimiter options, fuzzy key similarity, shared data helpers"
+        ]
       },
       {
         "version": "1.0.0",
         "date": "2026-03-28",
         "bump": "minor",
-        "notes": ["Initial list compare with copyable sections"]
+        "notes": [
+          "Initial list compare with copyable sections"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -208,13 +222,17 @@
         "version": "1.1.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Approximate age and expiry countdown from parsed birth and expiration dates"]
+        "notes": [
+          "Approximate age and expiry countdown from parsed birth and expiration dates"
+        ]
       },
       {
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial MRZ decoder with ICAO field breakdown"]
+        "notes": [
+          "Initial MRZ decoder with ICAO field breakdown"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -240,13 +258,17 @@
         "version": "1.0.1",
         "date": "2026-03-29",
         "bump": "patch",
-        "notes": ["Catalog category: Financial"]
+        "notes": [
+          "Catalog category: Financial"
+        ]
       },
       {
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial IBAN and BIC validation"]
+        "notes": [
+          "Initial IBAN and BIC validation"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -272,7 +294,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial phone parse and validation"]
+        "notes": [
+          "Initial phone parse and validation"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -298,7 +322,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial tax and NI validators"]
+        "notes": [
+          "Initial tax and NI validators"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -324,13 +350,17 @@
         "version": "1.0.1",
         "date": "2026-03-29",
         "bump": "patch",
-        "notes": ["Catalog category: Financial"]
+        "notes": [
+          "Catalog category: Financial"
+        ]
       },
       {
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial Luhn and brand heuristic tool"]
+        "notes": [
+          "Initial Luhn and brand heuristic tool"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -356,7 +386,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial Base58Check and EIP-55 validators"]
+        "notes": [
+          "Initial Base58Check and EIP-55 validators"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -382,7 +414,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial image upload decode"]
+        "notes": [
+          "Initial image upload decode"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -408,7 +442,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial client-side canvas re-encode stripper"]
+        "notes": [
+          "Initial client-side canvas re-encode stripper"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -434,7 +470,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial Pomodoro timer"]
+        "notes": [
+          "Initial Pomodoro timer"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -460,7 +498,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial unit converter"]
+        "notes": [
+          "Initial unit converter"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -486,7 +526,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial world clock"]
+        "notes": [
+          "Initial world clock"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -512,7 +554,9 @@
         "version": "1.1.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Import Microsoft Word .docx files (Mammoth, client-side text extraction)"]
+        "notes": [
+          "Import Microsoft Word .docx files (Mammoth, client-side text extraction)"
+        ]
       },
       {
         "version": "1.0.0",
@@ -546,7 +590,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial Magic To-Do (hosted OpenAI-compatible LLM)"]
+        "notes": [
+          "Initial Magic To-Do (hosted OpenAI-compatible LLM)"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -572,7 +618,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial Formalizer (hosted LLM)"]
+        "notes": [
+          "Initial Formalizer (hosted LLM)"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -598,7 +646,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial Judge (hosted LLM)"]
+        "notes": [
+          "Initial Judge (hosted LLM)"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -624,7 +674,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial Professor (hosted LLM)"]
+        "notes": [
+          "Initial Professor (hosted LLM)"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -650,7 +702,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial Consultant (hosted LLM)"]
+        "notes": [
+          "Initial Consultant (hosted LLM)"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -676,7 +730,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial Estimator (hosted LLM)"]
+        "notes": [
+          "Initial Estimator (hosted LLM)"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -702,7 +758,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial Compiler (hosted LLM)"]
+        "notes": [
+          "Initial Compiler (hosted LLM)"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -728,7 +786,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial regex pattern tester"]
+        "notes": [
+          "Initial regex pattern tester"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -754,7 +814,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial Base64 encode/decode"]
+        "notes": [
+          "Initial Base64 encode/decode"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -780,7 +842,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial IMEI decoder"]
+        "notes": [
+          "Initial IMEI decoder"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -806,7 +870,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial VIN decoder"]
+        "notes": [
+          "Initial VIN decoder"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -832,7 +898,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial epoch timestamp converter"]
+        "notes": [
+          "Initial epoch timestamp converter"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -858,7 +926,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial date/time normalizer"]
+        "notes": [
+          "Initial date/time normalizer"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -884,7 +954,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial timeline builder"]
+        "notes": [
+          "Initial timeline builder"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -894,9 +966,9 @@
   {
     "id": "duration-calculator",
     "name": "Duration Calculator",
-    "shortDescription": "Elapsed time, business days, and calendar offsets.",
-    "description": "Compute elapsed span between two ISO instants (with weekday counts excluding weekends in UTC) and add years, months, and days for statute-style date math (informational only).",
-    "version": "1.0.0",
+    "shortDescription": "Elapsed time, business days with holiday calendars, and calendar offsets.",
+    "description": "Compute elapsed span between two ISO instants (with weekday counts), count business days between two dates with US Federal or UK bank holiday exclusions and custom date overrides, and add years/months/days for statute-style date math (informational only).",
+    "version": "1.1.0",
     "category": "temporal",
     "icon": "Hourglass",
     "launchUrl": "/tools/duration-calculator",
@@ -907,10 +979,22 @@
     },
     "changelog": [
       {
+        "version": "1.1.0",
+        "date": "2026-04-01",
+        "bump": "minor",
+        "notes": [
+          "Added business day counter with configurable holiday calendars (US Federal, UK England & Wales)",
+          "Custom holiday dates field for ad-hoc exclusions and exceptional bank holidays",
+          "Breakdown shows calendar days, weekends excluded, and holidays excluded separately"
+        ]
+      },
+      {
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial duration calculator"]
+        "notes": [
+          "Initial duration calculator"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -936,7 +1020,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Initial coordinate converter"]
+        "notes": [
+          "Initial coordinate converter"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
@@ -962,7 +1048,9 @@
         "version": "1.0.0",
         "date": "2026-03-29",
         "bump": "minor",
-        "notes": ["Catalog entry linking to GeoRepo (external)"]
+        "notes": [
+          "Catalog entry linking to GeoRepo (external)"
+        ]
       }
     ],
     "accessLevel": "All authenticated users",
