@@ -39,7 +39,7 @@ export class LlmChatService {
   ): Promise<string> {
     const url = environment.llmChatCompletionsUrl?.trim() ?? '';
     if (!url) {
-      throw new Error('LLM endpoint is not configured (llmChatCompletionsUrl).');
+      throw new Error('LLM endpoint is not configured. Contact your administrator.');
     }
     const model = options.model?.trim() || environment.llmDefaultModel?.trim() || 'gpt-4o-mini';
     const body: Record<string, unknown> = {
