@@ -14,4 +14,8 @@ export const environment = {
   llmChatCompletionsUrl: '',
   /** Default model name sent in the chat completions request body. */
   llmDefaultModel: 'gpt-4o-mini',
+  /** Elastic APM RUM: set to your APM Server URL to enable error reporting. */
+  apmServerUrl: '',
+  apmServiceName: 'superapp',
+  apmEnvironment: 'development',
 };

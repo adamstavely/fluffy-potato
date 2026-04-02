@@ -1,4 +1,5 @@
-import { ErrorHandler, Injectable, inject } from '@angular/core';
+import { ErrorHandler, Injectable } from '@angular/core';
+import { apm } from '@elastic/apm-rum';
 
 export interface ErrorContext {
   toolId?: string;
@@ -13,8 +14,10 @@ export class ErrorService implements ErrorHandler {
   }
 
   capture(error: Error, context: ErrorContext): void {
-    if (typeof console !== 'undefined' && console.error) {
-      console.error('[ErrorService]', error, context);
+    console.error('[ErrorService]', error, context);
+    if (Object.keys(context).length > 0) {
+      apm.setCustomContext(context);
     }
+    apm.captureError(error);
   }
 }
