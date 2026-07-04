@@ -216,9 +216,9 @@ describe('ToolLaunchService', () => {
     service = TestBed.inject(ToolLaunchService);
     openSpy.calls.reset();
 
-    service.launchTool(baseTool({ id: 'pomodoro', launchUrl: '/tools/pomodoro' }), 'card');
+    service.launchTool(baseTool({ id: 'iban-validator', launchUrl: '/tools/iban-validator' }), 'card');
     const opened = openSpy.calls.mostRecent().args[0] as string;
-    expect(opened).toBe(expectOriginPlusPath('/myapp/tools/pomodoro'));
+    expect(opened).toBe(expectOriginPlusPath('/myapp/tools/iban-validator'));
   });
 
   it('uses fallback when prepareExternalUrl returns scheme-relative //', () => {
