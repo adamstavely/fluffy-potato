@@ -56,6 +56,11 @@
   --app-info-subtle: #f0f9ff;
   --app-danger: #dc2626;
   --app-danger-subtle: #fef2f2;
+  /* Readable semantic text for use on the -subtle fills (all ≥4.5:1 — DS keeps
+     $text-warning separate for the same reason). */
+  --app-success-text: #15803d;
+  --app-info-text: #0369a1;
+  --app-danger-text: #b91c1c;
   /* Favorites star — align to the DS warning gold. */
   --app-favorite-gold: #eaba1c;
 
@@ -178,6 +183,88 @@ body {
 
 .font-display {
   font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+ * DS §2.2 — semantic typography roles. Reference what the text *is*, not its size.
+ * Available app-wide for new markup: .t-display / .t-title / .t-body / .t-body-small /
+ * .t-label / .t-caption. Form labels use .t-body (14px), never .t-label.
+ */
+.t-display {
+  font-family: var(--inter-font);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.t-title {
+  font-family: var(--inter-font);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.t-body {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.t-body-small {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.t-label {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.t-caption {
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/*
+ * DS §4.2 — badges. Subtle fill + readable semantic text (all pass WCAG AA).
+ * Usage: <span class="badge badge--success">Active</span>; add .badge--pill for a pill.
+ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--app-radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.badge--pill {
+  border-radius: var(--app-radius-pill);
+}
+.badge--neutral {
+  background: var(--app-neutral-100);
+  color: var(--app-neutral-700);
+}
+.badge--primary {
+  background: var(--app-interactive-subtle);
+  color: var(--app-interactive);
+}
+.badge--success {
+  background: var(--app-success-subtle);
+  color: var(--app-success-text);
+}
+.badge--info {
+  background: var(--app-info-subtle);
+  color: var(--app-info-text);
+}
+.badge--warning {
+  background: var(--app-warning-subtle);
+  color: var(--app-warning-text);
+}
+.badge--danger {
+  background: var(--app-danger-subtle);
+  color: var(--app-danger-text);
 }
 
 /* App shell nav — active Tools link (matches mockup .nav-link.active) */

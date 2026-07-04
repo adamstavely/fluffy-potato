@@ -46,7 +46,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
             >
           </nav>
           <div
-            class="font-display flex size-[30px] shrink-0 items-center justify-center rounded-full bg-[var(--app-accent)] text-xs font-semibold text-[var(--app-accent-fg)]"
+            class="font-display flex size-[30px] shrink-0 items-center justify-center rounded-full bg-[var(--app-interactive)] text-xs font-semibold text-white"
             aria-hidden="true"
           >
             AJ
