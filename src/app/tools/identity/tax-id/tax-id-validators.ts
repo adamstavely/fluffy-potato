@@ -86,22 +86,24 @@ export function validateEuVat(raw: string): TaxIdValidationResult {
         message: 'Netherlands (NL): expect NL + 9 digits + B + 2 digits (e.g. NL859761971B02).',
       };
     }
+    // Legacy/company NL numbers carry an "elevenproef" check digit: weight the first
+    // 8 digits 9..2, take mod 11, and compare to the 9th digit (a result of 10 is invalid).
+    // Note: personal VAT IDs issued since 2020 are randomized and do not satisfy this test.
     const nine = body.slice(0, 9);
-    const suf = body.slice(10, 12);
-    let product = 0;
-    for (let i = 0; i < 9; i++) {
-      product += parseInt(nine[i]!, 10) * (9 - i);
+    let sum = 0;
+    for (let i = 0; i < 8; i++) {
+      sum += parseInt(nine[i]!, 10) * (9 - i);
     }
-    const mod = product % 97;
-    const expected = mod === 0 ? 97 : mod;
-    const ok = parseInt(suf, 10) === expected;
+    const remainder = sum % 11;
+    const checkDigit = parseInt(nine[8]!, 10);
+    const ok = remainder !== 10 && remainder === checkDigit;
     return {
       kind: 'eu-vat',
       normalized: full,
       valid: ok,
       message: ok
-        ? 'Netherlands BTW number structure and 97-check match.'
-        : 'Netherlands BTW suffix does not match the nine-digit base (mod 97).',
+        ? 'Netherlands BTW number structure and eleven-test check digit match.'
+        : 'Netherlands BTW check digit fails the eleven-test (note: post-2020 personal numbers are randomized).',
     };
   }
 
@@ -150,6 +152,19 @@ export function validateEuVat(raw: string): TaxIdValidationResult {
   };
 }
 
+/**
+ * IRS-published set of valid EIN campus prefixes (first two digits).
+ * Source: irs.gov "How EINs are Assigned and Valid EIN Prefixes". This is a discrete
+ * allow-list, not a contiguous range — e.g. 07–09, 17–19, 28–29, 49, 69, 70, 78–79, 89,
+ * 96–97 are unassigned, while 98–99 (foreign/other) are valid.
+ */
+const VALID_EIN_PREFIXES = new Set<number>([
+  1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 20, 21, 22, 23, 24, 25, 26, 27, 30, 31, 32, 33,
+  34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 50, 51, 52, 53, 54, 55, 56, 57, 58,
+  59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 71, 72, 73, 74, 75, 76, 77, 80, 81, 82, 83, 84, 85, 86,
+  87, 88, 90, 91, 92, 93, 94, 95, 98, 99,
+]);
+
 export function validateUsEin(raw: string): TaxIdValidationResult {
   const digits = raw.replace(/\D/g, '');
   if (digits.length !== 9) {
@@ -161,12 +176,12 @@ export function validateUsEin(raw: string): TaxIdValidationResult {
     };
   }
   const prefix = parseInt(digits.slice(0, 2), 10);
-  if (prefix < 10 || prefix === 11 || prefix === 12 || prefix > 95) {
+  if (!VALID_EIN_PREFIXES.has(prefix)) {
     return {
       kind: 'us-ein',
       normalized: `${digits.slice(0, 2)}-${digits.slice(2)}`,
       valid: false,
-      message: 'EIN prefix (first two digits) is not in a valid IRS range.',
+      message: 'EIN prefix (first two digits) is not an assigned IRS campus code.',
     };
   }
   const normalized = `${digits.slice(0, 2)}-${digits.slice(2)}`;
@@ -188,12 +203,12 @@ export function validateUkNi(raw: string): TaxIdValidationResult {
       message: 'Enter a National Insurance number.',
     };
   }
-  const forbiddenFirst = /^[DFIQUV]/.test(compact);
-  const forbiddenSecond = /^.[DFIQUAO]/.test(compact);
-  const ok =
-    /^[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}\d{6}[A-D]{1}$/.test(compact) &&
-    !forbiddenFirst &&
-    !forbiddenSecond;
+  // HMRC rules: first letter excludes D,F,I,Q,U,V; second excludes D,F,I,O,Q,U,V
+  // (both enforced by the character classes below). Suffix is A–D.
+  const NI_RE = /^[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z]\d{6}[A-D]$/;
+  // Prefix pairs HMRC never allocates, regardless of the per-letter rules above.
+  const disallowedPrefixes = new Set(['BG', 'GB', 'KN', 'NK', 'NT', 'TN', 'ZZ']);
+  const ok = NI_RE.test(compact) && !disallowedPrefixes.has(compact.slice(0, 2));
   return {
     kind: 'uk-ni',
     normalized: compact,

@@ -36,7 +36,8 @@ function parseSortable(s: string): number | null {
     return Number(t);
   }
   if (ISO_DATE.test(t)) {
-    return new Date(t + 'T00:00:00').getTime();
+    // Parse as UTC so min/max can be formatted back to the same calendar date.
+    return new Date(t + 'T00:00:00Z').getTime();
   }
   return null;
 }
@@ -101,8 +102,14 @@ export function profileColumns(
     if (nums.length > 0) {
       const mn = Math.min(...nums);
       const mx = Math.max(...nums);
-      minSample = String(mn);
-      maxSample = String(mx);
+      if (inferred === 'date') {
+        // `nums` holds epoch-ms for date columns; show the calendar date, not the raw ms.
+        minSample = new Date(mn).toISOString().slice(0, 10);
+        maxSample = new Date(mx).toISOString().slice(0, 10);
+      } else {
+        minSample = String(mn);
+        maxSample = String(mx);
+      }
     }
 
     out.push({

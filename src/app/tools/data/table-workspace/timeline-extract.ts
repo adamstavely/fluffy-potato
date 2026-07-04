@@ -6,30 +6,51 @@ export interface ExtractedDate {
   context: string;
 }
 
+/** Return `yyyy-mm-dd` only when the (year, month, day) triple is a real calendar date. */
+function isoIfValid(year: number, month: number, day: number): string | null {
+  if (month < 1 || month > 12 || day < 1) {
+    return null;
+  }
+  const leap = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+  const daysInMonth = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  if (day > daysInMonth[month - 1]!) {
+    return null;
+  }
+  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+}
+
 const PATTERNS: { re: RegExp; toIso: (m: RegExpMatchArray) => string | null }[] = [
   {
     re: /\b(\d{4})-(\d{2})-(\d{2})\b/g,
-    toIso: (m) => `${m[1]}-${m[2]}-${m[3]}`,
+    toIso: (m) => isoIfValid(Number(m[1]), Number(m[2]), Number(m[3])),
   },
   {
+    // Slash dates are ambiguous (US MDY vs EU DMY). Use a field > 12 to disambiguate
+    // when possible; otherwise fall back to DMY. Invalid triples return null (kept as raw).
     re: /\b(\d{1,2})\/(\d{1,2})\/(\d{4})\b/g,
     toIso: (m) => {
       const a = Number(m[1]);
       const b = Number(m[2]);
       const y = Number(m[3]);
-      const mm = String(b).padStart(2, '0');
-      const dd = String(a).padStart(2, '0');
-      return `${y}-${mm}-${dd}`;
+      let day: number;
+      let month: number;
+      if (a > 12 && b <= 12) {
+        day = a;
+        month = b;
+      } else if (b > 12 && a <= 12) {
+        month = a;
+        day = b;
+      } else {
+        // Ambiguous or both invalid: default to day/month order.
+        day = a;
+        month = b;
+      }
+      return isoIfValid(y, month, day);
     },
   },
   {
     re: /\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/g,
-    toIso: (m) => {
-      const dd = Number(m[1]);
-      const mm = Number(m[2]);
-      const y = Number(m[3]);
-      return `${y}-${String(mm).padStart(2, '0')}-${String(dd).padStart(2, '0')}`;
-    },
+    toIso: (m) => isoIfValid(Number(m[3]), Number(m[2]), Number(m[1])),
   },
 ];
 

@@ -1,8 +1,17 @@
-import * as pdfjsLib from 'pdfjs-dist';
+type PdfjsModule = typeof import('pdfjs-dist');
 
+let pdfjsPromise: Promise<PdfjsModule> | null = null;
 let workerConfigured = false;
 
-function ensureWorker(baseUri: string): void {
+/** Load pdfjs on first use so its (large) bundle is only fetched when a PDF is opened. */
+function loadPdfjs(): Promise<PdfjsModule> {
+  if (!pdfjsPromise) {
+    pdfjsPromise = import('pdfjs-dist');
+  }
+  return pdfjsPromise;
+}
+
+function ensureWorker(pdfjsLib: PdfjsModule, baseUri: string): void {
   if (workerConfigured) {
     return;
   }
@@ -16,7 +25,8 @@ function ensureWorker(baseUri: string): void {
  * Quality depends on how text is encoded in the PDF.
  */
 export async function extractTextFromPdfFile(file: File, baseUri: string): Promise<string> {
-  ensureWorker(baseUri);
+  const pdfjsLib = await loadPdfjs();
+  ensureWorker(pdfjsLib, baseUri);
   const data = new Uint8Array(await file.arrayBuffer());
   const loadingTask = pdfjsLib.getDocument({ data, useSystemFonts: true });
   const pdf = await loadingTask.promise;

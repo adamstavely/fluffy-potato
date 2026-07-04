@@ -37,5 +37,6 @@ export function exportDelimited(
     const p = pad(row);
     lines.push(format === 'csv' ? rowToCsvLine(p) : p.join('\t'));
   }
-  return lines.join('\n');
+  // RFC 4180 specifies CRLF between records; spreadsheets import it cleanly.
+  return lines.join('\r\n');
 }
