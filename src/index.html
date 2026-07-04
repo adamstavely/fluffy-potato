@@ -5,23 +5,38 @@
   <title>Superapp</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--
+    Content-Security-Policy. Delivered as a meta tag so it ships with the static build; a
+    production deployment should ALSO send it as a response header (and add `frame-ancestors 'none'`,
+    which meta cannot express) to defend against clickjacking. Allowlist:
+      - fonts.googleapis.com / fonts.gstatic.com — Google Fonts (Inter, JetBrains Mono, Material Icons)
+      - api.mymemory.translated.net, translate.googleapis.com — translation tool
+      - cdn.jsdelivr.net, huggingface.co, *.hf.co — in-browser transcription model (transformers.js)
+      - 'wasm-unsafe-eval' — ONNX WASM runtime used by transcription (no plain unsafe-eval)
+      - data:/blob: images + blob: workers — canvas/object-URL tools and web workers
+  -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    base-uri 'self';
+    object-src 'none';
+    form-action 'self';
+    frame-src 'self';
+    child-src 'self' blob:;
+    worker-src 'self' blob:;
+    img-src 'self' data: blob:;
+    font-src 'self' https://fonts.gstatic.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    script-src 'self' 'wasm-unsafe-eval' https://cdn.jsdelivr.net;
+    connect-src 'self' https://api.mymemory.translated.net https://translate.googleapis.com https://cdn.jsdelivr.net https://huggingface.co https://*.hf.co;
+  ">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,300;1,14..32,400&family=JetBrains+Mono:wght@400;500;600&display=swap"
     rel="stylesheet"
   />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <script>
-    // Apply the saved/OS theme before first paint to avoid a flash (DS §8).
-    (function () {
-      try {
-        var t = localStorage.getItem('sa-theme');
-        if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
-        }
-      } catch (e) {}
-    })();
-  </script>
+  <!-- Externalized (see assets/theme-init.js) so script-src needs no 'unsafe-inline'. Render-blocking in <head> → runs before first paint. -->
+  <script src="assets/theme-init.js"></script>
 </head>
 <body>
   <app-root></app-root>
