@@ -734,3 +734,31 @@ button.sa-segmented-btn.sa-segmented-btn--active {
     background-position: 0 0;
   }
 }
+
+/*
+ * DS §4.0 — selected form controls use the interactive accent (blue), consistent with
+ * links and focus rings. Material checkboxes/radios default to --mat-sys-primary (navy);
+ * re-point their MDC selected tokens to the interactive blue, and set accent-color on
+ * native checkboxes/radios (used by a few tools) so every selection control matches.
+ */
+.mat-mdc-checkbox {
+  /* Scope the primary token to blue for this component only (buttons stay navy). */
+  --mat-sys-primary: var(--app-interactive);
+  --mdc-checkbox-selected-icon-color: var(--app-interactive);
+  --mdc-checkbox-selected-focus-icon-color: var(--app-interactive);
+  --mdc-checkbox-selected-hover-icon-color: var(--app-interactive);
+  --mdc-checkbox-selected-pressed-icon-color: var(--app-interactive);
+  --mat-checkbox-selected-checkmark-color: #ffffff;
+}
+.mat-mdc-radio-button {
+  --mat-sys-primary: var(--app-interactive);
+  --mdc-radio-selected-icon-color: var(--app-interactive);
+  --mdc-radio-selected-focus-icon-color: var(--app-interactive);
+  --mdc-radio-selected-hover-icon-color: var(--app-interactive);
+  --mdc-radio-selected-pressed-icon-color: var(--app-interactive);
+  --mat-radio-checked-ripple-color: var(--app-interactive);
+}
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: var(--app-interactive);
+}

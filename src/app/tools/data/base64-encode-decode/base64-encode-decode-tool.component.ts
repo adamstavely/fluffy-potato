@@ -129,7 +129,7 @@ function fromUrlSafe(safe: string): string {
           <textarea
             id="b64-output"
             readonly
-            class="min-h-[160px] w-full rounded-lg border border-[var(--app-border)] bg-[var(--app-bg)] px-3 py-2 font-mono text-sm text-[var(--app-text-primary)]"
+            class="min-h-[160px] w-full rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-3 py-2 font-mono text-sm text-[var(--app-text-primary)]"
             [value]="outputText()"
           ></textarea>
         </div>
