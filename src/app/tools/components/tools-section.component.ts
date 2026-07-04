@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   Component,
   computed,
@@ -39,7 +39,6 @@ type CatalogScopeKey = 'all' | 'mine' | 'team';
   selector: 'sa-tools-section',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     ToolsIconsModule,
@@ -47,8 +46,8 @@ type CatalogScopeKey = 'all' | 'mine' | 'team';
     ToolDetailDrawerComponent,
     CdkTrapFocus,
     SaSelectComponent,
-    SaTextFieldComponent,
-  ],
+    SaTextFieldComponent
+],
   template: `
     <div class="flex min-h-0 flex-1 flex-col">
       <div class="mb-9 flex flex-wrap items-center gap-3">

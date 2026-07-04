@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+
 import {
   Component,
   computed,
@@ -8,6 +8,7 @@ import {
   NgZone,
   OnDestroy,
   signal,
+  DOCUMENT
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 

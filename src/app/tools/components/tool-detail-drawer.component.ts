@@ -235,7 +235,7 @@ export class ToolDetailDrawerComponent {
 
   protected readonly drawerFavBtnClass = computed(() => {
     const base =
-      'flex size-[30px] items-center justify-center rounded-md border-0 bg-transparent text-[var(--app-text-muted)] transition-colors hover:bg-[var(--app-bg)] hover:text-[var(--app-favorite-gold)] [--mdc-icon-button-icon-size:18px]';
+      'flex size-[30px] items-center justify-center rounded-md border-0 bg-transparent text-[var(--app-text-muted)] transition-colors hover:bg-[var(--app-bg)] hover:text-[var(--app-favorite-gold)] [--mat-icon-button-icon-size:18px]';
     return this.isFavorited() ? `${base} text-[var(--app-favorite-gold)]` : base;
   });
 

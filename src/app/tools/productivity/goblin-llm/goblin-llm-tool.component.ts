@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -17,7 +17,7 @@ import {
 @Component({
   selector: 'sa-goblin-llm-tool',
   standalone: true,
-  imports: [CommonModule, FormsModule, SaTextareaComponent, SaButtonComponent, SaSelectComponent],
+  imports: [FormsModule, SaTextareaComponent, SaButtonComponent, SaSelectComponent],
   template: `
     <div class="mx-auto max-w-6xl space-y-4">
       @if (!cfg()) {

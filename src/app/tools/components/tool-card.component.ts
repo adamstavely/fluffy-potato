@@ -132,7 +132,7 @@ export class ToolCardComponent {
 
   protected readonly favIconBtnClass = computed(() => {
     const base =
-      'flex size-6 shrink-0 items-center justify-center rounded-md border-0 bg-transparent p-0 text-[var(--app-text-muted)] transition-colors hover:bg-[var(--app-bg)] hover:text-[var(--app-favorite-gold)] [--mdc-icon-button-state-layer-size:1.5rem] [--mdc-icon-button-icon-size:18px]';
+      'flex size-6 shrink-0 items-center justify-center rounded-md border-0 bg-transparent p-0 text-[var(--app-text-muted)] transition-colors hover:bg-[var(--app-bg)] hover:text-[var(--app-favorite-gold)] [--mat-icon-button-state-layer-size:1.5rem] [--mat-icon-button-icon-size:18px]';
     return this.isFavorited() ? `${base} text-[var(--app-favorite-gold)]` : base;
   });
 

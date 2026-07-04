@@ -19,7 +19,8 @@
   --app-border-subtle: #f0ede8;
   --app-text-primary: #1a1917;
   --app-text-secondary: #6b6860;
-  --app-text-muted: #a8a49e;
+  /* WCAG 2 AA: #77726a on white = 4.77:1 (the lighter #a8a49e was only 2.47:1). */
+  --app-text-muted: #77726a;
   --app-accent: #1a1917;
   --app-accent-fg: #ffffff;
   /* Favorites star — light gold; use for fill + stroke so icon outline matches */
@@ -74,8 +75,8 @@ html {
    * MDC outlined text field defaults: focus-outline-width 2px vs outline-width 1px — reads as a double border.
    * Pin both to 1px on the root so tokens apply before/after lazy Material CSS.
    */
-  --mdc-outlined-text-field-outline-width: 1px;
-  --mdc-outlined-text-field-focus-outline-width: 1px;
+  --mat-form-field-outlined-outline-width: 1px;
+  --mat-form-field-outlined-focus-outline-width: 1px;
 }
 
 html,
@@ -194,10 +195,10 @@ sa-icon-button {
  */
 sa-button button.mat-mdc-button-base,
 sa-file-input button.mat-mdc-button-base {
-  --mdc-text-button-container-shape: var(--app-radius-button);
-  --mdc-filled-button-container-shape: var(--app-radius-button);
-  --mdc-outlined-button-container-shape: var(--app-radius-button);
-  --mdc-protected-button-container-shape: var(--app-radius-button);
+  --mat-button-text-container-shape: var(--app-radius-button);
+  --mat-button-filled-container-shape: var(--app-radius-button);
+  --mat-button-outlined-container-shape: var(--app-radius-button);
+  --mat-button-protected-container-shape: var(--app-radius-button);
 }
 
 /* Align Material form fields with app surfaces (WCAG contrast on default theme) */
@@ -205,9 +206,9 @@ sa-file-input button.mat-mdc-button-base {
   --mat-form-field-container-vertical-padding: 8px;
   --mat-form-field-container-height: 40px;
   /* Outline corners match `.mat-mdc-text-field-wrapper` radius (MDC default is 4px). */
-  --mdc-outlined-text-field-container-shape: 0.5rem;
+  --mat-form-field-outlined-container-shape: 0.5rem;
   /* Placeholder uses token, not inherited color */
-  --mdc-outlined-text-field-input-text-placeholder-color: var(--app-text-muted);
+  --mat-form-field-outlined-input-text-placeholder-color: var(--app-text-muted);
 }
 
 /*
@@ -308,7 +309,7 @@ sa-file-input button.mat-mdc-button-base {
 
 /*
  * Tools catalog scope + category chips: `mat-button` theme can override Tailwind utilities.
- * MDC sets label color on `.mdc-button__label` via `--mdc-text-button-label-text-color`, not
+ * MDC sets label color on `.mdc-button__label` via `--mat-button-text-label-text-color`, not
  * inherited `color` on the host — without these tokens, label text can disappear.
  */
 .sa-catalog-chip.mat-mdc-button.mat-mdc-button-base {
@@ -317,7 +318,7 @@ sa-file-input button.mat-mdc-button-base {
 }
 
 .sa-catalog-chip.mat-mdc-button:not(:disabled) {
-  --mdc-text-button-label-text-color: var(--app-text-secondary);
+  --mat-button-text-label-text-color: var(--app-text-secondary);
   background-color: var(--app-surface) !important;
   border: 1px solid var(--app-border) !important;
   box-shadow: none;
@@ -329,7 +330,7 @@ sa-file-input button.mat-mdc-button-base {
 }
 
 .sa-catalog-chip.mat-mdc-button:not(:disabled):hover {
-  --mdc-text-button-label-text-color: var(--app-text-primary);
+  --mat-button-text-label-text-color: var(--app-text-primary);
   border-color: #c4c0ba !important;
 }
 
@@ -338,7 +339,7 @@ sa-file-input button.mat-mdc-button-base {
 }
 
 .sa-catalog-chip.mat-mdc-button[aria-pressed='true']:not(:disabled) {
-  --mdc-text-button-label-text-color: var(--app-accent-fg);
+  --mat-button-text-label-text-color: var(--app-accent-fg);
   background-color: var(--app-accent) !important;
   border-color: var(--app-accent) !important;
 }
@@ -350,7 +351,7 @@ sa-file-input button.mat-mdc-button-base {
 
 /* Inactive chips must never inherit theme “on-surface” as white on white surface */
 .sa-catalog-chip.mat-mdc-button:not([aria-pressed='true']):not(:disabled) {
-  --mdc-text-button-label-text-color: var(--app-text-secondary);
+  --mat-button-text-label-text-color: var(--app-text-secondary);
 }
 
 .sa-catalog-chip.mat-mdc-button:not([aria-pressed='true']):not(:disabled) .mdc-button__label {
