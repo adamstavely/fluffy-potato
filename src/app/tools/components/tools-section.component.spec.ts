@@ -112,7 +112,7 @@ describe('ToolsSectionComponent', () => {
       )[1];
       mineBtn!.triggerEventHandler('click', {});
       fixture.detectChanges();
-      expect(fixture.nativeElement.textContent).toContain('No tools match your filters.');
+      expect(fixture.nativeElement.textContent).toContain('No tools found');
     });
 
     it('shows favorited tools on Mine', () => {
@@ -143,7 +143,7 @@ describe('ToolsSectionComponent', () => {
     it('hides tools when category does not match', () => {
       fixture.componentInstance.activeFilter.set('data');
       fixture.detectChanges();
-      expect(fixture.nativeElement.textContent).toContain('No tools match your filters.');
+      expect(fixture.nativeElement.textContent).toContain('No tools found');
     });
   });
 

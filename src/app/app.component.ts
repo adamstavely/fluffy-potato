@@ -9,7 +9,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     <div class="flex min-h-screen min-h-[100dvh] flex-col bg-[var(--app-bg)]">
       <a class="skip-to-main" href="#main-content">Skip to main content</a>
       <header
-        class="sticky top-0 z-[60] border-b border-[var(--app-border)] bg-[var(--app-surface)]"
+        class="sticky top-0 z-[var(--z-sticky)] border-b border-[var(--app-border)] bg-[var(--app-surface)]"
       >
         <div class="mx-auto flex h-14 max-w-[1280px] items-center gap-8 px-8">
           <a routerLink="/tools" class="font-display flex items-center gap-2 text-base font-bold tracking-tight text-[var(--app-text-primary)]">

@@ -101,7 +101,7 @@ type CatalogScopeKey = 'all' | 'mine' | 'team';
 
       @if (drawerTool()) {
         <div
-          class="fixed inset-0 z-[90] bg-black/[0.08]"
+          class="fixed inset-0 z-[var(--z-overlay)] bg-slate-900/10"
           role="presentation"
           (click)="closeDrawer()"
         ></div>
@@ -124,7 +124,10 @@ type CatalogScopeKey = 'all' | 'mine' | 'team';
           }
 
           @if (visibleCount() === 0) {
-            <p class="py-12 text-center text-sm text-slate-500">No tools match your filters.</p>
+            <div class="empty-state" role="status">
+              <p class="empty-state__title">No tools found</p>
+              <p class="empty-state__desc">No tools match your current search and filters. Try clearing them.</p>
+            </div>
           }
         </div>
 
@@ -133,7 +136,7 @@ type CatalogScopeKey = 'all' | 'mine' | 'team';
             #drawerPanel
             cdkTrapFocus
             cdkTrapFocusAutoCapture
-            class="fixed bottom-0 right-0 z-[100] flex w-[var(--app-drawer-width)] flex-col border-l border-[var(--app-border)] bg-[var(--app-surface)] shadow-[var(--app-drawer-shadow)]"
+            class="fixed bottom-0 right-0 z-[var(--z-modal)] flex w-[var(--app-drawer-width)] flex-col border-l border-[var(--app-border)] bg-[var(--app-surface)] shadow-[var(--app-drawer-shadow)]"
             style="top: var(--app-header-height)"
           >
             <sa-tool-detail-drawer
