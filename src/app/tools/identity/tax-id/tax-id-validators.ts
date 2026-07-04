@@ -2,6 +2,7 @@
  * Format and checksum helpers for common tax / national identifiers.
  * These checks do not prove a number is assigned or active—only shape and local rules.
  */
+import { checkVAT, countries as vatCountries } from 'jsvat-next';
 
 export type TaxIdKind = 'eu-vat' | 'us-ein' | 'uk-ni';
 
@@ -12,143 +13,38 @@ export interface TaxIdValidationResult {
   message: string;
 }
 
-/** BZSt algorithm for DE USt-IdNr check digit (9 digits after DE: 8 base + 1 check). */
-export function deVatCheckDigit(body8: string): number {
-  let p = 10;
-  for (let i = 0; i < 8; i++) {
-    const d = parseInt(body8[i]!, 10);
-    let s = (d + p) % 10;
-    if (s === 0) {
-      s = 10;
-    }
-    p = (s * 2) % 11;
-  }
-  const c = 11 - p;
-  return c === 10 ? 0 : c;
-}
-
-function normalizeEuVat(raw: string): string {
-  return raw.replace(/\s+/g, '').toUpperCase();
-}
-
+/**
+ * VAT number validation via jsvat-next: structure + checksum for all 27 EU member states
+ * plus Andorra, Australia, Brazil, Norway, Russia, Serbia, Switzerland, and the UK.
+ */
 export function validateEuVat(raw: string): TaxIdValidationResult {
-  const s = normalizeEuVat(raw);
+  const s = raw.replace(/\s+/g, '').toUpperCase();
   if (!s) {
     return {
       kind: 'eu-vat',
       normalized: '',
       valid: false,
-      message: 'Enter a VAT number (e.g. DE115235681).',
+      message: 'Enter a VAT number with its country prefix (e.g. DE115235681).',
     };
   }
-  const m = /^([A-Z]{2})(.+)$/.exec(s);
-  if (!m) {
+  const res = checkVAT(s, vatCountries);
+  if (!res.country) {
     return {
       kind: 'eu-vat',
       normalized: s,
       valid: false,
-      message: 'Must start with a two-letter country code.',
+      message:
+        'Unrecognized VAT prefix. Supported: the 27 EU states plus AD, AU, BR, CH, GB, NO, RS, RU.',
     };
   }
-  const cc = m[1];
-  const body = m[2].replace(/[^A-Z0-9]/g, '');
-  const full = cc + body;
-
-  if (cc === 'DE') {
-    if (!/^DE\d{9}$/.test(full)) {
-      return {
-        kind: 'eu-vat',
-        normalized: full,
-        valid: false,
-        message: 'Germany (DE): expect DE followed by exactly 9 digits.',
-      };
-    }
-    const eight = body.slice(0, 8);
-    const check = parseInt(body.slice(8, 9), 10);
-    const expected = deVatCheckDigit(eight);
-    const ok = check === expected;
-    return {
-      kind: 'eu-vat',
-      normalized: full,
-      valid: ok,
-      message: ok
-        ? 'Germany USt-IdNr structure and check digit match.'
-        : 'Germany USt-IdNr check digit does not match the first eight digits.',
-    };
-  }
-
-  if (cc === 'NL') {
-    if (!/^NL\d{9}B\d{2}$/.test(full)) {
-      return {
-        kind: 'eu-vat',
-        normalized: full,
-        valid: false,
-        message: 'Netherlands (NL): expect NL + 9 digits + B + 2 digits (e.g. NL859761971B02).',
-      };
-    }
-    // Legacy/company NL numbers carry an "elevenproef" check digit: weight the first
-    // 8 digits 9..2, take mod 11, and compare to the 9th digit (a result of 10 is invalid).
-    // Note: personal VAT IDs issued since 2020 are randomized and do not satisfy this test.
-    const nine = body.slice(0, 9);
-    let sum = 0;
-    for (let i = 0; i < 8; i++) {
-      sum += parseInt(nine[i]!, 10) * (9 - i);
-    }
-    const remainder = sum % 11;
-    const checkDigit = parseInt(nine[8]!, 10);
-    const ok = remainder !== 10 && remainder === checkDigit;
-    return {
-      kind: 'eu-vat',
-      normalized: full,
-      valid: ok,
-      message: ok
-        ? 'Netherlands BTW number structure and eleven-test check digit match.'
-        : 'Netherlands BTW check digit fails the eleven-test (note: post-2020 personal numbers are randomized).',
-    };
-  }
-
-  if (cc === 'FR') {
-    const ok = /^FR[A-Z0-9]{2}\d{9}$/.test(full);
-    return {
-      kind: 'eu-vat',
-      normalized: full,
-      valid: ok,
-      message: ok
-        ? 'France: format FR + 2 alphanumeric + 9 digits (checksum not verified).'
-        : 'France: expect FR + 2 characters + 9 digits.',
-    };
-  }
-
-  if (cc === 'GB') {
-    const ok = /^GB(\d{9}(\d{3})?|GD[0-4]\d{2}|HA[5-9]\d{2})$/.test(full);
-    return {
-      kind: 'eu-vat',
-      normalized: full,
-      valid: ok,
-      message: ok
-        ? 'United Kingdom: format looks valid (checksum not verified).'
-        : 'United Kingdom: expect GB + 9 or 12 digits, or government/health patterns (GD/HA).',
-    };
-  }
-
-  if (cc === 'ES') {
-    const ok = /^ES[A-Z0-9]\d{7}[A-Z0-9]$/.test(full);
-    return {
-      kind: 'eu-vat',
-      normalized: full,
-      valid: ok,
-      message: ok
-        ? 'Spain: format matches common NIF/CIF-style VAT (checksum not verified).'
-        : 'Spain: expect ES + letter/digit + 7 digits + trailing character.',
-    };
-  }
-
+  const name = res.country.name;
   return {
     kind: 'eu-vat',
-    normalized: full,
-    valid: false,
-    message:
-      'Supported with full checks: DE, NL. Format-only: FR, GB, ES. Verify other countries with official sources.',
+    normalized: res.value || s,
+    valid: res.isValid,
+    message: res.isValid
+      ? `${name} VAT number: structure and checksum are valid.`
+      : `${name}: the structure or checksum does not validate.`,
   };
 }
 

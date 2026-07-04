@@ -67,7 +67,7 @@ export class TaxIdToolComponent {
   readonly tool = input.required<ToolDefinition>();
 
   protected readonly disclaimerHint =
-    'EU VAT: full checksum for DE and NL; format-only for FR, GB, ES. Always confirm with official registers when it matters.';
+    'VAT: full structure + checksum for all 27 EU states plus AD, AU, BR, CH, GB, NO, RS, RU. Always confirm with official registers when it matters.';
 
   protected readonly kindOptions: SaRadioOption<TaxIdKind>[] = [
     { value: 'eu-vat', label: 'EU VAT' },
