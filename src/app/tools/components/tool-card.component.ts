@@ -25,7 +25,7 @@ import { ToolLaunchService } from '../services/tool-launch.service';
       saTrackCardView
       [saTrackCardViewToolId]="tool().id"
       [saTrackCardViewCategory]="categoryLabel()"
-      class="relative flex h-full cursor-default flex-col rounded-[var(--app-radius-card)] border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[var(--app-shadow-card)] transition-[box-shadow,border-color,transform] duration-200 hover:-translate-y-px hover:border-[#d8d4ce] hover:shadow-[var(--app-shadow-card-hover)]"
+      class="relative flex h-full cursor-default flex-col rounded-[var(--app-radius-card)] border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[var(--app-shadow-card)] transition-[box-shadow,border-color,transform] duration-200 hover:-translate-y-px hover:border-[var(--app-border-strong)] hover:shadow-[var(--app-shadow-card-hover)]"
       [ngClass]="articleActiveClass()"
     >
       <div class="mb-3 flex items-start justify-between gap-2">
@@ -145,7 +145,7 @@ export class ToolCardComponent {
 
   protected readonly detailsBtnClass = computed(() => {
     const base =
-      'inline-flex h-[34px] shrink-0 items-center justify-center gap-1.5 rounded-[7px] border border-[var(--app-border)] bg-transparent px-3 font-sans text-[13px] font-medium tracking-tight text-[var(--app-text-secondary)] transition-colors hover:border-[#c4c0ba] hover:text-[var(--app-text-primary)]';
+      'inline-flex h-[34px] shrink-0 items-center justify-center gap-1.5 rounded-[var(--app-radius-button)] border border-[var(--app-border)] bg-transparent px-3 font-sans text-[13px] font-medium tracking-tight text-[var(--app-text-secondary)] transition-colors hover:border-[var(--app-border-strong)] hover:text-[var(--app-text-primary)]';
     return this.isDrawerActive()
       ? `${base} border-[var(--app-accent)] bg-[var(--app-accent)] text-[var(--app-accent-fg)]`
       : base;

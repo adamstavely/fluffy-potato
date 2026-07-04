@@ -7,34 +7,118 @@
   --font-sans:
     'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
   --font-mono:
-    'Inter', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/* Tools catalog mockup tokens (tools-section-mockup.html) */
+/*
+ * Design System v2.1 token layer (IMIN). Values below are the authoritative source of truth
+ * (§2 Design Tokens). The app's `--app-*` names are kept as the surface the Angular/Material
+ * components already consume; each is mapped to a DS value so the whole app inherits the DS
+ * palette, type scale, radius, elevation, and motion in one place.
+ */
 :root {
   --inter-font: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --app-bg: #f9f9f8;
-  --app-surface: #ffffff;
-  --app-border: #e8e6e1;
-  --app-border-subtle: #f0ede8;
-  --app-text-primary: #1a1917;
-  --app-text-secondary: #6b6860;
-  /* WCAG 2 AA: #77726a on white = 4.77:1 (the lighter #a8a49e was only 2.47:1). */
-  --app-text-muted: #77726a;
-  --app-accent: #1a1917;
+  --mono-font: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ── Brand ─────────────────────────────────────────────── */
+  --app-primary: #1d3557; /* DS $color-primary (navy) */
+  --app-primary-hover: #162840;
+  --app-primary-active: #0f1e30;
+  /* Interactive blue — links, icon buttons, focus rings, selected states (DS $color-accent). */
+  --app-interactive: #0073e6;
+  --app-interactive-hover: #005dc0;
+  --app-interactive-subtle: #ebf4ff;
+  --app-focus-ring: #0073e6;
+
+  /* ── Surface & border (DS neutrals) ────────────────────── */
+  --app-bg: #f8fafc; /* $surface-page */
+  --app-surface: #ffffff; /* $surface-base */
+  --app-border: #e2e8f0; /* $border-default */
+  --app-border-subtle: #f1f5f9; /* $neutral-100 */
+  --app-border-strong: #cbd5e1; /* $border-strong */
+
+  /* ── Text tiers (DS, all WCAG AA on white) ─────────────── */
+  --app-text-primary: #24272d; /* $text-primary   — 13.6:1 */
+  --app-text-secondary: #475569; /* $text-secondary — 7.5:1 */
+  --app-text-muted: #64748b; /* $text-tertiary  — 4.54:1 (DS-corrected) */
+
+  /* Primary buttons / nav-active use the brand navy; alias kept for existing components. */
+  --app-accent: var(--app-primary);
   --app-accent-fg: #ffffff;
-  /* Favorites star — light gold; use for fill + stroke so icon outline matches */
-  --app-favorite-gold: #e8c96a;
+
+  /* ── Semantic (DS §2.1) ────────────────────────────────── */
+  --app-success: #16a34a;
+  --app-success-subtle: #f0fdf4;
+  --app-warning: #eaba1c;
+  --app-warning-text: #92600a; /* readable warning text on light */
+  --app-warning-subtle: #fffbeb;
+  --app-info: #0ea5e9;
+  --app-info-subtle: #f0f9ff;
+  --app-danger: #dc2626;
+  --app-danger-subtle: #fef2f2;
+  /* Favorites star — align to the DS warning gold. */
+  --app-favorite-gold: #eaba1c;
+
+  /* ── Neutral scale (DS) ────────────────────────────────── */
+  --app-neutral-0: #ffffff;
+  --app-neutral-50: #f8fafc;
+  --app-neutral-100: #f1f5f9;
+  --app-neutral-200: #e2e8f0;
+  --app-neutral-300: #cbd5e1;
+  --app-neutral-400: #94a3b8;
+  --app-neutral-500: #64748b;
+  --app-neutral-600: #475569;
+  --app-neutral-700: #334155;
+  --app-neutral-800: #1e293b;
+  --app-neutral-900: #0f172a;
+  --app-neutral-950: #020617;
+
+  /* ── Chart categorical palette (DS §11.2 — never brand/semantic) ── */
+  --app-chart-1: #3b82f6;
+  --app-chart-2: #10b981;
+  --app-chart-3: #f59e0b;
+  --app-chart-4: #ef4444;
+  --app-chart-5: #8b5cf6;
+  --app-chart-6: #ec4899;
+
+  /* ── Radius scale (DS §2.4) ────────────────────────────── */
+  --app-radius-sm: 4px;
+  --app-radius-md: 6px;
+  --app-radius-lg: 9px;
+  --app-radius-xl: 12px;
+  --app-radius-pill: 9999px;
+  --app-radius-card: var(--app-radius-xl);
+  --app-radius-button: var(--app-radius-md);
+
+  /* ── Elevation (DS §2.5 — cool slate shadows) ──────────── */
+  --app-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --app-shadow-md: 0 4px 12px rgba(15, 23, 42, 0.1);
+  --app-shadow-lg: 0 12px 24px rgba(15, 23, 42, 0.14);
+  --app-shadow-card: var(--app-shadow-sm);
+  --app-shadow-card-hover: var(--app-shadow-md);
+
+  /* ── Motion (DS §2.6) ──────────────────────────────────── */
+  --app-duration-fast: 120ms;
+  --app-duration-base: 180ms;
+  --app-duration-slow: 240ms;
+  --app-ease-out: cubic-bezier(0, 0, 0.2, 1);
+
   --app-drawer-width: 420px;
-  --app-drawer-shadow: -8px 0 32px rgba(0, 0, 0, 0.06);
-  --app-radius-card: 12px;
-  /* Match tool-card primary/secondary actions (Launch / View Details) */
-  --app-radius-button: 7px;
-  --app-shadow-card:
-    0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --app-shadow-card-hover:
-    0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --app-drawer-shadow: var(--app-shadow-lg);
   --app-header-height: 56px;
+  --app-overlay-scrim: rgba(15, 23, 42, 0.5);
+}
+
+/* DS §2.6 — honor reduced-motion everywhere. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /*
@@ -48,7 +132,7 @@ html {
   --mat-sys-background: var(--app-bg);
   --mat-sys-on-surface: var(--app-text-primary);
   --mat-sys-on-surface-variant: var(--app-text-secondary);
-  --mat-sys-outline: #c4c0ba;
+  --mat-sys-outline: var(--app-border-strong);
   --mat-sys-outline-variant: var(--app-border);
   --mat-sys-surface-container-lowest: var(--app-surface);
   --mat-sys-surface-container-low: var(--app-bg);
@@ -151,7 +235,8 @@ input:focus-visible:not(.mat-mdc-input-element),
 select:focus-visible,
 textarea:focus-visible:not(.mat-mdc-input-element),
 summary:focus-visible {
-  outline: 2px solid var(--app-accent);
+  /* DS §4.0 — focus is always the interactive blue, 2px, 2px offset. */
+  outline: 2px solid var(--app-focus-ring);
   outline-offset: 2px;
 }
 
@@ -239,7 +324,7 @@ sa-file-input button.mat-mdc-button-base {
 .sa-mat-field.mat-focused .mdc-notched-outline__leading,
 .sa-mat-field.mat-focused .mdc-notched-outline__notch,
 .sa-mat-field.mat-focused .mdc-notched-outline__trailing {
-  border-color: var(--app-accent);
+  border-color: var(--app-focus-ring);
 }
 
 /*
@@ -331,7 +416,7 @@ sa-file-input button.mat-mdc-button-base {
 
 .sa-catalog-chip.mat-mdc-button:not(:disabled):hover {
   --mat-button-text-label-text-color: var(--app-text-primary);
-  border-color: #c4c0ba !important;
+  border-color: var(--app-border-strong) !important;
 }
 
 .sa-catalog-chip.mat-mdc-button:not(:disabled):hover .mdc-button__label {
