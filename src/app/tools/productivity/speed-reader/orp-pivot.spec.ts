@@ -4,7 +4,8 @@ describe('orpPivotIndex', () => {
   it('maps length buckets to Spritz-style pivots', () => {
     expect(orpPivotIndex('')).toBe(0);
     expect(orpPivotIndex('a')).toBe(0);
-    expect(orpPivotIndex('ab')).toBe(0);
+    // Spritz buckets len 2–5 onto the second character (index 1).
+    expect(orpPivotIndex('ab')).toBe(1);
     expect(orpPivotIndex('abc')).toBe(1);
     expect(orpPivotIndex('abcde')).toBe(1);
     expect(orpPivotIndex('abcdef')).toBe(2);

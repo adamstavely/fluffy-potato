@@ -13,5 +13,7 @@ export function replaceInCells(
     return rows.map((r) => [...r]);
   }
   const re = new RegExp(escapeRegExp(find), caseInsensitive ? 'gi' : 'g');
-  return rows.map((row) => row.map((cell) => cell.replace(re, replace)));
+  // Use a function replacer so `$`, `$&`, `$1`, etc. in user text are inserted
+  // literally rather than interpreted as regex replacement patterns.
+  return rows.map((row) => row.map((cell) => cell.replace(re, () => replace)));
 }

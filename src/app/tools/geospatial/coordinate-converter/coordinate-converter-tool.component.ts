@@ -60,10 +60,18 @@ function formatDms(lat: number, lon: number): string {
 
 function toDms(deg: number, isLat: boolean): string {
   const v = Math.abs(deg);
-  const d = Math.floor(v);
-  const mf = (v - d) * 60;
-  const m = Math.floor(mf);
-  const s = (mf - m) * 60;
+  let d = Math.floor(v);
+  let m = Math.floor((v - d) * 60);
+  // Round seconds first, then carry into minutes/degrees so we never render 60".
+  let s = Math.round((v - d - m / 60) * 3600 * 100) / 100;
+  if (s >= 60) {
+    s -= 60;
+    m += 1;
+  }
+  if (m >= 60) {
+    m -= 60;
+    d += 1;
+  }
   const hemi = isLat
     ? deg >= 0
       ? 'N'

@@ -1,5 +1,5 @@
 import { NgComponentOutlet } from '@angular/common';
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component, Type, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, of, startWith, switchMap } from 'rxjs';
@@ -24,10 +24,11 @@ type ToolHostLoadState =
     }
     @if (readyTool()) {
       <sa-tool-scaffold [config]="scaffoldConfig()!">
-        <ng-container
-          [ngComponentOutlet]="hostComponentType()!"
-          [ngComponentOutletInputs]="hostInputs()"
-        />
+        @if (hostComponentType(); as host) {
+          <ng-container [ngComponentOutlet]="host" [ngComponentOutletInputs]="hostInputs()" />
+        } @else {
+          <p class="p-6 text-sm text-slate-600">Loading tool…</p>
+        }
       </sa-tool-scaffold>
     }
   `,
@@ -73,7 +74,9 @@ export class ToolHostComponent {
     return entry ? { tool, entry } : null;
   });
 
-  readonly hostComponentType = computed(() => this.resolvedEntry()?.entry.component ?? null);
+  /** The lazily-imported component Type, or null while its chunk is still loading. */
+  private readonly loadedComponent = signal<Type<unknown> | null>(null);
+  readonly hostComponentType = computed(() => this.loadedComponent());
 
   readonly hostInputs = computed((): Record<string, unknown> => {
     const r = this.resolvedEntry();
@@ -93,6 +96,30 @@ export class ToolHostComponent {
   });
 
   constructor() {
+    effect((onCleanup) => {
+      const resolved = this.resolvedEntry();
+      this.loadedComponent.set(null);
+      if (!resolved) {
+        return;
+      }
+      let active = true;
+      onCleanup(() => {
+        active = false;
+      });
+      void resolved.entry
+        .load()
+        .then((type) => {
+          if (active) {
+            this.loadedComponent.set(type);
+          }
+        })
+        .catch(() => {
+          if (active) {
+            void this.router.navigateByUrl('/not-found');
+          }
+        });
+    });
+
     effect(() => {
       if (this.loadState().kind === 'missing') {
         void this.router.navigateByUrl('/not-found');

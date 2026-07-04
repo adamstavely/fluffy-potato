@@ -6,6 +6,7 @@ import axe from 'axe-core';
 import { AnalyticsService } from '../platform/analytics.service';
 import { AuditService } from '../platform/audit.service';
 import { AuthService } from '../platform/auth.service';
+import { TeamToolFavoritesService } from '../platform/team-tool-favorites.service';
 import { UserPrefsService } from '../platform/user-prefs.service';
 import { ToolsSectionComponent } from '../tools/components/tools-section.component';
 import type { ToolDefinition } from '../tools/models/tool.model';
@@ -41,6 +42,13 @@ describe('WCAG smoke (axe) — tools catalog shell', () => {
           provide: ToolRegistryService,
           useValue: {
             getVisibleTools: () => of([sampleTool]),
+          },
+        },
+        {
+          provide: TeamToolFavoritesService,
+          useValue: {
+            getTeamFavoriteToolIds: () => of<string[]>([]),
+            snapshotTeamFavorites: () => [] as string[],
           },
         },
         {

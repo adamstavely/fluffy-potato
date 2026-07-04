@@ -36,7 +36,7 @@ describe('toolRouteGuard', () => {
 
   beforeEach(() => {
     registry = jasmine.createSpyObj('ToolRegistryService', [
-      'getToolByIdAny',
+      'getToolById',
       'lookupBundledToolById',
     ]);
     registry.lookupBundledToolById.and.returnValue(undefined);
@@ -61,7 +61,7 @@ describe('toolRouteGuard', () => {
   });
 
   it('redirects to not-found when tool is unknown', async () => {
-    registry.getToolByIdAny.and.returnValue(of(undefined));
+    registry.getToolById.and.returnValue(of(undefined));
     const result = (await TestBed.runInInjectionContext(() =>
       toolRouteGuard(routeWith('unknown-slug'), state),
     )) as UrlTree;
@@ -69,7 +69,7 @@ describe('toolRouteGuard', () => {
   });
 
   it('redirects to not-found when tool has no host mapping', async () => {
-    registry.getToolByIdAny.and.returnValue(of(baseTool({ id: 'no-host-mapping' })));
+    registry.getToolById.and.returnValue(of(baseTool({ id: 'no-host-mapping' })));
     const result = (await TestBed.runInInjectionContext(() =>
       toolRouteGuard(routeWith('no-host-mapping'), state),
     )) as UrlTree;
@@ -77,7 +77,7 @@ describe('toolRouteGuard', () => {
   });
 
   it('allows when tool exists and has a host', async () => {
-    registry.getToolByIdAny.and.returnValue(of(baseTool({ id: 'cyberchef' })));
+    registry.getToolById.and.returnValue(of(baseTool({ id: 'cyberchef' })));
     const result = await TestBed.runInInjectionContext(() =>
       toolRouteGuard(routeWith('cyberchef'), state),
     );
@@ -85,7 +85,7 @@ describe('toolRouteGuard', () => {
   });
 
   it('lazy loader guard runs inner guard after dynamic import (injection context)', async () => {
-    registry.getToolByIdAny.and.returnValue(of(baseTool({ id: 'cyberchef' })));
+    registry.getToolById.and.returnValue(of(baseTool({ id: 'cyberchef' })));
     const result = await TestBed.runInInjectionContext(() =>
       toolRouteGuardLoader(routeWith('cyberchef'), state),
     );

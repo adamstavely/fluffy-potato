@@ -1,6 +1,5 @@
 import { Component, input, signal } from '@angular/core';
-import { BrowserMultiFormatReader } from '@zxing/browser';
-import { BarcodeFormat, DecodeHintType, NotFoundException } from '@zxing/library';
+import type { BrowserMultiFormatReader } from '@zxing/browser';
 
 import { SaButtonComponent } from '../../../ui/sa-button.component';
 import { SaFileInputComponent } from '../../../ui/sa-file-input.component';
@@ -53,27 +52,40 @@ import type { ToolDefinition } from '../../models/tool.model';
 export class BarcodeQrToolComponent {
   readonly tool = input.required<ToolDefinition>();
 
-  private readonly reader = new BrowserMultiFormatReader(
-    new Map<DecodeHintType, unknown>([
-      [
-        DecodeHintType.POSSIBLE_FORMATS,
+  /** Constructed on first decode so the zxing bundle is only fetched when an image is chosen. */
+  private reader: BrowserMultiFormatReader | null = null;
+
+  private async getReader(): Promise<BrowserMultiFormatReader> {
+    if (this.reader) {
+      return this.reader;
+    }
+    const [{ BrowserMultiFormatReader }, { BarcodeFormat, DecodeHintType }] = await Promise.all([
+      import('@zxing/browser'),
+      import('@zxing/library'),
+    ]);
+    this.reader = new BrowserMultiFormatReader(
+      new Map<number, unknown>([
         [
-          BarcodeFormat.QR_CODE,
-          BarcodeFormat.PDF_417,
-          BarcodeFormat.DATA_MATRIX,
-          BarcodeFormat.AZTEC,
-          BarcodeFormat.CODE_128,
-          BarcodeFormat.CODE_39,
-          BarcodeFormat.EAN_13,
-          BarcodeFormat.EAN_8,
-          BarcodeFormat.ITF,
-          BarcodeFormat.UPC_A,
-          BarcodeFormat.UPC_E,
+          DecodeHintType.POSSIBLE_FORMATS,
+          [
+            BarcodeFormat.QR_CODE,
+            BarcodeFormat.PDF_417,
+            BarcodeFormat.DATA_MATRIX,
+            BarcodeFormat.AZTEC,
+            BarcodeFormat.CODE_128,
+            BarcodeFormat.CODE_39,
+            BarcodeFormat.EAN_13,
+            BarcodeFormat.EAN_8,
+            BarcodeFormat.ITF,
+            BarcodeFormat.UPC_A,
+            BarcodeFormat.UPC_E,
+          ],
         ],
-      ],
-    ]),
-    {},
-  );
+      ]),
+      {},
+    );
+    return this.reader;
+  }
 
   protected readonly busy = signal(false);
   protected readonly error = signal<string | null>(null);
@@ -103,13 +115,15 @@ export class BarcodeQrToolComponent {
     });
 
     try {
-      const result = await this.reader.decodeFromImageElement(img);
+      const reader = await this.getReader();
+      const result = await reader.decodeFromImageElement(img);
       this.decoded.set({
         format: String(result.getBarcodeFormat()),
         text: result.getText(),
       });
     } catch (e) {
-      if (e instanceof NotFoundException) {
+      // zxing throws NotFoundException (name-tagged) when no code is present in the image.
+      if (e instanceof Error && e.name === 'NotFoundException') {
         this.error.set('No barcode detected. Try a clearer crop or higher resolution.');
       } else {
         this.error.set(e instanceof Error ? e.message : 'Decode failed.');
