@@ -11,12 +11,19 @@ import { Component, inject } from '@angular/core';
   selector: 'sa-cyberchef-host',
   standalone: true,
   template: `
+    <!--
+      Sandbox WITHOUT allow-same-origin: the embedded third-party CyberChef build runs in an
+      opaque origin, so it cannot read the shell's localStorage, cookies, or DOM even though the
+      document is served from our own /assets. allow-scripts (run), allow-downloads (save output),
+      allow-popups (help links). Trade-off: CyberChef can't persist recipes to localStorage.
+    -->
     <iframe
       [src]="frameSrc"
       title="CyberChef"
       class="block h-[min(80vh,900px)] w-full min-h-[480px] rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)]"
       loading="lazy"
       referrerpolicy="same-origin"
+      sandbox="allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox"
     ></iframe>
   `,
 })
