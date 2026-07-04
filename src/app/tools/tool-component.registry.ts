@@ -105,30 +105,6 @@ export const TOOL_HOST_COMPONENTS: Record<string, ToolHostEntry> = {
     load: () => import('./identity/vin-decoder/vin-decoder-tool.component').then((m) => m.VinDecoderToolComponent),
     passToolInput: true,
   },
-  'epoch-timestamp': {
-    load: () =>
-      import('./temporal/epoch-timestamp/epoch-timestamp-tool.component').then((m) => m.EpochTimestampToolComponent),
-    passToolInput: true,
-  },
-  'datetime-normalizer': {
-    load: () =>
-      import('./temporal/datetime-normalizer/datetime-normalizer-tool.component').then(
-        (m) => m.DatetimeNormalizerToolComponent,
-      ),
-    passToolInput: true,
-  },
-  'timeline-builder': {
-    load: () =>
-      import('./temporal/timeline-builder/timeline-builder-tool.component').then((m) => m.TimelineBuilderToolComponent),
-    passToolInput: true,
-  },
-  'duration-calculator': {
-    load: () =>
-      import('./temporal/duration-calculator/duration-calculator-tool.component').then(
-        (m) => m.DurationCalculatorToolComponent,
-      ),
-    passToolInput: true,
-  },
   'coordinate-converter': {
     load: () =>
       import('./geospatial/coordinate-converter/coordinate-converter-tool.component').then(
@@ -138,51 +114,6 @@ export const TOOL_HOST_COMPONENTS: Record<string, ToolHostEntry> = {
   },
   georepo: {
     load: () => import('./geospatial/georepo/georepo-tool.component').then((m) => m.GeoRepoToolComponent),
-    passToolInput: true,
-  },
-  pomodoro: {
-    load: () => import('./productivity/pomodoro/pomodoro-tool.component').then((m) => m.PomodoroToolComponent),
-    passToolInput: true,
-  },
-  'unit-converter': {
-    load: () => import('./data/unit-converter/unit-converter-tool.component').then((m) => m.UnitConverterToolComponent),
-    passToolInput: true,
-  },
-  'world-clock': {
-    load: () => import('./temporal/world-clock/world-clock-tool.component').then((m) => m.WorldClockToolComponent),
-    passToolInput: true,
-  },
-  'speed-reader': {
-    load: () =>
-      import('./productivity/speed-reader/speed-reader-tool.component').then((m) => m.SpeedReaderToolComponent),
-    passToolInput: true,
-  },
-  'magic-todo': {
-    load: () => import('./productivity/goblin-llm/goblin-llm-tool.component').then((m) => m.GoblinLlmToolComponent),
-    passToolInput: true,
-  },
-  formalizer: {
-    load: () => import('./productivity/goblin-llm/goblin-llm-tool.component').then((m) => m.GoblinLlmToolComponent),
-    passToolInput: true,
-  },
-  judge: {
-    load: () => import('./productivity/goblin-llm/goblin-llm-tool.component').then((m) => m.GoblinLlmToolComponent),
-    passToolInput: true,
-  },
-  professor: {
-    load: () => import('./productivity/goblin-llm/goblin-llm-tool.component').then((m) => m.GoblinLlmToolComponent),
-    passToolInput: true,
-  },
-  consultant: {
-    load: () => import('./productivity/goblin-llm/goblin-llm-tool.component').then((m) => m.GoblinLlmToolComponent),
-    passToolInput: true,
-  },
-  estimator: {
-    load: () => import('./productivity/goblin-llm/goblin-llm-tool.component').then((m) => m.GoblinLlmToolComponent),
-    passToolInput: true,
-  },
-  compiler: {
-    load: () => import('./productivity/goblin-llm/goblin-llm-tool.component').then((m) => m.GoblinLlmToolComponent),
     passToolInput: true,
   },
 };

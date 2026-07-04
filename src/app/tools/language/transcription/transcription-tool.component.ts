@@ -71,20 +71,20 @@ function loadWhisperTranscriber(): Promise<FileTranscriber> {
   imports: [FormsModule, SaFileInputComponent, SaButtonComponent, SaSelectComponent, SaTextareaComponent],
   template: `
     <div class="mx-auto max-w-3xl space-y-4">
-      <p class="text-sm leading-relaxed text-slate-600">
-        <strong class="font-medium text-slate-800">Live listening</strong> uses your browser’s
-        <strong class="font-medium text-slate-800">Web Speech API</strong>
+      <p class="text-sm leading-relaxed text-[var(--app-text-secondary)]">
+        <strong class="font-medium text-[var(--app-text-primary)]">Live listening</strong> uses your browser’s
+        <strong class="font-medium text-[var(--app-text-primary)]">Web Speech API</strong>
         (typically Chrome or Edge). Audio is processed by the browser/OS speech engine — not by this app’s servers.
       </p>
-      <p class="text-sm leading-relaxed text-slate-600">
-        <strong class="font-medium text-slate-800">Upload a file</strong> runs the
-        <strong class="font-medium text-slate-800">Whisper tiny</strong> model in your browser via ONNX (first use
+      <p class="text-sm leading-relaxed text-[var(--app-text-secondary)]">
+        <strong class="font-medium text-[var(--app-text-primary)]">Upload a file</strong> runs the
+        <strong class="font-medium text-[var(--app-text-primary)]">Whisper tiny</strong> model in your browser via ONNX (first use
         downloads model weights; stays cached afterward). Works offline after that.
       </p>
 
       @if (error()) {
         <div
-          class="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950"
+          class="rounded-lg border border-[color-mix(in_srgb,var(--app-warning)_45%,transparent)] bg-[var(--app-warning-subtle)] px-3 py-2 text-sm text-[var(--app-warning-text)]"
           role="status"
         >
           {{ error() }}
@@ -92,7 +92,7 @@ function loadWhisperTranscriber(): Promise<FileTranscriber> {
       }
 
       <div
-        class="rounded-lg border border-dashed border-slate-200 bg-slate-50/80 p-4"
+        class="rounded-lg border border-dashed border-[var(--app-border)] bg-[var(--app-bg)]/80 p-4"
         role="region"
         aria-label="Upload an audio or video file to transcribe"
         (dragover)="onDragOver($event)"
@@ -100,12 +100,12 @@ function loadWhisperTranscriber(): Promise<FileTranscriber> {
         (drop)="onDrop($event)"
         [class.ring-2]="fileDragOver()"
         [class.ring-slate-400]="fileDragOver()"
-        [class.bg-slate-100]="fileDragOver()"
+        [class.bg-[var(--app-border-subtle)]]="fileDragOver()"
       >
-        <p class="text-xs font-medium text-slate-700" id="transcription-file-upload-desc">
+        <p class="text-xs font-medium text-[var(--app-text-primary)]" id="transcription-file-upload-desc">
           Transcribe an audio or video file
         </p>
-        <p class="mt-1 text-xs text-slate-600">
+        <p class="mt-1 text-xs text-[var(--app-text-secondary)]">
           Drop a file here or choose one. Video must contain an audio track your browser can decode.
         </p>
         <div class="mt-3 flex flex-wrap items-center gap-2">
@@ -116,7 +116,7 @@ function loadWhisperTranscriber(): Promise<FileTranscriber> {
             (fileChange)="onFilesFromPicker($event)"
           />
           @if (fileTranscribing()) {
-            <span class="text-sm text-slate-600">Transcribing… (first run may download the model)</span>
+            <span class="text-sm text-[var(--app-text-secondary)]">Transcribing… (first run may download the model)</span>
           }
         </div>
       </div>
@@ -134,7 +134,7 @@ function loadWhisperTranscriber(): Promise<FileTranscriber> {
             <sa-button
               variant="flat"
               ariaLabel="Start speech recognition"
-              innerClass="!bg-slate-900 px-4 py-2 text-sm font-medium !text-white hover:!opacity-90 disabled:!cursor-not-allowed disabled:!opacity-50"
+              innerClass="!bg-[var(--app-accent)] px-4 py-2 text-sm font-medium !text-[var(--app-accent-fg)] hover:!opacity-90 disabled:!cursor-not-allowed disabled:!opacity-50"
               [disabled]="!supported() || fileTranscribing()"
               (click)="start()"
             >
@@ -144,7 +144,7 @@ function loadWhisperTranscriber(): Promise<FileTranscriber> {
             <sa-button
               variant="flat"
               ariaLabel="Stop speech recognition"
-              innerClass="!bg-rose-700 px-4 py-2 text-sm font-medium !text-white hover:!opacity-90"
+              innerClass="!bg-[var(--app-danger)] px-4 py-2 text-sm font-medium !text-[var(--app-accent-fg)] hover:!opacity-90"
               (click)="stop()"
             >
               Stop

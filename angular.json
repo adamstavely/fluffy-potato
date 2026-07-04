@@ -42,7 +42,6 @@
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "src/polyfills-global.ts",
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
@@ -51,11 +50,6 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "/assets"
-              },
-              {
-                "glob": "pdf.worker.min.mjs",
-                "input": "node_modules/pdfjs-dist/build",
-                "output": "/assets/pdfjs"
               }
             ],
             "styles": [
@@ -113,7 +107,6 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "polyfills": [
-              "src/polyfills-global.ts",
               "zone.js",
               "zone.js/testing"
             ],
@@ -123,11 +116,6 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "/assets"
-              },
-              {
-                "glob": "pdf.worker.min.mjs",
-                "input": "node_modules/pdfjs-dist/build",
-                "output": "/assets/pdfjs"
               }
             ],
             "styles": [
@@ -138,6 +126,32 @@
           }
         }
       }
+    }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
     }
   }
 }

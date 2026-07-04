@@ -32,7 +32,7 @@ function btcVersionLabel(byte: number): string {
   imports: [FormsModule, SaTextFieldComponent],
   template: `
     <div class="mx-auto max-w-3xl space-y-4">
-      <p class="text-sm leading-relaxed text-slate-600">{{ notice }}</p>
+      <p class="text-sm leading-relaxed text-[var(--app-text-secondary)]">{{ notice }}</p>
 
       <sa-text-field
         label="Wallet address (Bitcoin Base58 or Ethereum hex)"
@@ -47,14 +47,14 @@ function btcVersionLabel(byte: number): string {
       @if (summary(); as s) {
         <div
           class="rounded-lg border px-3 py-3 text-sm"
-          [class.border-emerald-200]="s.ok"
-          [class.bg-emerald-50]="s.ok"
-          [class.border-rose-200]="!s.ok"
-          [class.bg-rose-50]="!s.ok"
+          [class.border-[color-mix(in_srgb,var(--app-success)_35%,transparent)]]="s.ok"
+          [class.bg-[var(--app-success-subtle)]]="s.ok"
+          [class.border-[color-mix(in_srgb,var(--app-danger)_35%,transparent)]]="!s.ok"
+          [class.bg-[var(--app-danger-subtle)]]="!s.ok"
         >
-          <p class="font-medium text-slate-900">{{ s.title }}</p>
+          <p class="font-medium text-[var(--app-text-primary)]">{{ s.title }}</p>
           @if (s.lines.length) {
-            <ul class="mt-2 list-inside list-disc space-y-1 text-slate-800">
+            <ul class="mt-2 list-inside list-disc space-y-1 text-[var(--app-text-primary)]">
               @for (line of s.lines; track line) {
                 <li>{{ line }}</li>
               }

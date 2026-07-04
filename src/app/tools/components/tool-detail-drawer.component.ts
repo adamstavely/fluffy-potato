@@ -101,7 +101,7 @@ import { TOOL_CATEGORY_LABEL } from '../models/tool.model';
               <div class="info-row-drawer flex gap-2 py-2.5 text-[13.5px] last:border-b-0">
                 <span class="w-[90px] shrink-0 text-[13px] text-[var(--app-text-muted)]">Contact</span>
                 <span class="min-w-0 break-words font-normal text-[var(--app-text-primary)]">
-                  <a class="text-[#2563eb] no-underline hover:underline" [href]="contactHref()">{{
+                  <a class="text-[var(--app-interactive)] no-underline hover:underline" [href]="contactHref()">{{
                     tool()!.maintainer.contact
                   }}</a>
                 </span>
@@ -235,7 +235,7 @@ export class ToolDetailDrawerComponent {
 
   protected readonly drawerFavBtnClass = computed(() => {
     const base =
-      'flex size-[30px] items-center justify-center rounded-md border-0 bg-transparent text-[var(--app-text-muted)] transition-colors hover:bg-[var(--app-bg)] hover:text-[var(--app-favorite-gold)] [--mdc-icon-button-icon-size:18px]';
+      'flex size-[30px] items-center justify-center rounded-md border-0 bg-transparent text-[var(--app-text-muted)] transition-colors hover:bg-[var(--app-bg)] hover:text-[var(--app-favorite-gold)] [--mat-icon-button-icon-size:18px]';
     return this.isFavorited() ? `${base} text-[var(--app-favorite-gold)]` : base;
   });
 
@@ -257,11 +257,11 @@ export class ToolDetailDrawerComponent {
       'rounded-[10px] px-1.5 py-px text-[10.5px] font-semibold uppercase tracking-[0.04em]';
     switch (b) {
       case 'major':
-        return `${base} bg-[#fdf4ff] text-[#7e22ce]`;
+        return `${base} bg-[var(--app-danger-subtle)] text-[var(--app-danger-text)]`;
       case 'minor':
-        return `${base} bg-[#eff6ff] text-[#1d4ed8]`;
+        return `${base} bg-[var(--app-info-subtle)] text-[var(--app-info-text)]`;
       case 'patch':
-        return `${base} bg-[#f0fdf4] text-[#15803d]`;
+        return `${base} bg-[var(--app-success-subtle)] text-[var(--app-success-text)]`;
     }
   }
 

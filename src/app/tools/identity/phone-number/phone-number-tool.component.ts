@@ -47,24 +47,24 @@ const REGIONS: { code: CountryCode; label: string }[] = [
       </div>
 
       @if (formattedPreview()) {
-        <p class="text-xs text-slate-600">
-          As-you-type: <span class="font-mono text-slate-800">{{ formattedPreview() }}</span>
+        <p class="text-xs text-[var(--app-text-secondary)]">
+          As-you-type: <span class="font-mono text-[var(--app-text-primary)]">{{ formattedPreview() }}</span>
         </p>
       }
 
       @if (info(); as i) {
         <div
           class="rounded-lg border px-3 py-3 text-sm"
-          [class.border-emerald-200]="i.valid"
-          [class.bg-emerald-50]="i.valid"
-          [class.border-rose-200]="!i.valid"
-          [class.bg-rose-50]="!i.valid"
+          [class.border-[color-mix(in_srgb,var(--app-success)_35%,transparent)]]="i.valid"
+          [class.bg-[var(--app-success-subtle)]]="i.valid"
+          [class.border-[color-mix(in_srgb,var(--app-danger)_35%,transparent)]]="!i.valid"
+          [class.bg-[var(--app-danger-subtle)]]="!i.valid"
         >
-          <p class="font-medium" [class.text-emerald-900]="i.valid" [class.text-rose-900]="!i.valid">
+          <p class="font-medium" [class.text-[var(--app-success-text)]]="i.valid" [class.text-[var(--app-danger-text)]]="!i.valid">
             {{ i.valid ? 'Valid number' : 'Could not parse as valid' }}
           </p>
           @if (i.valid) {
-            <ul class="mt-2 list-inside list-disc space-y-1 text-xs text-slate-800">
+            <ul class="mt-2 list-inside list-disc space-y-1 text-xs text-[var(--app-text-primary)]">
               <li>E.164: <span class="font-mono select-all">{{ i.e164 }}</span></li>
               <li>Country: {{ i.country }} ({{ i.countryCallingCode }})</li>
               <li>Type: {{ i.type }}</li>
@@ -73,7 +73,7 @@ const REGIONS: { code: CountryCode; label: string }[] = [
               }
             </ul>
           } @else if (i.reason) {
-            <p class="mt-1 text-xs text-rose-800">{{ i.reason }}</p>
+            <p class="mt-1 text-xs text-[var(--app-danger-text)]">{{ i.reason }}</p>
           }
         </div>
       }

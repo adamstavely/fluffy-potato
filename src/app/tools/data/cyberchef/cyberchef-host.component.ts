@@ -14,7 +14,7 @@ import { Component, inject } from '@angular/core';
     <iframe
       [src]="frameSrc"
       title="CyberChef"
-      class="block h-[min(80vh,900px)] w-full min-h-[480px] rounded-lg border border-slate-200 bg-white"
+      class="block h-[min(80vh,900px)] w-full min-h-[480px] rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)]"
       loading="lazy"
       referrerpolicy="same-origin"
     ></iframe>

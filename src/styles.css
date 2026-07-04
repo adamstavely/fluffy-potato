@@ -7,33 +7,167 @@
   --font-sans:
     'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
   --font-mono:
-    'Inter', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/* Tools catalog mockup tokens (tools-section-mockup.html) */
+/*
+ * Design System v2.1 token layer (IMIN). Values below are the authoritative source of truth
+ * (§2 Design Tokens). The app's `--app-*` names are kept as the surface the Angular/Material
+ * components already consume; each is mapped to a DS value so the whole app inherits the DS
+ * palette, type scale, radius, elevation, and motion in one place.
+ */
 :root {
   --inter-font: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --app-bg: #f9f9f8;
-  --app-surface: #ffffff;
-  --app-border: #e8e6e1;
-  --app-border-subtle: #f0ede8;
-  --app-text-primary: #1a1917;
-  --app-text-secondary: #6b6860;
-  --app-text-muted: #a8a49e;
-  --app-accent: #1a1917;
+  --mono-font: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ── Brand ─────────────────────────────────────────────── */
+  --app-primary: #1d3557; /* DS $color-primary (navy) */
+  --app-primary-hover: #162840;
+  --app-primary-active: #0f1e30;
+  /* Interactive blue — links, icon buttons, focus rings, selected states (DS $color-accent). */
+  --app-interactive: #0073e6;
+  --app-interactive-hover: #005dc0;
+  --app-interactive-subtle: #ebf4ff;
+  --app-focus-ring: #0073e6;
+
+  /* ── Surface & border (DS neutrals) ────────────────────── */
+  --app-bg: #f8fafc; /* $surface-page */
+  --app-surface: #ffffff; /* $surface-base */
+  --app-border: #e2e8f0; /* $border-default */
+  --app-border-subtle: #f1f5f9; /* $neutral-100 */
+  --app-border-strong: #cbd5e1; /* $border-strong */
+
+  /* ── Text tiers (DS, all WCAG AA on white) ─────────────── */
+  --app-text-primary: #24272d; /* $text-primary   — 13.6:1 */
+  --app-text-secondary: #475569; /* $text-secondary — 7.5:1 */
+  --app-text-muted: #64748b; /* $text-tertiary  — 4.54:1 (DS-corrected) */
+
+  /* Primary buttons / nav-active use the brand navy; alias kept for existing components. */
+  --app-accent: var(--app-primary);
   --app-accent-fg: #ffffff;
-  /* Favorites star — light gold; use for fill + stroke so icon outline matches */
-  --app-favorite-gold: #e8c96a;
+
+  /* ── Semantic (DS §2.1) ────────────────────────────────── */
+  --app-success: #16a34a;
+  --app-success-subtle: #f0fdf4;
+  --app-warning: #eaba1c;
+  --app-warning-text: #92600a; /* readable warning text on light */
+  --app-warning-subtle: #fffbeb;
+  --app-info: #0ea5e9;
+  --app-info-subtle: #f0f9ff;
+  --app-danger: #dc2626;
+  --app-danger-subtle: #fef2f2;
+  /* Readable semantic text for use on the -subtle fills (all ≥4.5:1 — DS keeps
+     $text-warning separate for the same reason). */
+  --app-success-text: #15803d;
+  --app-info-text: #0369a1;
+  --app-danger-text: #b91c1c;
+  /* Favorites star — align to the DS warning gold. */
+  --app-favorite-gold: #eaba1c;
+
+  /* ── Neutral scale (DS) ────────────────────────────────── */
+  --app-neutral-0: #ffffff;
+  --app-neutral-50: #f8fafc;
+  --app-neutral-100: #f1f5f9;
+  --app-neutral-200: #e2e8f0;
+  --app-neutral-300: #cbd5e1;
+  --app-neutral-400: #94a3b8;
+  --app-neutral-500: #64748b;
+  --app-neutral-600: #475569;
+  --app-neutral-700: #334155;
+  --app-neutral-800: #1e293b;
+  --app-neutral-900: #0f172a;
+  --app-neutral-950: #020617;
+
+  /* ── Chart categorical palette (DS §11.2 — never brand/semantic) ── */
+  --app-chart-1: #3b82f6;
+  --app-chart-2: #10b981;
+  --app-chart-3: #f59e0b;
+  --app-chart-4: #ef4444;
+  --app-chart-5: #8b5cf6;
+  --app-chart-6: #ec4899;
+
+  /* ── Radius scale (DS §2.4) ────────────────────────────── */
+  --app-radius-sm: 4px;
+  --app-radius-md: 6px;
+  --app-radius-lg: 9px;
+  --app-radius-xl: 12px;
+  --app-radius-pill: 9999px;
+  --app-radius-card: var(--app-radius-xl);
+  --app-radius-button: var(--app-radius-md);
+
+  /* ── Elevation (DS §2.5 — cool slate shadows) ──────────── */
+  --app-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --app-shadow-md: 0 4px 12px rgba(15, 23, 42, 0.1);
+  --app-shadow-lg: 0 12px 24px rgba(15, 23, 42, 0.14);
+  --app-shadow-card: var(--app-shadow-sm);
+  --app-shadow-card-hover: var(--app-shadow-md);
+
+  /* ── Motion (DS §2.6) ──────────────────────────────────── */
+  --app-duration-fast: 120ms;
+  --app-duration-base: 180ms;
+  --app-duration-slow: 240ms;
+  --app-ease-out: cubic-bezier(0, 0, 0.2, 1);
+
   --app-drawer-width: 420px;
-  --app-drawer-shadow: -8px 0 32px rgba(0, 0, 0, 0.06);
-  --app-radius-card: 12px;
-  /* Match tool-card primary/secondary actions (Launch / View Details) */
-  --app-radius-button: 7px;
-  --app-shadow-card:
-    0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --app-shadow-card-hover:
-    0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --app-drawer-shadow: var(--app-shadow-lg);
   --app-header-height: 56px;
+  --app-overlay-scrim: rgba(15, 23, 42, 0.5);
+}
+
+/*
+ * DS §8 Theming — dark mode (`.dark` on <html>). Only the `--app-*` tokens are
+ * re-pointed here; because the Material bridge and every component read those
+ * tokens, the whole app (including Material surfaces) flips from this one block.
+ */
+html.dark {
+  color-scheme: dark;
+
+  --app-primary: #93c5fd; /* DS dark primary — light blue with dark text (8.11:1 AAA) */
+  --app-primary-hover: #bfdbfe;
+  --app-primary-active: #dbeafe;
+  --app-accent: var(--app-primary);
+  --app-accent-fg: #0f172a;
+  --app-interactive: #60a5fa; /* DS dark accent (5.75:1 AA) */
+  --app-interactive-hover: #93c5fd;
+  --app-interactive-subtle: rgba(0, 115, 230, 0.18);
+  --app-focus-ring: #60a5fa;
+
+  --app-bg: #0b1120; /* DS dark background */
+  --app-surface: #1e293b; /* DS dark card */
+  --app-border: #334155;
+  --app-border-subtle: #243044;
+  --app-border-strong: #475569;
+
+  --app-text-primary: #f1f5f9;
+  --app-text-secondary: #cbd5e1;
+  --app-text-muted: #94a3b8;
+
+  /* Low-opacity semantic tints + lighter readable text (DS dark subtle fills). */
+  --app-success-subtle: rgba(16, 185, 129, 0.14);
+  --app-warning-subtle: rgba(234, 186, 28, 0.14);
+  --app-info-subtle: rgba(14, 165, 233, 0.14);
+  --app-danger-subtle: rgba(220, 38, 38, 0.14);
+  --app-success-text: #4ade80;
+  --app-info-text: #7dd3fc;
+  --app-warning-text: #fcd34d;
+  --app-danger-text: #fca5a5;
+
+  --app-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --app-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --app-shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.5);
+  --app-overlay-scrim: rgba(2, 6, 23, 0.6);
+}
+
+/* DS §2.6 — honor reduced-motion everywhere. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /*
@@ -47,7 +181,7 @@ html {
   --mat-sys-background: var(--app-bg);
   --mat-sys-on-surface: var(--app-text-primary);
   --mat-sys-on-surface-variant: var(--app-text-secondary);
-  --mat-sys-outline: #c4c0ba;
+  --mat-sys-outline: var(--app-border-strong);
   --mat-sys-outline-variant: var(--app-border);
   --mat-sys-surface-container-lowest: var(--app-surface);
   --mat-sys-surface-container-low: var(--app-bg);
@@ -74,8 +208,8 @@ html {
    * MDC outlined text field defaults: focus-outline-width 2px vs outline-width 1px — reads as a double border.
    * Pin both to 1px on the root so tokens apply before/after lazy Material CSS.
    */
-  --mdc-outlined-text-field-outline-width: 1px;
-  --mdc-outlined-text-field-focus-outline-width: 1px;
+  --mat-form-field-outlined-outline-width: 1px;
+  --mat-form-field-outlined-focus-outline-width: 1px;
 }
 
 html,
@@ -93,6 +227,88 @@ body {
 
 .font-display {
   font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+ * DS §2.2 — semantic typography roles. Reference what the text *is*, not its size.
+ * Available app-wide for new markup: .t-display / .t-title / .t-body / .t-body-small /
+ * .t-label / .t-caption. Form labels use .t-body (14px), never .t-label.
+ */
+.t-display {
+  font-family: var(--inter-font);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.t-title {
+  font-family: var(--inter-font);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.t-body {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.t-body-small {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.t-label {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.t-caption {
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/*
+ * DS §4.2 — badges. Subtle fill + readable semantic text (all pass WCAG AA).
+ * Usage: <span class="badge badge--success">Active</span>; add .badge--pill for a pill.
+ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--app-radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.badge--pill {
+  border-radius: var(--app-radius-pill);
+}
+.badge--neutral {
+  background: var(--app-neutral-100);
+  color: var(--app-neutral-700);
+}
+.badge--primary {
+  background: var(--app-interactive-subtle);
+  color: var(--app-interactive);
+}
+.badge--success {
+  background: var(--app-success-subtle);
+  color: var(--app-success-text);
+}
+.badge--info {
+  background: var(--app-info-subtle);
+  color: var(--app-info-text);
+}
+.badge--warning {
+  background: var(--app-warning-subtle);
+  color: var(--app-warning-text);
+}
+.badge--danger {
+  background: var(--app-danger-subtle);
+  color: var(--app-danger-text);
 }
 
 /* App shell nav — active Tools link (matches mockup .nav-link.active) */
@@ -150,7 +366,8 @@ input:focus-visible:not(.mat-mdc-input-element),
 select:focus-visible,
 textarea:focus-visible:not(.mat-mdc-input-element),
 summary:focus-visible {
-  outline: 2px solid var(--app-accent);
+  /* DS §4.0 — focus is always the interactive blue, 2px, 2px offset. */
+  outline: 2px solid var(--app-focus-ring);
   outline-offset: 2px;
 }
 
@@ -194,10 +411,10 @@ sa-icon-button {
  */
 sa-button button.mat-mdc-button-base,
 sa-file-input button.mat-mdc-button-base {
-  --mdc-text-button-container-shape: var(--app-radius-button);
-  --mdc-filled-button-container-shape: var(--app-radius-button);
-  --mdc-outlined-button-container-shape: var(--app-radius-button);
-  --mdc-protected-button-container-shape: var(--app-radius-button);
+  --mat-button-text-container-shape: var(--app-radius-button);
+  --mat-button-filled-container-shape: var(--app-radius-button);
+  --mat-button-outlined-container-shape: var(--app-radius-button);
+  --mat-button-protected-container-shape: var(--app-radius-button);
 }
 
 /* Align Material form fields with app surfaces (WCAG contrast on default theme) */
@@ -205,9 +422,9 @@ sa-file-input button.mat-mdc-button-base {
   --mat-form-field-container-vertical-padding: 8px;
   --mat-form-field-container-height: 40px;
   /* Outline corners match `.mat-mdc-text-field-wrapper` radius (MDC default is 4px). */
-  --mdc-outlined-text-field-container-shape: 0.5rem;
+  --mat-form-field-outlined-container-shape: 0.5rem;
   /* Placeholder uses token, not inherited color */
-  --mdc-outlined-text-field-input-text-placeholder-color: var(--app-text-muted);
+  --mat-form-field-outlined-input-text-placeholder-color: var(--app-text-muted);
 }
 
 /*
@@ -238,7 +455,7 @@ sa-file-input button.mat-mdc-button-base {
 .sa-mat-field.mat-focused .mdc-notched-outline__leading,
 .sa-mat-field.mat-focused .mdc-notched-outline__notch,
 .sa-mat-field.mat-focused .mdc-notched-outline__trailing {
-  border-color: var(--app-accent);
+  border-color: var(--app-focus-ring);
 }
 
 /*
@@ -308,7 +525,7 @@ sa-file-input button.mat-mdc-button-base {
 
 /*
  * Tools catalog scope + category chips: `mat-button` theme can override Tailwind utilities.
- * MDC sets label color on `.mdc-button__label` via `--mdc-text-button-label-text-color`, not
+ * MDC sets label color on `.mdc-button__label` via `--mat-button-text-label-text-color`, not
  * inherited `color` on the host — without these tokens, label text can disappear.
  */
 .sa-catalog-chip.mat-mdc-button.mat-mdc-button-base {
@@ -317,7 +534,7 @@ sa-file-input button.mat-mdc-button-base {
 }
 
 .sa-catalog-chip.mat-mdc-button:not(:disabled) {
-  --mdc-text-button-label-text-color: var(--app-text-secondary);
+  --mat-button-text-label-text-color: var(--app-text-secondary);
   background-color: var(--app-surface) !important;
   border: 1px solid var(--app-border) !important;
   box-shadow: none;
@@ -329,8 +546,8 @@ sa-file-input button.mat-mdc-button-base {
 }
 
 .sa-catalog-chip.mat-mdc-button:not(:disabled):hover {
-  --mdc-text-button-label-text-color: var(--app-text-primary);
-  border-color: #c4c0ba !important;
+  --mat-button-text-label-text-color: var(--app-text-primary);
+  border-color: var(--app-border-strong) !important;
 }
 
 .sa-catalog-chip.mat-mdc-button:not(:disabled):hover .mdc-button__label {
@@ -338,7 +555,7 @@ sa-file-input button.mat-mdc-button-base {
 }
 
 .sa-catalog-chip.mat-mdc-button[aria-pressed='true']:not(:disabled) {
-  --mdc-text-button-label-text-color: var(--app-accent-fg);
+  --mat-button-text-label-text-color: var(--app-accent-fg);
   background-color: var(--app-accent) !important;
   border-color: var(--app-accent) !important;
 }
@@ -350,7 +567,7 @@ sa-file-input button.mat-mdc-button-base {
 
 /* Inactive chips must never inherit theme “on-surface” as white on white surface */
 .sa-catalog-chip.mat-mdc-button:not([aria-pressed='true']):not(:disabled) {
-  --mdc-text-button-label-text-color: var(--app-text-secondary);
+  --mat-button-text-label-text-color: var(--app-text-secondary);
 }
 
 .sa-catalog-chip.mat-mdc-button:not([aria-pressed='true']):not(:disabled) .mdc-button__label {
@@ -380,4 +597,140 @@ button.sa-segmented-btn:hover {
 button.sa-segmented-btn.sa-segmented-btn--active {
   color: var(--app-text-primary);
   background-color: var(--app-surface);
+}
+
+/*
+ * ── DS §15 — Z-Index Layer System ─────────────────────────────────────────
+ * Named layers so independently-developed overlays never collide. Reference the
+ * token/utility, never a raw z-index. Tooltip is always highest (non-interactive,
+ * must clear modals).
+ */
+:root {
+  --z-base: 0;
+  --z-sticky: 100;
+  --z-dropdown: 200;
+  --z-popover: 300;
+  --z-overlay: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+  --z-tooltip: 700;
+}
+.z-sticky {
+  z-index: var(--z-sticky);
+}
+.z-dropdown {
+  z-index: var(--z-dropdown);
+}
+.z-popover {
+  z-index: var(--z-popover);
+}
+.z-overlay {
+  z-index: var(--z-overlay);
+}
+.z-modal {
+  z-index: var(--z-modal);
+}
+.z-toast {
+  z-index: var(--z-toast);
+}
+.z-tooltip {
+  z-index: var(--z-tooltip);
+}
+
+/*
+ * ── DS §4.9 — Callouts ─────────────────────────────────────────────────────
+ * Inline messages. Always pair color with an icon + text (DS §4.0 error rule).
+ */
+.callout {
+  display: flex;
+  gap: 0.625rem;
+  align-items: flex-start;
+  padding: 0.75rem 0.875rem;
+  border-radius: var(--app-radius-md);
+  border: 1px solid transparent;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.callout__icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.callout__title {
+  font-weight: 600;
+}
+.callout--info {
+  background: var(--app-info-subtle);
+  border-color: color-mix(in srgb, var(--app-info) 30%, transparent);
+  color: var(--app-info-text);
+}
+.callout--success {
+  background: var(--app-success-subtle);
+  border-color: color-mix(in srgb, var(--app-success) 30%, transparent);
+  color: var(--app-success-text);
+}
+.callout--warning {
+  background: var(--app-warning-subtle);
+  border-color: color-mix(in srgb, var(--app-warning) 40%, transparent);
+  color: var(--app-warning-text);
+}
+.callout--danger {
+  background: var(--app-danger-subtle);
+  border-color: color-mix(in srgb, var(--app-danger) 30%, transparent);
+  color: var(--app-danger-text);
+}
+
+/*
+ * ── DS §4.11 / §7 — Empty States ───────────────────────────────────────────
+ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  padding: 2.5rem 1.5rem;
+  color: var(--app-text-secondary);
+}
+.empty-state__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--app-text-primary);
+}
+.empty-state__desc {
+  font-size: 13px;
+  color: var(--app-text-muted);
+  max-width: 42ch;
+}
+
+/*
+ * ── DS §4.12 — Loading / Skeleton ──────────────────────────────────────────
+ * Shimmer left-to-right on neutral fills. Honors prefers-reduced-motion via the
+ * global rule above (animation-duration collapses).
+ */
+.skeleton__line,
+.skeleton__block {
+  border-radius: var(--app-radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--app-neutral-100) 25%,
+    var(--app-neutral-200) 50%,
+    var(--app-neutral-100) 75%
+  );
+  background-size: 400% 100%;
+  animation: sa-shimmer 1.5s ease-in-out infinite;
+}
+.skeleton__line {
+  height: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.skeleton__line--short {
+  width: 60%;
+}
+@keyframes sa-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
 }

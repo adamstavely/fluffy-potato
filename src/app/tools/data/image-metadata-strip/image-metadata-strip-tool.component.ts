@@ -16,7 +16,7 @@ interface StrippedItem {
   imports: [SaFileInputComponent, SaButtonComponent],
   template: `
     <div class="mx-auto max-w-3xl space-y-4">
-      <p class="text-sm text-slate-600">
+      <p class="text-sm text-[var(--app-text-secondary)]">
         EXIF, GPS, and other embedded metadata are removed by re-encoding the image in your browser.
         Nothing is uploaded. JPEG and PNG stay the same format when your browser supports encoding;
         other types are saved as PNG. Animated GIFs become a single still (first frame).
@@ -32,11 +32,11 @@ interface StrippedItem {
       />
 
       @if (busy()) {
-        <p class="text-sm text-slate-600">Processing…</p>
+        <p class="text-sm text-[var(--app-text-secondary)]">Processing…</p>
       }
 
       @if (error()) {
-        <div class="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900" role="alert">
+        <div class="rounded-lg border border-[color-mix(in_srgb,var(--app-warning)_45%,transparent)] bg-[var(--app-warning-subtle)] px-3 py-2 text-sm text-[var(--app-warning-text)]" role="alert">
           {{ error() }}
         </div>
       }
@@ -45,11 +45,11 @@ interface StrippedItem {
         <ul class="space-y-2" role="list">
           @for (r of results(); track r.url) {
             <li
-              class="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800"
+              class="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-[var(--app-border)] bg-[var(--app-bg)] px-3 py-2 text-sm text-[var(--app-text-primary)]"
             >
               <span class="min-w-0 break-all font-mono text-xs">{{ r.name }}</span>
               <a
-                class="shrink-0 font-medium text-[var(--app-accent)] underline decoration-slate-300 underline-offset-2 hover:decoration-[var(--app-accent)]"
+                class="shrink-0 font-medium text-[var(--app-accent)] underline decoration-[var(--app-border-strong)] underline-offset-2 hover:decoration-[var(--app-accent)]"
                 [href]="r.url"
                 [download]="r.name"
               >

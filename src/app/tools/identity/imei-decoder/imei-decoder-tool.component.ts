@@ -16,7 +16,7 @@ function normalizeImei(raw: string): string {
   imports: [FormsModule, SaTextFieldComponent],
   template: `
     <div class="mx-auto max-w-2xl space-y-4">
-      <p class="text-sm text-slate-600">
+      <p class="text-sm text-[var(--app-text-secondary)]">
         Type Allocation Code (TAC) is the first eight digits. Check digit uses Luhn over all 15 digits.
         Manufacturer hints below are illustrative only; use GSMA TAC for authoritative allocation data.
       </p>
@@ -34,16 +34,16 @@ function normalizeImei(raw: string): string {
       @if (info(); as i) {
         <div
           class="rounded-lg border px-3 py-3 text-sm"
-          [class.border-emerald-200]="i.ok"
-          [class.bg-emerald-50]="i.ok"
-          [class.border-rose-200]="!i.ok"
-          [class.bg-rose-50]="!i.ok"
+          [class.border-[color-mix(in_srgb,var(--app-success)_35%,transparent)]]="i.ok"
+          [class.bg-[var(--app-success-subtle)]]="i.ok"
+          [class.border-[color-mix(in_srgb,var(--app-danger)_35%,transparent)]]="!i.ok"
+          [class.bg-[var(--app-danger-subtle)]]="!i.ok"
         >
-          <p class="font-medium" [class.text-emerald-900]="i.ok" [class.text-rose-900]="!i.ok">
+          <p class="font-medium" [class.text-[var(--app-success-text)]]="i.ok" [class.text-[var(--app-danger-text)]]="!i.ok">
             {{ i.ok ? 'Structure valid' : 'Invalid IMEI' }}
           </p>
           @if (i.digits.length === 15) {
-            <ul class="mt-2 list-inside list-disc space-y-1 text-xs text-slate-800">
+            <ul class="mt-2 list-inside list-disc space-y-1 text-xs text-[var(--app-text-primary)]">
               <li>TAC: <span class="font-mono select-all">{{ i.tac }}</span></li>
               <li>Serial: <span class="font-mono select-all">{{ i.serial }}</span></li>
               <li>Check digit: <span class="font-mono">{{ i.check }}</span></li>
@@ -53,7 +53,7 @@ function normalizeImei(raw: string): string {
               }
             </ul>
           } @else {
-            <p class="mt-1 text-xs text-rose-800">Expected 15 digits (found {{ i.digits.length }}).</p>
+            <p class="mt-1 text-xs text-[var(--app-danger-text)]">Expected 15 digits (found {{ i.digits.length }}).</p>
           }
         </div>
       }

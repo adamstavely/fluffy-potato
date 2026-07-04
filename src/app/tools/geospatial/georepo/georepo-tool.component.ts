@@ -28,7 +28,7 @@ import { ToolsIconsModule } from '../../tools-icons.module';
           Open GeoRepo
         </a>
         <p class="mt-8 text-xs text-[var(--app-text-muted)]">
-          <a class="text-[#2563eb] no-underline hover:underline" routerLink="/tools">Back to tools</a>
+          <a class="text-[var(--app-interactive)] no-underline hover:underline" routerLink="/tools">Back to tools</a>
         </p>
       </div>
     </sa-tool-scaffold>

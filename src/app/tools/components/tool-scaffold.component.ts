@@ -28,7 +28,7 @@ import { TOOL_SCAFFOLD_TOOL_ID } from '../tokens/tool-scaffold-context';
     },
   ],
   template: `
-    <div class="flex min-h-screen flex-col bg-slate-50">
+    <div class="flex min-h-screen flex-col bg-[var(--app-bg)]">
       <sa-branding-bar
         [title]="config().toolName"
         [subtitle]="'v' + config().version"
@@ -37,7 +37,7 @@ import { TOOL_SCAFFOLD_TOOL_ID } from '../tokens/tool-scaffold-context';
       <div class="flex-1 p-4">
         @if (loadError()) {
           <div
-            class="rounded-lg border border-rose-200 bg-rose-50 p-4 text-sm text-rose-900"
+            class="rounded-lg border border-[color-mix(in_srgb,var(--app-danger)_35%,transparent)] bg-[var(--app-danger-subtle)] p-4 text-sm text-[var(--app-danger-text)]"
             role="alert"
           >
             {{ loadError() }}

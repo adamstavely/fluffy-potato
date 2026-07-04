@@ -41,29 +41,29 @@ import type { ToolDefinition } from '../../models/tool.model';
       @if (ibanBlock(); as b) {
         <div
           class="rounded-lg border px-3 py-3 text-sm"
-          [class.border-emerald-200]="b.valid"
-          [class.bg-emerald-50]="b.valid"
-          [class.border-rose-200]="!b.valid"
-          [class.bg-rose-50]="!b.valid"
+          [class.border-[color-mix(in_srgb,var(--app-success)_35%,transparent)]]="b.valid"
+          [class.bg-[var(--app-success-subtle)]]="b.valid"
+          [class.border-[color-mix(in_srgb,var(--app-danger)_35%,transparent)]]="!b.valid"
+          [class.bg-[var(--app-danger-subtle)]]="!b.valid"
         >
-          <p class="font-medium" [class.text-emerald-900]="b.valid" [class.text-rose-900]="!b.valid">
+          <p class="font-medium" [class.text-[var(--app-success-text)]]="b.valid" [class.text-[var(--app-danger-text)]]="!b.valid">
             {{ b.valid ? 'IBAN valid' : 'IBAN not valid' }}
           </p>
           @if (b.electronic) {
-            <p class="mt-1 font-mono text-xs text-slate-800">
+            <p class="mt-1 font-mono text-xs text-[var(--app-text-primary)]">
               Electronic: <span class="select-all">{{ b.electronic }}</span>
             </p>
           }
           @if (b.friendly) {
-            <p class="mt-1 font-mono text-xs text-slate-800">
+            <p class="mt-1 font-mono text-xs text-[var(--app-text-primary)]">
               Grouped: <span class="select-all">{{ b.friendly }}</span>
             </p>
           }
           @if (b.countryCode) {
-            <p class="mt-1 text-slate-700">Country: {{ b.countryCode }}</p>
+            <p class="mt-1 text-[var(--app-text-primary)]">Country: {{ b.countryCode }}</p>
           }
           @if (b.bban) {
-            <p class="mt-1 font-mono text-xs text-slate-700">BBAN: {{ b.bban }}</p>
+            <p class="mt-1 font-mono text-xs text-[var(--app-text-primary)]">BBAN: {{ b.bban }}</p>
           }
         </div>
       }
@@ -71,20 +71,20 @@ import type { ToolDefinition } from '../../models/tool.model';
       @if (bicBlock(); as bc) {
         <div
           class="rounded-lg border px-3 py-3 text-sm"
-          [class.border-emerald-200]="bc.valid"
-          [class.bg-emerald-50]="bc.valid"
-          [class.border-amber-200]="!bc.valid"
-          [class.bg-amber-50]="!bc.valid"
+          [class.border-[color-mix(in_srgb,var(--app-success)_35%,transparent)]]="bc.valid"
+          [class.bg-[var(--app-success-subtle)]]="bc.valid"
+          [class.border-[color-mix(in_srgb,var(--app-warning)_45%,transparent)]]="!bc.valid"
+          [class.bg-[var(--app-warning-subtle)]]="!bc.valid"
         >
           <p
             class="font-medium"
-            [class.text-emerald-900]="bc.valid"
-            [class.text-amber-900]="!bc.valid"
+            [class.text-[var(--app-success-text)]]="bc.valid"
+            [class.text-[var(--app-warning-text)]]="!bc.valid"
           >
             {{ bc.valid ? 'BIC format valid' : 'BIC format not valid' }}
           </p>
           @if (bc.bank) {
-            <p class="mt-1 text-xs text-slate-700">
+            <p class="mt-1 text-xs text-[var(--app-text-primary)]">
               Bank: {{ bc.bank }}, Country: {{ bc.countryCode }}, Location: {{ bc.location }}
             </p>
           }

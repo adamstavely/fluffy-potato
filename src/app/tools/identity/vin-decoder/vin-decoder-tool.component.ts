@@ -17,7 +17,7 @@ function normalizeVin(raw: string): string {
   imports: [FormsModule, SaTextFieldComponent],
   template: `
     <div class="mx-auto max-w-2xl space-y-4">
-      <p class="text-sm text-slate-600">
+      <p class="text-sm text-[var(--app-text-secondary)]">
         VINs are 17 characters (no I, O, Q). Check-digit validation applies to North American–style
         VINs; WMI hints are illustrative only.
       </p>
@@ -33,7 +33,7 @@ function normalizeVin(raw: string): string {
       />
 
       @if (info(); as i) {
-        <div class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-900">
+        <div class="rounded-lg border border-[var(--app-border)] bg-[var(--app-bg)] px-3 py-3 text-sm text-[var(--app-text-primary)]">
           @if (i.valid) {
             <ul class="list-inside list-disc space-y-1 text-xs">
               <li>WMI: <span class="font-mono">{{ i.wmi }}</span> — {{ i.wmiNote }}</li>
@@ -46,7 +46,7 @@ function normalizeVin(raw: string): string {
               <li>Region (rough): {{ i.region }}</li>
             </ul>
           } @else {
-            <p class="text-rose-800">{{ i.reason }}</p>
+            <p class="text-[var(--app-danger-text)]">{{ i.reason }}</p>
           }
         </div>
       }
