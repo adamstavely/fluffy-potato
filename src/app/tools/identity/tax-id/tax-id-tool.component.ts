@@ -18,7 +18,7 @@ import {
   template: `
     <div class="mx-auto max-w-3xl space-y-4">
       <fieldset class="space-y-2">
-        <legend class="text-xs font-medium text-slate-700">Identifier type</legend>
+        <legend class="text-xs font-medium text-[var(--app-text-primary)]">Identifier type</legend>
         <sa-radio-group
           name="taxKind"
           ariaLabel="Identifier type"
@@ -44,17 +44,17 @@ import {
       @if (result(); as r) {
         <div
           class="rounded-lg border px-3 py-3 text-sm"
-          [class.border-emerald-200]="r.valid"
-          [class.bg-emerald-50]="r.valid"
-          [class.border-rose-200]="!r.valid"
-          [class.bg-rose-50]="!r.valid"
+          [class.border-[color-mix(in_srgb,var(--app-success)_35%,transparent)]]="r.valid"
+          [class.bg-[var(--app-success-subtle)]]="r.valid"
+          [class.border-[color-mix(in_srgb,var(--app-danger)_35%,transparent)]]="!r.valid"
+          [class.bg-[var(--app-danger-subtle)]]="!r.valid"
         >
-          <p class="font-medium" [class.text-emerald-900]="r.valid" [class.text-rose-900]="!r.valid">
+          <p class="font-medium" [class.text-[var(--app-success-text)]]="r.valid" [class.text-[var(--app-danger-text)]]="!r.valid">
             {{ r.valid ? 'Looks good' : 'Does not validate' }}
           </p>
-          <p class="mt-1 text-slate-800">{{ r.message }}</p>
+          <p class="mt-1 text-[var(--app-text-primary)]">{{ r.message }}</p>
           @if (r.normalized) {
-            <p class="mt-2 font-mono text-xs text-slate-700">
+            <p class="mt-2 font-mono text-xs text-[var(--app-text-primary)]">
               Normalized: <span class="select-all">{{ r.normalized }}</span>
             </p>
           }

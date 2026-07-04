@@ -11,7 +11,7 @@ import type { ToolDefinition } from '../../models/tool.model';
   imports: [SaFileInputComponent, SaButtonComponent],
   template: `
     <div class="mx-auto max-w-3xl space-y-4">
-      <p class="text-sm text-slate-600">
+      <p class="text-sm text-[var(--app-text-secondary)]">
         Upload an image containing a barcode or QR code. Decoding runs locally in your browser.
       </p>
 
@@ -23,23 +23,23 @@ import type { ToolDefinition } from '../../models/tool.model';
       />
 
       @if (busy()) {
-        <p class="text-sm text-slate-600">Decoding…</p>
+        <p class="text-sm text-[var(--app-text-secondary)]">Decoding…</p>
       }
 
       @if (error()) {
-        <div class="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900" role="alert">
+        <div class="rounded-lg border border-[color-mix(in_srgb,var(--app-warning)_45%,transparent)] bg-[var(--app-warning-subtle)] px-3 py-2 text-sm text-[var(--app-warning-text)]" role="alert">
           {{ error() }}
         </div>
       }
 
       @if (decoded(); as d) {
-        <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-3 text-sm text-emerald-950">
+        <div class="rounded-lg border border-[color-mix(in_srgb,var(--app-success)_35%,transparent)] bg-[var(--app-success-subtle)] px-3 py-3 text-sm text-[var(--app-success-text)]">
           <p class="font-medium">Format: {{ d.format }}</p>
           <p class="mt-2 break-all font-mono text-xs">{{ d.text }}</p>
           <sa-button
             variant="text"
             ariaLabel="Copy decoded text"
-            innerClass="mt-3 !text-xs !text-emerald-900 !underline !decoration-emerald-400 hover:!decoration-emerald-700"
+            innerClass="mt-3 !text-xs !text-[var(--app-success-text)] !underline !decoration-[var(--app-success-text)]"
             (click)="copy(d.text)"
           >
             Copy text

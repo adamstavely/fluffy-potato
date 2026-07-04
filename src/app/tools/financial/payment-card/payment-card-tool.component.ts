@@ -50,7 +50,7 @@ function guessBrand(digits: string): string {
   imports: [FormsModule, SaTextFieldComponent],
   template: `
     <div class="mx-auto max-w-3xl space-y-4">
-      <p class="text-sm leading-relaxed text-amber-900">{{ pciNotice }}</p>
+      <p class="text-sm leading-relaxed text-[var(--app-warning-text)]">{{ pciNotice }}</p>
 
       <sa-text-field
         label="Card number (digits only; spaces ignored)"
@@ -66,14 +66,14 @@ function guessBrand(digits: string): string {
       @if (info(); as i) {
         <div
           class="rounded-lg border px-3 py-3 text-sm"
-          [class.border-emerald-200]="i.luhnOk && i.lengthOk"
-          [class.bg-emerald-50]="i.luhnOk && i.lengthOk"
-          [class.border-rose-200]="!(i.luhnOk && i.lengthOk)"
-          [class.bg-rose-50]="!(i.luhnOk && i.lengthOk)"
+          [class.border-[color-mix(in_srgb,var(--app-success)_35%,transparent)]]="i.luhnOk && i.lengthOk"
+          [class.bg-[var(--app-success-subtle)]]="i.luhnOk && i.lengthOk"
+          [class.border-[color-mix(in_srgb,var(--app-danger)_35%,transparent)]]="!(i.luhnOk && i.lengthOk)"
+          [class.bg-[var(--app-danger-subtle)]]="!(i.luhnOk && i.lengthOk)"
         >
-          <p class="font-medium text-slate-900">Luhn: {{ i.luhnOk ? 'pass' : 'fail' }}</p>
-          <p class="mt-1 text-slate-800">Length ({{ i.len }} digits): {{ i.lengthOk ? 'typical range' : 'unusual' }}</p>
-          <p class="mt-1 text-slate-800">Heuristic brand: {{ i.brand }}</p>
+          <p class="font-medium text-[var(--app-text-primary)]">Luhn: {{ i.luhnOk ? 'pass' : 'fail' }}</p>
+          <p class="mt-1 text-[var(--app-text-primary)]">Length ({{ i.len }} digits): {{ i.lengthOk ? 'typical range' : 'unusual' }}</p>
+          <p class="mt-1 text-[var(--app-text-primary)]">Heuristic brand: {{ i.brand }}</p>
         </div>
       }
     </div>

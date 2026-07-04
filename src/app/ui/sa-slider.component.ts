@@ -23,7 +23,7 @@ import { MatSliderModule } from '@angular/material/slider';
   template: `
     <div class="flex flex-wrap items-center gap-2">
       @if (label()) {
-        <span [id]="labelId" class="text-xs text-slate-700">{{ label() }}</span>
+        <span [id]="labelId" class="text-xs text-[var(--app-text-primary)]">{{ label() }}</span>
       }
       <mat-slider
         [min]="min()"
@@ -41,7 +41,7 @@ import { MatSliderModule } from '@angular/material/slider';
         />
       </mat-slider>
       @if (showValue()) {
-        <span class="font-mono tabular-nums text-xs text-slate-600" aria-hidden="true">{{
+        <span class="font-mono tabular-nums text-xs text-[var(--app-text-secondary)]" aria-hidden="true">{{
           value() + (valueSuffix() || '')
         }}</span>
       }

@@ -114,6 +114,50 @@
   --app-overlay-scrim: rgba(15, 23, 42, 0.5);
 }
 
+/*
+ * DS §8 Theming — dark mode (`.dark` on <html>). Only the `--app-*` tokens are
+ * re-pointed here; because the Material bridge and every component read those
+ * tokens, the whole app (including Material surfaces) flips from this one block.
+ */
+html.dark {
+  color-scheme: dark;
+
+  --app-primary: #93c5fd; /* DS dark primary — light blue with dark text (8.11:1 AAA) */
+  --app-primary-hover: #bfdbfe;
+  --app-primary-active: #dbeafe;
+  --app-accent: var(--app-primary);
+  --app-accent-fg: #0f172a;
+  --app-interactive: #60a5fa; /* DS dark accent (5.75:1 AA) */
+  --app-interactive-hover: #93c5fd;
+  --app-interactive-subtle: rgba(0, 115, 230, 0.18);
+  --app-focus-ring: #60a5fa;
+
+  --app-bg: #0b1120; /* DS dark background */
+  --app-surface: #1e293b; /* DS dark card */
+  --app-border: #334155;
+  --app-border-subtle: #243044;
+  --app-border-strong: #475569;
+
+  --app-text-primary: #f1f5f9;
+  --app-text-secondary: #cbd5e1;
+  --app-text-muted: #94a3b8;
+
+  /* Low-opacity semantic tints + lighter readable text (DS dark subtle fills). */
+  --app-success-subtle: rgba(16, 185, 129, 0.14);
+  --app-warning-subtle: rgba(234, 186, 28, 0.14);
+  --app-info-subtle: rgba(14, 165, 233, 0.14);
+  --app-danger-subtle: rgba(220, 38, 38, 0.14);
+  --app-success-text: #4ade80;
+  --app-info-text: #7dd3fc;
+  --app-warning-text: #fcd34d;
+  --app-danger-text: #fca5a5;
+
+  --app-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --app-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --app-shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.5);
+  --app-overlay-scrim: rgba(2, 6, 23, 0.6);
+}
+
 /* DS §2.6 — honor reduced-motion everywhere. */
 @media (prefers-reduced-motion: reduce) {
   *,

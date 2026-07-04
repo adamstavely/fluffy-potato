@@ -58,12 +58,12 @@ const CROSSWALK_MAX_ROWS = 25_000;
       </div>
 
       @if (compareMode() === 'lines') {
-        <p class="text-sm leading-relaxed text-slate-600">
+        <p class="text-sm leading-relaxed text-[var(--app-text-secondary)]">
           Compare two line-based lists. Matching is by whole line after optional trimming and case
           folding.
         </p>
 
-        <div class="flex flex-wrap gap-4 text-xs text-slate-700">
+        <div class="flex flex-wrap gap-4 text-xs text-[var(--app-text-primary)]">
           <sa-checkbox [(ngModel)]="trimLines" (ngModelChange)="bump()"> Trim each line </sa-checkbox>
           <sa-checkbox [(ngModel)]="ignoreEmpty" (ngModelChange)="bump()"> Ignore blank lines </sa-checkbox>
           <sa-checkbox [(ngModel)]="caseInsensitive" (ngModelChange)="bump()">
@@ -94,13 +94,13 @@ const CROSSWALK_MAX_ROWS = 25_000;
           />
         </div>
       } @else {
-        <p class="text-sm leading-relaxed text-slate-600">
+        <p class="text-sm leading-relaxed text-[var(--app-text-secondary)]">
           Paste two delimited tables (e.g. TSV from Excel). Pick the key column on each side to see
           rows only in A, only in B, and matched pairs. Fuzzy matching uses normalized edit
           similarity on the key cells.
         </p>
 
-        <div class="flex flex-wrap items-end gap-3 text-xs text-slate-700">
+        <div class="flex flex-wrap items-end gap-3 text-xs text-[var(--app-text-primary)]">
           <sa-select
             label="Delimiter"
             [options]="delimiterOptions"
@@ -129,10 +129,10 @@ const CROSSWALK_MAX_ROWS = 25_000;
             fieldClass="w-24"
             inputClass="text-center font-mono"
           />
-          <span class="text-slate-500">(1 = leftmost)</span>
+          <span class="text-[var(--app-text-muted)]">(1 = leftmost)</span>
         </div>
 
-        <div class="flex flex-wrap items-center gap-4 text-xs text-slate-700">
+        <div class="flex flex-wrap items-center gap-4 text-xs text-[var(--app-text-primary)]">
           <sa-checkbox [(ngModel)]="crosswalkTrimKeys" (ngModelChange)="bump()"> Trim key cells </sa-checkbox>
           <sa-checkbox [(ngModel)]="crosswalkCaseInsensitive" (ngModelChange)="bump()">
             Case-insensitive key
@@ -177,51 +177,51 @@ const CROSSWALK_MAX_ROWS = 25_000;
         </div>
 
         @if (crosswalkError()) {
-          <p class="text-sm text-rose-700" role="alert">{{ crosswalkError() }}</p>
+          <p class="text-sm text-[var(--app-danger-text)]" role="alert">{{ crosswalkError() }}</p>
         }
       }
 
       <dl
-        class="grid grid-cols-2 gap-3 sm:grid-cols-4 rounded-lg border border-slate-200 bg-slate-50 p-3 text-center text-sm"
+        class="grid grid-cols-2 gap-3 sm:grid-cols-4 rounded-lg border border-[var(--app-border)] bg-[var(--app-bg)] p-3 text-center text-sm"
         aria-label="Comparison summary counts"
       >
         <div>
-          <dt class="text-xs text-slate-600">Only in A</dt>
-          <dd class="m-0 font-semibold text-slate-900">{{ stats().onlyA }}</dd>
+          <dt class="text-xs text-[var(--app-text-secondary)]">Only in A</dt>
+          <dd class="m-0 font-semibold text-[var(--app-text-primary)]">{{ stats().onlyA }}</dd>
         </div>
         <div>
-          <dt class="text-xs text-slate-600">Only in B</dt>
-          <dd class="m-0 font-semibold text-slate-900">{{ stats().onlyB }}</dd>
+          <dt class="text-xs text-[var(--app-text-secondary)]">Only in B</dt>
+          <dd class="m-0 font-semibold text-[var(--app-text-primary)]">{{ stats().onlyB }}</dd>
         </div>
         <div>
-          <dt class="text-xs text-slate-600">In both / matched</dt>
-          <dd class="m-0 font-semibold text-slate-900">{{ stats().both }}</dd>
+          <dt class="text-xs text-[var(--app-text-secondary)]">In both / matched</dt>
+          <dd class="m-0 font-semibold text-[var(--app-text-primary)]">{{ stats().both }}</dd>
         </div>
         <div>
-          <dt class="text-xs text-slate-600">Total A / B</dt>
-          <dd class="m-0 font-semibold text-slate-900">{{ stats().totalA }} / {{ stats().totalB }}</dd>
+          <dt class="text-xs text-[var(--app-text-secondary)]">Total A / B</dt>
+          <dd class="m-0 font-semibold text-[var(--app-text-primary)]">{{ stats().totalA }} / {{ stats().totalB }}</dd>
         </div>
       </dl>
 
       <div class="grid gap-4 lg:grid-cols-3">
         @for (block of resultBlocks(); track block.title) {
-          <div class="rounded-lg border border-slate-200 bg-white p-3">
+          <div class="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] p-3">
             <div class="mb-2 flex items-center justify-between gap-2">
-              <span class="text-xs font-semibold uppercase tracking-wide text-slate-600">{{
+              <span class="text-xs font-semibold uppercase tracking-wide text-[var(--app-text-secondary)]">{{
                 block.title
               }}</span>
               <sa-button
                 variant="text"
                 [ariaLabel]="'Copy ' + block.title + ' to clipboard'"
                 [disabled]="!block.text"
-                innerClass="!text-xs !text-slate-600 !underline !decoration-slate-300 hover:!decoration-slate-600"
+                innerClass="!text-xs !text-[var(--app-text-secondary)] !underline !decoration-[var(--app-border-strong)] hover:!decoration-[var(--app-text-secondary)]"
                 (click)="copyBlock(block.text)"
               >
                 Copy
               </sa-button>
             </div>
             <pre
-              class="max-h-[220px] overflow-auto whitespace-pre-wrap break-words font-mono text-xs text-slate-800"
+              class="max-h-[220px] overflow-auto whitespace-pre-wrap break-words font-mono text-xs text-[var(--app-text-primary)]"
               [attr.aria-label]="block.title + ' results'"
               >{{ block.text || '—' }}</pre
             >

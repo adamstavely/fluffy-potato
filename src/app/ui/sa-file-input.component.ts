@@ -14,7 +14,7 @@ let nextFileId = 0;
     <div class="flex flex-col gap-1">
       <span
         [id]="labelId"
-        [class]="labelHidden() ? 'sr-only' : 'block text-xs font-medium text-slate-700'"
+        [class]="labelHidden() ? 'sr-only' : 'block text-xs font-medium text-[var(--app-text-primary)]'"
         >{{ label() }}</span
       >
       <input

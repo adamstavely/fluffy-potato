@@ -20,14 +20,14 @@ type ToolHostLoadState =
   imports: [ToolScaffoldComponent, NgComponentOutlet],
   template: `
     @if (loadState().kind === 'loading') {
-      <p class="p-6 text-sm text-slate-600">Loading tool…</p>
+      <p class="p-6 text-sm text-[var(--app-text-secondary)]">Loading tool…</p>
     }
     @if (readyTool()) {
       <sa-tool-scaffold [config]="scaffoldConfig()!">
         @if (hostComponentType(); as host) {
           <ng-container [ngComponentOutlet]="host" [ngComponentOutletInputs]="hostInputs()" />
         } @else {
-          <p class="p-6 text-sm text-slate-600">Loading tool…</p>
+          <p class="p-6 text-sm text-[var(--app-text-secondary)]">Loading tool…</p>
         }
       </sa-tool-scaffold>
     }

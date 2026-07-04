@@ -34,8 +34,8 @@ const PRESETS: { id: TransliterationPreset; label: string; hint: string }[] = [
   imports: [FormsModule, SaSelectComponent, SaTextareaComponent, SaButtonComponent],
   template: `
     <div class="mx-auto max-w-6xl space-y-4">
-      <p class="text-sm leading-relaxed text-slate-600">
-        Convert text from one script to another <strong class="font-medium text-slate-800">without</strong> changing
+      <p class="text-sm leading-relaxed text-[var(--app-text-secondary)]">
+        Convert text from one script to another <strong class="font-medium text-[var(--app-text-primary)]">without</strong> changing
         meaning (transliteration). This runs entirely in your browser.
       </p>
 
@@ -47,7 +47,7 @@ const PRESETS: { id: TransliterationPreset; label: string; hint: string }[] = [
         fieldClass="max-w-md"
       />
 
-      <p class="text-xs text-slate-500">{{ activeHint() }}</p>
+      <p class="text-xs text-[var(--app-text-muted)]">{{ activeHint() }}</p>
 
       <div class="grid gap-4 md:grid-cols-2 md:items-stretch">
         <sa-textarea
@@ -63,7 +63,7 @@ const PRESETS: { id: TransliterationPreset; label: string; hint: string }[] = [
 
         <div class="flex min-h-0 flex-col gap-1">
           <div class="flex flex-wrap items-center justify-between gap-2">
-            <span class="text-xs font-medium text-slate-700" id="transliteration-output-label">Output</span>
+            <span class="text-xs font-medium text-[var(--app-text-primary)]" id="transliteration-output-label">Output</span>
             <sa-button
               variant="stroked"
               ariaLabel="Copy transliteration output"
@@ -83,7 +83,7 @@ const PRESETS: { id: TransliterationPreset; label: string; hint: string }[] = [
             [ngModel]="output()"
             [readOnly]="true"
             [spellcheck]="false"
-            inputClass="font-mono text-sm bg-slate-50"
+            inputClass="font-mono text-sm bg-[var(--app-bg)]"
             fieldClass="min-h-[180px] md:min-h-[240px]"
           />
         </div>

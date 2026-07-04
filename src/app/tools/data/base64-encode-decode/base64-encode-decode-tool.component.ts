@@ -57,8 +57,8 @@ function fromUrlSafe(safe: string): string {
   imports: [FormsModule],
   template: `
     <div class="mx-auto max-w-4xl space-y-5">
-      <fieldset class="rounded-lg border border-slate-200 bg-slate-50/80 px-3 py-3">
-        <legend class="px-1 text-xs font-medium text-slate-600">Mode</legend>
+      <fieldset class="rounded-lg border border-[var(--app-border)] bg-[var(--app-bg)]/80 px-3 py-3">
+        <legend class="px-1 text-xs font-medium text-[var(--app-text-secondary)]">Mode</legend>
         <div class="flex flex-wrap gap-4 text-sm">
           <label class="inline-flex cursor-pointer items-center gap-2">
             <input
@@ -89,25 +89,25 @@ function fromUrlSafe(safe: string): string {
       </label>
 
       <div>
-        <label class="mb-1 block text-xs font-medium text-slate-700" for="b64-input">{{
+        <label class="mb-1 block text-xs font-medium text-[var(--app-text-primary)]" for="b64-input">{{
           mode === 'encode' ? 'Plain text' : 'Base64'
         }}</label>
         <textarea
           id="b64-input"
-          class="min-h-[160px] w-full rounded-lg border border-slate-300 bg-white px-3 py-2 font-mono text-sm text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-400"
+          class="min-h-[160px] w-full rounded-lg border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-3 py-2 font-mono text-sm text-[var(--app-text-primary)] shadow-sm focus:border-[var(--app-border-strong)] focus:outline-none focus:ring-1 focus:ring-slate-400"
           [(ngModel)]="inputText"
           (ngModelChange)="bump()"
           [spellcheck]="false"
           autocomplete="off"
           [attr.aria-describedby]="'b64-hint'"
         ></textarea>
-        <p id="b64-hint" class="mt-1 text-xs text-slate-500">
+        <p id="b64-hint" class="mt-1 text-xs text-[var(--app-text-muted)]">
           All processing runs in your browser. Decoding expects UTF-8 after binary decode.
         </p>
       </div>
 
       @if (error(); as err) {
-        <div class="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-900">
+        <div class="rounded-lg border border-[color-mix(in_srgb,var(--app-danger)_35%,transparent)] bg-[var(--app-danger-subtle)] px-3 py-2 text-sm text-[var(--app-danger-text)]">
           {{ err }}
         </div>
       }
@@ -115,12 +115,12 @@ function fromUrlSafe(safe: string): string {
       @if (!error()) {
         <div>
           <div class="mb-1 flex flex-wrap items-center justify-between gap-2">
-            <label class="text-xs font-medium text-slate-700" for="b64-output">{{
+            <label class="text-xs font-medium text-[var(--app-text-primary)]" for="b64-output">{{
               mode === 'encode' ? 'Base64 output' : 'Decoded text'
             }}</label>
             <button
               type="button"
-              class="rounded-md border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50"
+              class="rounded-md border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-3 py-1 text-xs font-medium text-[var(--app-text-primary)] shadow-sm hover:bg-[var(--app-bg)]"
               (click)="copyOutput()"
             >
               Copy output
@@ -129,7 +129,7 @@ function fromUrlSafe(safe: string): string {
           <textarea
             id="b64-output"
             readonly
-            class="min-h-[160px] w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 font-mono text-sm text-slate-900"
+            class="min-h-[160px] w-full rounded-lg border border-[var(--app-border)] bg-[var(--app-bg)] px-3 py-2 font-mono text-sm text-[var(--app-text-primary)]"
             [value]="outputText()"
           ></textarea>
         </div>

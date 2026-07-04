@@ -68,14 +68,14 @@ function diffDays(a: Date, b: Date): number {
   imports: [FormsModule, NgClass, SaCheckboxComponent, SaTextareaComponent, SaButtonComponent],
   template: `
     <div class="mx-auto max-w-5xl space-y-4">
-      <p class="text-sm leading-relaxed text-slate-600">
+      <p class="text-sm leading-relaxed text-[var(--app-text-secondary)]">
         Paste the machine-readable zone from a passport or ID card (ICAO TD1, TD2, TD3). Spaces are
         treated as filler (<span class="font-mono">&lt;</span>), input is uppercased, and non-MRZ
         characters are stripped.
       </p>
 
       <sa-checkbox
-        class="block text-xs text-slate-700"
+        class="block text-xs text-[var(--app-text-primary)]"
         [(ngModel)]="autocorrect"
         (ngModelChange)="bump()"
       >
@@ -96,7 +96,7 @@ function diffDays(a: Date, b: Date): number {
 
       @if (error()) {
         <div
-          class="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900"
+          class="rounded-lg border border-[color-mix(in_srgb,var(--app-warning)_45%,transparent)] bg-[var(--app-warning-subtle)] px-3 py-2 text-sm text-[var(--app-warning-text)]"
           role="alert"
         >
           {{ error() }}
@@ -107,58 +107,58 @@ function diffDays(a: Date, b: Date): number {
         <div class="flex flex-wrap items-center gap-3 text-sm">
           <span
             class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
-            [class.border-emerald-200]="r.valid"
-            [class.bg-emerald-50]="r.valid"
-            [class.text-emerald-800]="r.valid"
-            [class.border-rose-200]="!r.valid"
-            [class.bg-rose-50]="!r.valid"
-            [class.text-rose-800]="!r.valid"
+            [class.border-[color-mix(in_srgb,var(--app-success)_35%,transparent)]]="r.valid"
+            [class.bg-[var(--app-success-subtle)]]="r.valid"
+            [class.text-[var(--app-success-text)]]="r.valid"
+            [class.border-[color-mix(in_srgb,var(--app-danger)_35%,transparent)]]="!r.valid"
+            [class.bg-[var(--app-danger-subtle)]]="!r.valid"
+            [class.text-[var(--app-danger-text)]]="!r.valid"
           >
             {{ r.valid ? 'Checks passed' : 'Validation issues' }}
           </span>
-          <span class="text-slate-600"
-            >Format <span class="font-mono font-semibold text-slate-900">{{ r.format }}</span></span
+          <span class="text-[var(--app-text-secondary)]"
+            >Format <span class="font-mono font-semibold text-[var(--app-text-primary)]">{{ r.format }}</span></span
           >
           @if (r.documentNumber) {
-            <span class="text-slate-600"
+            <span class="text-[var(--app-text-secondary)]"
               >Document #
-              <span class="font-mono font-semibold text-slate-900">{{ r.documentNumber }}</span></span
+              <span class="font-mono font-semibold text-[var(--app-text-primary)]">{{ r.documentNumber }}</span></span
             >
           }
           <sa-button
             variant="text"
             ariaLabel="Copy parsed MRZ as JSON"
-            innerClass="ml-auto !text-xs !text-slate-600 !underline !decoration-slate-300 hover:!decoration-slate-600"
+            innerClass="ml-auto !text-xs !text-[var(--app-text-secondary)] !underline !decoration-[var(--app-border-strong)] hover:!decoration-[var(--app-text-secondary)]"
             (click)="copyJson(r)"
           >
             Copy JSON
           </sa-button>
         </div>
 
-        <div class="overflow-hidden rounded-lg border border-slate-200">
+        <div class="overflow-hidden rounded-lg border border-[var(--app-border)]">
           <table class="w-full border-collapse text-left text-sm">
             <caption class="sr-only">
               Parsed MRZ fields: name, document data, and validation status per field
             </caption>
-            <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-600">
+            <thead class="bg-[var(--app-bg)] text-xs font-semibold uppercase tracking-wide text-[var(--app-text-secondary)]">
               <tr>
-                <th class="border-b border-slate-200 px-3 py-2">Field</th>
-                <th class="border-b border-slate-200 px-3 py-2">Value</th>
-                <th class="border-b border-slate-200 px-3 py-2">Status</th>
+                <th class="border-b border-[var(--app-border)] px-3 py-2">Field</th>
+                <th class="border-b border-[var(--app-border)] px-3 py-2">Value</th>
+                <th class="border-b border-[var(--app-border)] px-3 py-2">Status</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
               @for (row of detailRows(); track row.label) {
-                <tr [ngClass]="{ 'bg-rose-50/50': !row.valid }">
-                  <td class="px-3 py-2 align-top text-slate-700">{{ row.label }}</td>
-                  <td class="px-3 py-2 align-top font-mono text-xs text-slate-900">
+                <tr [ngClass]="{ 'bg-[var(--app-danger-subtle)]/50': !row.valid }">
+                  <td class="px-3 py-2 align-top text-[var(--app-text-primary)]">{{ row.label }}</td>
+                  <td class="px-3 py-2 align-top font-mono text-xs text-[var(--app-text-primary)]">
                     {{ row.displayValue }}
                   </td>
                   <td class="px-3 py-2 align-top text-xs">
                     @if (row.valid) {
-                      <span class="text-emerald-700">OK</span>
+                      <span class="text-[var(--app-success-text)]">OK</span>
                     } @else {
-                      <span class="text-rose-700">{{ row.error ?? 'Invalid' }}</span>
+                      <span class="text-[var(--app-danger-text)]">{{ row.error ?? 'Invalid' }}</span>
                     }
                   </td>
                 </tr>
@@ -168,8 +168,8 @@ function diffDays(a: Date, b: Date): number {
         </div>
 
         @if (lifeSummary(); as ls) {
-          <div class="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-800">
-            <p class="text-xs font-semibold uppercase tracking-wide text-slate-600">From parsed dates</p>
+          <div class="rounded-lg border border-[var(--app-border)] bg-[var(--app-bg)] p-3 text-sm text-[var(--app-text-primary)]">
+            <p class="text-xs font-semibold uppercase tracking-wide text-[var(--app-text-secondary)]">From parsed dates</p>
             <ul class="mt-2 list-inside list-disc space-y-1">
               @if (ls.ageText) {
                 <li>{{ ls.ageText }}</li>
@@ -181,7 +181,7 @@ function diffDays(a: Date, b: Date): number {
           </div>
         }
 
-        <p class="text-xs text-slate-500">
+        <p class="text-xs text-[var(--app-text-muted)]">
           Dates shown as <span class="font-mono">YYYY-MM-DD</span> use a common century heuristic on
           YYMMDD only; always verify against the printed document.
         </p>

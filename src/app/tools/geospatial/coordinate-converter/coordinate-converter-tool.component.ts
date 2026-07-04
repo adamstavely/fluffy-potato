@@ -88,7 +88,7 @@ function toDms(deg: number, isLat: boolean): string {
   imports: [FormsModule, SaTextFieldComponent],
   template: `
     <div class="mx-auto max-w-3xl space-y-4">
-      <p class="text-sm text-slate-600">
+      <p class="text-sm text-[var(--app-text-secondary)]">
         Paste decimal degrees (<span class="font-mono">lat, lon</span>), MGRS, or UTM
         (zone letter easting northing). Output is WGS84.
       </p>
@@ -104,25 +104,25 @@ function toDms(deg: number, isLat: boolean): string {
       />
 
       @if (error(); as err) {
-        <p class="text-sm text-rose-700">{{ err }}</p>
+        <p class="text-sm text-[var(--app-danger-text)]">{{ err }}</p>
       }
 
       @if (result(); as r) {
-        <dl class="space-y-2 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm">
+        <dl class="space-y-2 rounded-lg border border-[var(--app-border)] bg-[var(--app-bg)] px-4 py-3 text-sm">
           <div>
-            <dt class="text-xs font-medium text-slate-500">Decimal degrees</dt>
+            <dt class="text-xs font-medium text-[var(--app-text-muted)]">Decimal degrees</dt>
             <dd class="font-mono text-xs break-all">{{ r.dd }}</dd>
           </div>
           <div>
-            <dt class="text-xs font-medium text-slate-500">DMS</dt>
+            <dt class="text-xs font-medium text-[var(--app-text-muted)]">DMS</dt>
             <dd class="font-mono text-xs break-all">{{ r.dms }}</dd>
           </div>
           <div>
-            <dt class="text-xs font-medium text-slate-500">UTM (WGS84)</dt>
+            <dt class="text-xs font-medium text-[var(--app-text-muted)]">UTM (WGS84)</dt>
             <dd class="font-mono text-xs break-all">{{ r.utm }}</dd>
           </div>
           <div>
-            <dt class="text-xs font-medium text-slate-500">MGRS</dt>
+            <dt class="text-xs font-medium text-[var(--app-text-muted)]">MGRS</dt>
             <dd class="font-mono text-xs break-all">{{ r.mgrs }}</dd>
           </div>
         </dl>

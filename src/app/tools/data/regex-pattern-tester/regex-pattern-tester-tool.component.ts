@@ -37,8 +37,8 @@ interface MatchRow {
         />
       </div>
 
-      <fieldset class="rounded-lg border border-slate-200 bg-slate-50/80 px-3 py-2">
-        <legend class="px-1 text-xs font-medium text-slate-600">Flags</legend>
+      <fieldset class="rounded-lg border border-[var(--app-border)] bg-[var(--app-bg)]/80 px-3 py-2">
+        <legend class="px-1 text-xs font-medium text-[var(--app-text-secondary)]">Flags</legend>
         <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
           @for (f of flagDefs; track f.key) {
             <label class="inline-flex cursor-pointer items-center gap-1.5">
@@ -48,40 +48,40 @@ interface MatchRow {
                 (change)="toggleFlag(f.key, $event)"
               />
               <span class="font-mono">{{ f.key }}</span>
-              <span class="text-slate-500">— {{ f.hint }}</span>
+              <span class="text-[var(--app-text-muted)]">— {{ f.hint }}</span>
             </label>
           }
         </div>
       </fieldset>
 
       <div>
-        <label class="mb-1 block text-xs font-medium text-slate-700" for="regex-sample"
+        <label class="mb-1 block text-xs font-medium text-[var(--app-text-primary)]" for="regex-sample"
           >Sample text</label
         >
         <textarea
           id="regex-sample"
-          class="min-h-[140px] w-full rounded-lg border border-slate-300 bg-white px-3 py-2 font-mono text-sm text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-400"
+          class="min-h-[140px] w-full rounded-lg border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-3 py-2 font-mono text-sm text-[var(--app-text-primary)] shadow-sm focus:border-[var(--app-border-strong)] focus:outline-none focus:ring-1 focus:ring-slate-400"
           [(ngModel)]="sample"
           (ngModelChange)="bump()"
           [spellcheck]="false"
           autocomplete="off"
           aria-describedby="regex-hint"
         ></textarea>
-        <p id="regex-hint" class="mt-1 text-xs text-slate-500">
+        <p id="regex-hint" class="mt-1 text-xs text-[var(--app-text-muted)]">
           Matching runs in the browser; large samples may be slow with global flag.
         </p>
       </div>
 
       @if (error(); as err) {
-        <div class="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-900">
+        <div class="rounded-lg border border-[color-mix(in_srgb,var(--app-danger)_35%,transparent)] bg-[var(--app-danger-subtle)] px-3 py-2 text-sm text-[var(--app-danger-text)]">
           {{ err }}
         </div>
       }
 
       @if (!error() && matches().length > 0) {
-        <div class="overflow-x-auto rounded-lg border border-slate-200">
+        <div class="overflow-x-auto rounded-lg border border-[var(--app-border)]">
           <table class="w-full min-w-[320px] border-collapse text-left text-sm">
-            <thead class="bg-slate-100 text-xs uppercase tracking-wide text-slate-600">
+            <thead class="bg-[var(--app-border-subtle)] text-xs uppercase tracking-wide text-[var(--app-text-secondary)]">
               <tr>
                 <th class="px-3 py-2">#</th>
                 <th class="px-3 py-2">Index</th>
@@ -92,13 +92,13 @@ interface MatchRow {
             <tbody class="divide-y divide-slate-100">
               @for (m of matches(); track m.index + '-' + $index) {
                 <tr>
-                  <td class="px-3 py-2 text-slate-500">{{ $index + 1 }}</td>
+                  <td class="px-3 py-2 text-[var(--app-text-muted)]">{{ $index + 1 }}</td>
                   <td class="px-3 py-2 font-mono text-xs">{{ m.index }}</td>
                   <td class="max-w-[240px] px-3 py-2 font-mono text-xs break-all">{{ m.match }}</td>
-                  <td class="px-3 py-2 font-mono text-xs text-slate-700">
+                  <td class="px-3 py-2 font-mono text-xs text-[var(--app-text-primary)]">
                     @if (m.groups.length) {
                       @for (g of m.groups; track $index) {
-                        <span class="mr-2 inline-block rounded bg-slate-100 px-1"
+                        <span class="mr-2 inline-block rounded bg-[var(--app-border-subtle)] px-1"
                           >{{ $index + 1 }}: {{ g }}</span
                         >
                       }
@@ -114,9 +114,9 @@ interface MatchRow {
       }
 
       @if (!error() && replacementPreview() !== null) {
-        <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm">
-          <p class="font-medium text-emerald-900">Replace preview</p>
-          <p class="mt-1 font-mono text-xs break-all text-emerald-950">{{ replacementPreview() }}</p>
+        <div class="rounded-lg border border-[color-mix(in_srgb,var(--app-success)_35%,transparent)] bg-[var(--app-success-subtle)] px-3 py-2 text-sm">
+          <p class="font-medium text-[var(--app-success-text)]">Replace preview</p>
+          <p class="mt-1 font-mono text-xs break-all text-[var(--app-success-text)]">{{ replacementPreview() }}</p>
         </div>
       }
     </div>

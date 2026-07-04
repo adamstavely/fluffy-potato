@@ -56,14 +56,14 @@ function parseGtxTranslation(data: unknown): string {
   imports: [FormsModule, SaSelectComponent, SaTextareaComponent, SaButtonComponent],
   template: `
     <div class="mx-auto max-w-6xl space-y-4">
-      <p class="text-sm leading-relaxed text-slate-600">
+      <p class="text-sm leading-relaxed text-[var(--app-text-secondary)]">
         Translate plain text using a public translation API. Daily limits and provider terms apply. For sensitive
         content, use an approved enterprise translator instead.
       </p>
 
       @if (error()) {
         <div
-          class="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-900"
+          class="rounded-lg border border-[color-mix(in_srgb,var(--app-danger)_35%,transparent)] bg-[var(--app-danger-subtle)] px-3 py-2 text-sm text-[var(--app-danger-text)]"
           role="alert"
         >
           {{ error() }}
@@ -98,7 +98,7 @@ function parseGtxTranslation(data: unknown): string {
           [readOnly]="true"
           placeholder="Translation appears here…"
           [spellcheck]="false"
-          inputClass="font-mono text-sm bg-slate-50"
+          inputClass="font-mono text-sm bg-[var(--app-bg)]"
           fieldClass="min-h-[180px] flex-1"
         />
       </div>
@@ -107,7 +107,7 @@ function parseGtxTranslation(data: unknown): string {
         <sa-button
           variant="flat"
           ariaLabel="Translate text"
-          innerClass="!bg-slate-900 px-4 py-2 text-sm font-medium !text-white hover:!opacity-90 disabled:!cursor-not-allowed disabled:!opacity-50"
+          innerClass="!bg-[var(--app-accent)] px-4 py-2 text-sm font-medium !text-[var(--app-accent-fg)] hover:!opacity-90 disabled:!cursor-not-allowed disabled:!opacity-50"
           [disabled]="loading() || !sourceText.trim()"
           (click)="translate()"
         >
